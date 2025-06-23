@@ -12,7 +12,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className='p-5 w-full lg:hidden bg-green-100'>
+    <div className='p-5 w-full lg:hidden'>
       <img
          onClick={()=>{toggle()}}
         className='w-10'

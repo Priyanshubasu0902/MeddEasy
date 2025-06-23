@@ -15,8 +15,8 @@ const Dashboard = ({ section }) => {
 
   return (
     <>
-      <div className={`min-h-screen w-2/6 inline-block ${view?'max-lg:w-2/5':'max-lg:hidden'} lg:w-1/5 bg-blue-100`}>
-        <div className={`h-full flex flex-col gap-10 p-5`}>
+      <div className={`min-h-screen w-2/6 inline-block ${view?'max-lg:w-2/5':'max-lg:hidden'} lg:w-1/5`}>
+        <div className={`h-full flex flex-col gap-10 pt-8 p-5`}>
           <div className="flex px-3 py-2 gap-5 items-center">
             <img className="w-15 h-15 rounded-full" src={image} alt="" />
             <span className="font-medium text-2xl">Priyanshu Basu</span>
