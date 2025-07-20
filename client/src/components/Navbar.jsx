@@ -7,12 +7,11 @@ const Navbar = () => {
    const {view, setView} = useContext(AppContext);
 
    const toggle = () => {
-    console.log(view);
     view ? setView(false) : setView(true);
   };
 
   return (
-    <div className='p-5 w-full lg:hidden'>
+    <div className='p-5 w-full bg-gray-100 lg:hidden'>
       <img
          onClick={()=>{toggle()}}
         className='w-10'

@@ -2,27 +2,48 @@ import React, { useContext, useState, useEffect } from "react";
 import { AppContext } from "../Context/AppContext";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useNavigate, useParams } from "react-router-dom";
 
-const MainAddReading = () => {
+const EditReadingMain= () => {
   const { view, backendUrl, userToken } = useContext(AppContext);
   const [reading, setReading] = useState(null);
   const [date, setDate] = useState();
   const [time, setTime] = useState();
-  const [type, setType] = useState("sugar");
+  const [type, setType] = useState();
+  const {id} = useParams();
+  const navigate = useNavigate();
+
+  const fetchReadingData = async() => {
+   try {
+      const {data} = await axios.get(backendUrl+`/api/readings/getReading/${id}`, {headers:{token:userToken}})
+      if(data.success) {
+         setReading(data.reading.reading)
+         setDate(data.reading.date)
+         setTime(data.reading.time)
+         setType(data.reading.type)
+      }
+      else{
+         toast.error(data.message)
+      }
+   } catch (error) {
+      toast.error(error.message)
+   }
+  }
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
     try {
         const { data } = await axios.post(
-          backendUrl + "/api/readings/addReadings",
+          backendUrl + `/api/readings/editReading/${id}`,
           { reading, date, time, type },
           { headers: { token: userToken } }
         );
         if (data.success) {
-          toast.success("Reading added")
+          toast.success("Changes Updated")
           setReading("");
           setDate("");
           setTime("");
+          navigate('/readings')
         } else {
           toast.error(data.message);
         }
@@ -31,31 +52,17 @@ const MainAddReading = () => {
     }
   };
 
+  useEffect(()=>{
+   fetchReadingData();
+  },[])
+
   return (
     <div
           className={`min-h-screen w-4/5 ${view ? "max-md:relative max-md:w-full" : "w-full"} px-10 py-10 flex flex-col gap-6`}
 
     >
-      <h1 className="text-5xl font-semibold">Add Readings</h1>
-      <p className="text-gray-500">Add your readings here</p>
-      <div className="flex gap-3 pt-2">
-        <button
-          onClick={() => setType("sugar")}
-          className={`${
-            type == "sugar" ? "bg-gray-200" : "bg-gray-300"
-          } px-2 py-1 rounded-lg max-sm:text-sm cursor-pointer`}
-        >
-          Sugar
-        </button>
-        <button
-          onClick={() => setType("pressure")}
-          className={`${
-            type == "pressure" ? "bg-gray-200" : "bg-gray-300"
-          } px-2 py-1 rounded-lg max-sm:text-sm cursor-pointer`}
-        >
-          Pressure
-        </button>
-      </div>
+      <h1 className="text-5xl font-semibold">Edit Readings</h1>
+      <p className="text-gray-500">Edit your reading here</p>
       {type == "sugar" ? (
         <div>
           <h2 className="text-3xl font-semibold">Sugar Reading</h2>
@@ -103,10 +110,10 @@ const MainAddReading = () => {
               />
             </label>
             <button
-              className="bg-blue-500 text-white h-[50px] w-[200px] rounded-3xl cursor-pointer text-center"
+              className="bg-blue-500 text-white h-[50px] w-[200px] rounded-3xl text-center cursor-pointer"
               type="Submit"
             >
-              Add Sugar Reading
+              Save Changes
             </button>
           </form>
         </div>
@@ -160,7 +167,7 @@ const MainAddReading = () => {
               className="bg-blue-500 text-white h-[50px] w-[200px] rounded-3xl cursor-pointer text-center"
               type="Submit"
             >
-              Add Pressure Reading
+              Save Changes
             </button>
           </form>
         </div>
@@ -169,4 +176,4 @@ const MainAddReading = () => {
   );
 };
 
-export default MainAddReading;
+export default EditReadingMain;

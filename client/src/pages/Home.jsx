@@ -1,18 +1,19 @@
-import React from 'react'
-import Dashboard from '../components/Dashboard'
-import HomeMain from '../components/HomeMain'
-import Navbar from '../components/Navbar'
+import Dashboard from "../components/Dashboard";
+import HomeMain from "../components/HomeMain";
+import Navbar from "../components/Navbar";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
+
   return (
-    <div className='min-h-screen'>
-      <Navbar/>
-      <div className='flex'>
-        <Dashboard section='home'/>
-        <HomeMain/>
+    <div className="h-screen">
+      <Navbar />
+      <div className="flex h-1/2">
+        <Dashboard section="home" />
+        <HomeMain />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

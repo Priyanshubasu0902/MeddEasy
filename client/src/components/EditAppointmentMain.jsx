@@ -1,28 +1,35 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AppContext } from "../Context/AppContext";
 import axios from 'axios'
 import { toast } from "react-toastify";
+import { useNavigate, useParams } from "react-router-dom";
+import Loading from "./Loading";
 
-const AddAppointmentMain = () => {
+const EditAppointmentMain = () => {
   const { view, backendUrl, userToken } = useContext(AppContext);
   const [date, setDate] = useState();
   const [time, setTime] = useState();
   const [doctorName, setDoctorName] = useState();
   const [purpose, setPurpose] = useState();
-  const [status, setStatus] = useState("not booked");
+  const [status, setStatus] = useState();
+  const {id} = useParams();
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const onSubmitHandler = async(e) => {
+    setLoading(true);
     e.preventDefault();
-
     try {
-      const {data} = await axios.post(backendUrl+'/api/appointments/addAppointment', {date,time,doctorName,purpose,status}, {headers:{token:userToken}})
+      const {data} = await axios.post(backendUrl+`/api/appointments/editAppointment/${id}`, {date,time,doctorName,purpose,status}, {headers:{token:userToken}})
       if(data.success) {
-        toast.success("Appointment added")
+        setLoading(false)
+        toast.success(data.message)
         setDate('')
         setTime('')
         setDoctorName('')
         setPurpose('')
-        setStatus('not booked')
+        setStatus('')
+        navigate('/appointment')
       }
       else{
         toast.error(data.message)
@@ -33,13 +40,34 @@ const AddAppointmentMain = () => {
     }
   }
 
-  return (
+  const fetchAppointment = async() => {
+   try {
+      const {data} = await axios.get(backendUrl+`/api/appointments/getAppointment/${id}`, {headers:{token:userToken}})
+      if(data.success) {
+         setDate(data.appointment.date)
+         setTime(data.appointment.time)
+         setPurpose(data.appointment.purpose)
+         setDoctorName(data.appointment.doctorName)
+         setStatus(data.appointment.status)
+      }
+      else{
+         toast.error(data.message)
+      }
+
+   } catch (error) {
+      toast.error(error.message)
+   }
+  } 
+
+  useEffect(()=>{fetchAppointment()},[])
+
+  return !loading? (
     <div className={`min-h-screen w-4/5 ${view ? "max-md:relative max-md:w-full" : "w-full"} px-10 py-10 flex flex-col gap-8`}
     >
       <h1 className="text-5xl max-md:text-3xl max-lg:text-4xl max-lg:pt-3 font-bold">
-        Add Appointments
+        Edit Appointment
       </h1>
-      <p className="text-gray-500">Add your appointments here</p>
+      <p className="text-gray-500">Edit your appointment here</p>
 
       <div className={`lg:w-2/7 w-full`}>
         <form
@@ -124,15 +152,14 @@ const AddAppointmentMain = () => {
           <div className="w-full flex justify-end">
             <input
               type="submit"
-              value="Add"
-              onClick={(e) => setStatus(status)}
+              value="Save Changes"
               className="bg-blue-300 px-4 py-2 font-semibold rounded-2xl cursor-pointer"
             />
           </div>
         </form>
       </div>
     </div>
-  );
+  ):<Loading/>;
 };
 
-export default AddAppointmentMain;
+export default EditAppointmentMain;
