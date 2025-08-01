@@ -17,6 +17,8 @@ import { useContext } from "react";
 import { AppContext } from "./Context/AppContext";
 import { ToastContainer } from "react-toastify";
 import EditReadings from "./pages/EditReadings";
+import ForgotPassword from "./pages/ForgotPassword";
+import SetPassword from "./pages/SetPassword";
 
 const App = () => {
   const { userToken, userData } = useContext(AppContext);
@@ -28,8 +30,10 @@ const App = () => {
         <Route path="/" element={<FrontPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signUp" element={<SignUp />} />
+        <Route path="/forgotPassword" element={<ForgotPassword />} />
         {userToken && userData ? (
           <>
+            <Route path="/setPassword" element={<SetPassword/>}/>
             <Route path="/home" element={<Home />} />
             <Route path="/readings" element={<Readings />} />
             <Route path="/addReadings" element={<AddReadings />} />

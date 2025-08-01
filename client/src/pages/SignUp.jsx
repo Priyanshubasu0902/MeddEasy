@@ -11,18 +11,18 @@ const SignUp = () => {
   const navigate = useNavigate();
 
   const [name, setName] = useState("");
-  const [email, setEmail] = useState(null);
-  const [number, setNumber] = useState(null);
+  const [email, setEmail] = useState("");
+  const [number, setNumber] = useState("");
   const [gender, setGender] = useState("");
   const [age, setAge] = useState("");
   const [password, setPassword] = useState("");
   const [image, setImage] = useState(false);
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
 
   const { backendUrl, setUserToken } = useContext(AppContext);
 
   const onSubmitHandler = async (e) => {
-    setLoading(true)
+    setLoading(true);
     e.preventDefault();
     try {
       const formData = new FormData();
@@ -38,10 +38,10 @@ const SignUp = () => {
         formData
       );
       if (data.success) {
-        setLoading(false)
+        setLoading(false);
         setUserToken(data.token);
         localStorage.setItem("token", data.token);
-        toast.success('Account Created')
+        toast.success("Account Created");
         navigate("/home");
       } else {
         toast.error(data.message);
@@ -51,69 +51,72 @@ const SignUp = () => {
     }
   };
 
-  return !loading? (
-    <div className="w-full min-h-screen flex items-center justify-center">
-      <div className="w-90 border rounded-xl p-5">
-        <h2 className="text-center text-xl font-semibold">Sign Up</h2>
+  return !loading ? (
+    <div className="w-full bg-[#692be0] min-h-screen flex items-center justify-center">
+      <div className="w-100 bg-white border border-[#692be0] shadow-2xl border-3 rounded-3xl p-5">
+        <h2 className="text-center text-[#692be0] text-3xl mt-4 font-bold">Welcome</h2>
+        <p className="text-center text-gray-500">Register to our platform</p>
         <form
           onSubmit={(e) => onSubmitHandler(e)}
-          className="flex flex-col gap-3"
+          className="flex flex-col gap-1 mt-8"
           action=""
         >
           <label htmlFor="">
-            <span className="font-semibold">Name:</span>
-            <br />
+            {/* <span className="font-semibold">Name:</span>
+            <br /> */}
             <input
               onChange={(e) => setName(e.target.value)}
               value={name}
-              className="border rounded w-full px-2 h-8 mt-1"
+              className="border rounded-md focus:outline-[#692be0] focus:outline-3 text-lg font-semibold w-full px-2 h-14 mt-1"
               required
               type="text"
-              placeholder="Enter full name"
+              placeholder="Name"
             />
           </label>
           <label htmlFor="">
-            <span className="font-semibold">Email:</span>
-            <br />
+            {/* <span className="font-semibold">Email:</span>
+            <br /> */}
             <input
               onChange={(e) => setEmail(e.target.value)}
               value={email}
-              className="border rounded w-full px-2 h-8 mt-1"
+              className="border rounded-md focus:outline-[#692be0] focus:outline-3 text-lg font-semibold w-full px-2 h-14 mt-1"
               type="email"
-              placeholder="Enter email address"
+              placeholder="Email"
+              required
             />
           </label>
           <label htmlFor="">
-            <span className="font-semibold">Number:</span>
-            <br />
+            {/* <span className="font-semibold">Number:</span>
+            <br /> */}
             <input
               onChange={(e) => setNumber(e.target.value)}
               value={number}
-              className="border rounded w-full px-2 h-8 mt-1"
+              className="border rounded-md focus:outline-[#692be0] focus:outline-3 text-lg font-semibold w-full px-2 h-14 mt-1"
               required
               type="number"
-              placeholder="Enter mobile number"
+              maxLength='10'
+              placeholder="Number"
             />
           </label>
           <label htmlFor="">
-            <span className="font-semibold">Age:</span>
-            <br />
+            {/* <span className="font-semibold">Age:</span>
+            <br /> */}
             <input
               onChange={(e) => setAge(e.target.value)}
               value={age}
-              className="border rounded w-full px-2 h-8 mt-1"
+              className="border rounded-md focus:outline-[#692be0] focus:outline-3 text-lg font-semibold w-full px-2 h-14 mt-1"
               required
               min="1"
               type="number"
-              placeholder="Enter age"
+              placeholder="Age"
             />
           </label>
           <label htmlFor="">
-            <span className="font-semibold">Gender:</span>
-            <br />
+            {/* <span className="font-semibold">Gender:</span>
+            <br /> */}
             <select
               onChange={(e) => setGender(e.target.value)}
-              className="border rounded mt-1"
+              className="text-gray-600 border rounded-md focus:outline-[#692be0] focus:outline-3 text-lg font-semibold mt-1 h-14"
               required
               name=""
               id=""
@@ -127,19 +130,18 @@ const SignUp = () => {
             </select>
           </label>
           <label htmlFor="">
-            <span className="font-semibold">Password:</span>
-            <br />
+            {/* <span className="font-semibold">Password:</span>
+            <br /> */}
             <input
               onChange={(e) => setPassword(e.target.value)}
               value={password}
-              className="border rounded w-full px-2 h-8 mt-1"
+              className="border rounded-md focus:outline-[#692be0] focus:outline-3 text-lg font-semibold w-full px-2 h-14 mt-1"
               type="password"
               required
-              placeholder="Enter password"
+              placeholder="Password"
             />
           </label>
-          <div className="flex items-center gap-3 mt-2">
-            <label htmlFor="img">
+            <label htmlFor="img" className="flex cursor-pointer items-center gap-3 mt-2">
               <img
                 className="w-16 h-16 object-contain rounded-full cursor-pointer"
                 src={image ? URL.createObjectURL(image) : uploadImage}
@@ -150,28 +152,30 @@ const SignUp = () => {
                 type="file"
                 hidden
                 id="img"
+                required
               />
-            </label>
             <p>Upload image</p>
-          </div>
+            </label>
           <input
             type="submit"
             value="Sign Up"
-            className="bg-gray-300 h-9 rounded-lg my-3 font-semibold cursor-pointer hover:bg-blue-500"
+            className="bg-[#814de5] text-white text-lg h-14 rounded-lg mt-2 font-semibold cursor-pointer hover:bg-[#692be0]"
           />
         </form>
-        <div className="text-center">
+        <div className="text-center mt-10">
           <span className="text-gray-600">Already have an account?</span>
           <span
             onClick={() => navigate("/login")}
-            className="text-blue-600 pl-1 cursor-pointer"
+            className="text-[#692be0] font-semibold pl-1 cursor-pointer"
           >
-            Login
+            Login!
           </span>
         </div>
       </div>
     </div>
-  ):<Loading/>;
+  ) : (
+    <Loading />
+  );
 };
 
 export default SignUp;

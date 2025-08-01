@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AppContext } from "../Context/AppContext";
-import axios from 'axios'
+import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 import Loading from "./Loading";
@@ -12,57 +12,67 @@ const EditAppointmentMain = () => {
   const [doctorName, setDoctorName] = useState();
   const [purpose, setPurpose] = useState();
   const [status, setStatus] = useState();
-  const {id} = useParams();
+  const { id } = useParams();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const onSubmitHandler = async(e) => {
+  const onSubmitHandler = async (e) => {
     setLoading(true);
     e.preventDefault();
     try {
-      const {data} = await axios.post(backendUrl+`/api/appointments/editAppointment/${id}`, {date,time,doctorName,purpose,status}, {headers:{token:userToken}})
-      if(data.success) {
-        setLoading(false)
-        toast.success(data.message)
-        setDate('')
-        setTime('')
-        setDoctorName('')
-        setPurpose('')
-        setStatus('')
-        navigate('/appointment')
+      const { data } = await axios.post(
+        backendUrl + `/api/appointments/editAppointment/${id}`,
+        { date, time, doctorName, purpose, status },
+        { headers: { token: userToken } }
+      );
+      if (data.success) {
+        setLoading(false);
+        toast.success(data.message);
+        setDate("");
+        setTime("");
+        setDoctorName("");
+        setPurpose("");
+        setStatus("");
+        navigate("/appointment");
+      } else {
+        toast.error(data.message);
       }
-      else{
-        toast.error(data.message)
-      }
-      
     } catch (error) {
-      toast.error(data.message)
+      toast.error(data.message);
     }
-  }
+  };
 
-  const fetchAppointment = async() => {
-   try {
-      const {data} = await axios.get(backendUrl+`/api/appointments/getAppointment/${id}`, {headers:{token:userToken}})
-      if(data.success) {
-         setDate(data.appointment.date)
-         setTime(data.appointment.time)
-         setPurpose(data.appointment.purpose)
-         setDoctorName(data.appointment.doctorName)
-         setStatus(data.appointment.status)
+  const fetchAppointment = async () => {
+    setLoading(true);
+    try {
+      const { data } = await axios.get(
+        backendUrl + `/api/appointments/getAppointment/${id}`,
+        { headers: { token: userToken } }
+      );
+      if (data.success) {
+        setLoading(false);
+        setDate(data.appointment.date);
+        setTime(data.appointment.time);
+        setPurpose(data.appointment.purpose);
+        setDoctorName(data.appointment.doctorName);
+        setStatus(data.appointment.status);
+      } else {
+        toast.error(data.message);
       }
-      else{
-         toast.error(data.message)
-      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
 
-   } catch (error) {
-      toast.error(error.message)
-   }
-  } 
+  useEffect(() => {
+    fetchAppointment();
+  }, []);
 
-  useEffect(()=>{fetchAppointment()},[])
-
-  return !loading? (
-    <div className={`min-h-screen w-4/5 ${view ? "max-md:relative max-md:w-full" : "w-full"} px-10 py-10 flex flex-col gap-8`}
+  return !loading ? (
+    <div
+      className={`min-h-screen w-4/5 ${
+        view ? "max-md:relative max-md:w-full" : "w-full"
+      } px-10 py-10 flex flex-col gap-8`}
     >
       <h1 className="text-5xl max-md:text-3xl max-lg:text-4xl max-lg:pt-3 font-bold">
         Edit Appointment
@@ -153,13 +163,15 @@ const EditAppointmentMain = () => {
             <input
               type="submit"
               value="Save Changes"
-              className="bg-blue-300 px-4 py-2 font-semibold rounded-2xl cursor-pointer"
+              className="bg-[#814de5] font-semibold text-white px-4 py-2 font-semibold rounded-2xl cursor-pointer"
             />
           </div>
         </form>
       </div>
     </div>
-  ):<Loading/>;
+  ) : (
+    <Loading />
+  );
 };
 
 export default EditAppointmentMain;

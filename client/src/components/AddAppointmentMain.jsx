@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { AppContext } from "../Context/AppContext";
 import axios from 'axios'
 import { toast } from "react-toastify";
+import Loading from "./Loading";
 
 const AddAppointmentMain = () => {
   const { view, backendUrl, userToken } = useContext(AppContext);
@@ -10,13 +11,16 @@ const AddAppointmentMain = () => {
   const [doctorName, setDoctorName] = useState();
   const [purpose, setPurpose] = useState();
   const [status, setStatus] = useState("not booked");
+  const [loading, setLoading] = useState(false);
 
   const onSubmitHandler = async(e) => {
+    setLoading(true);
     e.preventDefault();
 
     try {
       const {data} = await axios.post(backendUrl+'/api/appointments/addAppointment', {date,time,doctorName,purpose,status}, {headers:{token:userToken}})
       if(data.success) {
+        setLoading(false);
         toast.success("Appointment added")
         setDate('')
         setTime('')
@@ -33,7 +37,7 @@ const AddAppointmentMain = () => {
     }
   }
 
-  return (
+  return !loading? (
     <div className={`min-h-screen w-4/5 ${view ? "max-md:relative max-md:w-full" : "w-full"} px-10 py-10 flex flex-col gap-8`}
     >
       <h1 className="text-5xl max-md:text-3xl max-lg:text-4xl max-lg:pt-3 font-bold">
@@ -126,13 +130,13 @@ const AddAppointmentMain = () => {
               type="submit"
               value="Add"
               onClick={(e) => setStatus(status)}
-              className="bg-blue-300 px-4 py-2 font-semibold rounded-2xl cursor-pointer"
+              className="bg-[#814de5] font-semibold text-white px-4 py-2 font-semibold rounded-2xl cursor-pointer"
             />
           </div>
         </form>
       </div>
     </div>
-  );
+  ):<Loading/>;
 };
 
 export default AddAppointmentMain;

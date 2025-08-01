@@ -19,14 +19,14 @@ const TestResultMain = () => {
   const navigate = useNavigate();
 
   const fetchTestResults = async () => {
-    // setLoading(true);
+    setLoading(true);
     try {
       const { data } = await axios.get(
         backendUrl + "/api/testResults/getTestResults",
         { headers: { token: userToken } }
       );
       if (data.success) {
-        // setLoading(false);
+        setLoading(false);
         setResults(data.testResults);
       } else {
         toast.error(data.message);
@@ -56,6 +56,7 @@ const TestResultMain = () => {
         setFileName("");
         setFileDescription("");
         setTestResult("");
+        fetchTestResults();
       } else {
         toast.error(data.message);
       }
@@ -65,12 +66,15 @@ const TestResultMain = () => {
   };
 
   const deleteTestResult = async (id) => {
+    setLoading(true);
     try {
       const { data } = await axios.get(
         backendUrl + `/api/testResults/deleteTestResult/${id}`,
         { headers: { token: userToken } }
       );
       if (data.success) {
+        setLoading(false);
+        fetchTestResults();
         toast.success(data.message);
       } else {
         toast.error(data.message);
@@ -82,13 +86,13 @@ const TestResultMain = () => {
 
   useEffect(() => {
     fetchTestResults();
-  }, [results]);
+  }, []);
 
   return !loading ? (
     <div
       className={`min-h-screen w-4/5 ${
         view ? "max-md:relative max-md:w-full" : "w-full"
-      } px-10 py-10 flex flex-col gap-5`}
+      } px-8 py-10 flex flex-col gap-5`}
     >
       <h1 className="text-6xl font-semibold">Test Results</h1>
       <p className="text-gray-500">Upload and manage your test results</p>
@@ -130,7 +134,7 @@ const TestResultMain = () => {
             </h3>
             <p className="text-center pt-2">Accepted file types: PDF, Docs</p>
             <label
-              className="text-center cursor-pointer bg-gray-300 mt-2 p-2 h-9 pt-1 rounded-md font-semibold"
+              className="text-center cursor-pointer bg-[#814de5] font-semibold text-white mt-2 p-2 h-9 pt-1 rounded-md font-semibold"
               htmlFor="file"
             >
               Browse Files
@@ -146,7 +150,7 @@ const TestResultMain = () => {
             <p>{testResult ? testResult.name : ""}</p>
           </div>
           <input
-            className="w-full bg-blue-300 h-8 cursor-pointer hover:bg-blue-600"
+            className="w-full bg-[#814de5] font-semibold text-white h-8 cursor-pointer "
             type="submit"
             value="Upload"
           />
@@ -169,7 +173,7 @@ const TestResultMain = () => {
                 </tr>
               </thead>
               <tbody>
-                {results.map((a, index) => (
+                {results.reverse().map((a, index) => (
                   <tr key={index} className="text-gray-800">
                     <td className="py-2 px-4 border-b border-gray-200 text-left">
                       {a.fileName}
@@ -182,7 +186,7 @@ const TestResultMain = () => {
                     </td>
                     <td className="py-2 px-3 border-b border-gray-200 text-left">
                       <a href={a.link} target="_blank">
-                        <button className="w-15 h-9 bg-blue-100 cursor-pointer">
+                        <button className="w-15 h-9 bg-[#814de5] font-semibold text-white cursor-pointer">
                           View
                         </button>
                       </a>

@@ -4,6 +4,7 @@ import axios from "axios";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
+import Loading from "./Loading";
 
 const EditTestResultMain = () => {
   const { view, userToken, backendUrl } = useContext(AppContext);
@@ -11,18 +12,21 @@ const EditTestResultMain = () => {
   const [testResult, setTestResult] = useState(null);
   const [fileName, setFileName] = useState(null);
   const [fileDescription, setFileDescription] = useState(null);
+  const [loading, setLoading] = useState(null);
 
   const navigate = useNavigate()
 
   const{id} = useParams();
 
   const fetchTestResults = async () => {
+    setLoading(true);
     try {
       const { data } = await axios.get(
         backendUrl + `/api/testResults/getTestResult/${id}`,
         { headers: { token: userToken } }
       );
       if (data.success) {
+        setLoading(false);
          setFileName(data.testResult.fileName)
          setFileDescription(data.testResult.fileDescription)
       } else {
@@ -34,6 +38,7 @@ const EditTestResultMain = () => {
   };
 
   const onSubmitHandler = async (e) => {
+    setLoading(true);
     e.preventDefault();
     try {
       const formData = new FormData();
@@ -47,6 +52,7 @@ const EditTestResultMain = () => {
         { headers: { token: userToken } }
       );
       if (data.success) {
+        setLoading(false)
          toast.success(data.message);
          navigate('/testResults')
         setFileName("");
@@ -65,7 +71,7 @@ const EditTestResultMain = () => {
     fetchTestResults();
   }, []);
 
-  return (
+  return !loading? (
     <div
       className={`min-h-screen w-4/5 ${
         view ? "max-md:relative max-md:w-full" : "w-full"
@@ -109,7 +115,7 @@ const EditTestResultMain = () => {
             </h3>
             <p className="text-center mt-2">Accepted file types: PDF, Docs</p>
             <label
-              className="text-center cursor-pointer bg-gray-300 p-2 h-9 pt-1 mt-2 rounded-md font-semibold"
+              className="text-center cursor-pointer bg-[#814de5] font-semibold text-white p-2 h-9 pt-1 mt-2 rounded-md font-semibold"
               htmlFor="file"
             >
               Browse Files
@@ -124,14 +130,14 @@ const EditTestResultMain = () => {
               <p>{testResult? testResult.name:fileName+'.pdf'}</p>
           </div>
           <input
-            className="w-full bg-blue-300 h-8 cursor-pointer hover:bg-blue-600"
+            className="w-full bg-[#814de5] font-semibold text-white h-8 cursor-pointer "
             type="submit"
             value="Save Changes"
           />
         </form>
       </div>
     </div>
-  );
+  ):<Loading/>;
 };
 
 export default EditTestResultMain;

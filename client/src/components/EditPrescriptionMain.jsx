@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { AppContext } from "../Context/AppContext";
 import axios from "axios";
 import { useEffect } from "react";
-import {toast} from 'react-toastify';
+import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 import Loading from "./Loading";
 
@@ -14,16 +14,18 @@ const EditPrescriptionMain = () => {
   const [doctorName, setDoctorName] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const {id} = useParams()
-  const navigate = useNavigate()
+  const { id } = useParams();
+  const navigate = useNavigate();
 
   const fetchPrescriptions = async () => {
+    setLoading(true);
     try {
       const { data } = await axios.get(
         backendUrl + `/api/prescriptions/getPrescription/${id}`,
         { headers: { token: userToken } }
       );
       if (data.success) {
+        setLoading(false);
         setFileName(data.prescription.fileName);
         setDoctorName(data.prescription.doctorName);
       } else {
@@ -49,12 +51,12 @@ const EditPrescriptionMain = () => {
         { headers: { token: userToken } }
       );
       if (data.success) {
-        setLoading(false)
-        toast.success(data.message)
+        setLoading(false);
+        toast.success(data.message);
         setFileName("");
         setDoctorName("");
         setPrescription("");
-        navigate('/prescriptions')
+        navigate("/prescriptions");
       } else {
         toast.error(data.message);
       }
@@ -67,14 +69,14 @@ const EditPrescriptionMain = () => {
     fetchPrescriptions();
   }, []);
 
-  return !loading? (
+  return !loading ? (
     <div
-      className={`min-h-screen w-4/5 ${view ? "max-md:relative max-md:w-full" : "w-full"} px-8 py-10 flex flex-col gap-5`}
+      className={`min-h-screen w-4/5 ${
+        view ? "max-md:relative max-md:w-full" : "w-full"
+      } px-8 py-10 flex flex-col gap-5`}
     >
       <h1 className="text-6xl font-semibold">Prescriptions</h1>
-      <p className="text-gray-500">
-      Edit your prescription
-      </p>
+      <p className="text-gray-500">Edit your prescription</p>
       <div className="lg:w-3/4">
         <form
           onSubmit={(e) => {
@@ -113,7 +115,7 @@ const EditPrescriptionMain = () => {
             </h3>
             <p className="text-center pt-2">Accepted file types: PDF, Docs</p>
             <label
-              className="text-center cursor-pointer bg-gray-300 mt-2 p-2 h-9 pt-1 rounded-md font-semibold"
+              className="text-center cursor-pointer bg-[#814de5] font-semibold text-white mt-2 p-2 h-9 pt-1 rounded-md font-semibold"
               htmlFor="file"
             >
               Browse Files
@@ -125,17 +127,19 @@ const EditPrescriptionMain = () => {
                 onChange={(e) => setPrescription(e.target.files[0])}
               />
             </label>
-            <p>{prescription ? prescription.name : fileName+'.pdf'}</p>
+            <p>{prescription ? prescription.name : fileName + ".pdf"}</p>
           </div>
           <input
-            className="w-full bg-blue-300 h-8 cursor-pointer hover:bg-blue-600"
+            className="w-full bg-[#814de5] font-semibold text-white h-8 cursor-pointer"
             type="submit"
             value="Save Changes"
           />
         </form>
       </div>
     </div>
-  ):<Loading/>;
+  ) : (
+    <Loading />
+  );
 };
 
 export default EditPrescriptionMain;

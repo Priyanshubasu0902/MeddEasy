@@ -1,5 +1,5 @@
 import express from "express";
-import { deleteUser, editUser, getUser, loginUser, signUpUser } from "../controllers/userController.js";
+import { deleteUser, editUser, getUser, loginUser, setPassword, signUpUser } from "../controllers/userController.js";
 import { isLoggedIn } from "../middlewares/isLoggedIn.js";
 import upload from '../config/multer.js';
 
@@ -19,5 +19,7 @@ router.post("/editDetails", isLoggedIn, editUser);
 
 // Delete User
 router.get("/deleteUser", isLoggedIn, deleteUser);
+
+router.post('/setPassword', isLoggedIn, setPassword);
 
 export default router;

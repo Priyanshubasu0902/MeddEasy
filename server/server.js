@@ -1,7 +1,7 @@
 import express from 'express'
 import cors from 'cors'
-import mongoose from 'mongoose';
 import "dotenv/config"
+import mongoose from 'mongoose';
 import connectDB from './config/db.js';
 import connectCloudinary from './config/cloudinary.js';
 import userRoutes from './routes/userRoutes.js'
@@ -10,6 +10,8 @@ import prescriptionRoutes from './routes/prescriptionRoutes.js'
 import readingRoutes from './routes/readingRoutes.js'
 import testResultRoutes from './routes/testResultRoutes.js'
 import doctorRoutes from './routes/doctorRoutes.js'
+import indexRoutes from './routes/indexRouter.js'
+import { checkAppointment } from './middlewares/Reminder.js';
 
 const app = express();
 const PORT = process.env.PORT || 5000
@@ -25,12 +27,15 @@ app.get('/', (req, res)=> {
    res.send("api working");
 })
 
+app.use('/api', indexRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/appointments', appointmentRoutes);
 app.use('/api/prescriptions', prescriptionRoutes);
 app.use('/api/readings', readingRoutes);
 app.use('/api/testResults', testResultRoutes);
 app.use('/api/doctors', doctorRoutes);
+
+checkAppointment();
 
 app.listen(PORT, (err) => {
    if(err) return console.log(err.message);

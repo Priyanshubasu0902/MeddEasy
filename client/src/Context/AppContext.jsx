@@ -24,8 +24,8 @@ export const AppContextProvider = (props) => {
       if (data.success) {
         setUserData(data.user);
       } else {
-        toast.error(data.message);
-        navigate("/login");
+        // toast.error('Login');
+        navigate("/");
       }
     } catch (error) {
       toast.error(error.message);

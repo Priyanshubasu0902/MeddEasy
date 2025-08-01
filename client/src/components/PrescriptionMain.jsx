@@ -3,7 +3,7 @@ import { AppContext } from "../Context/AppContext";
 import axios from "axios";
 import { useEffect } from "react";
 import moment from "moment";
-import {toast} from 'react-toastify';
+import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import Loading from "./Loading";
 
@@ -16,15 +16,17 @@ const PrescriptionMain = () => {
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const fetchPrescriptions = async () => {
+    setLoading(true);
     try {
       const { data } = await axios.get(
         backendUrl + "/api/prescriptions/getPrescriptions",
         { headers: { token: userToken } }
       );
       if (data.success) {
+        setLoading(false);
         setResults(data.prescription);
       } else {
         toast.error(data.message);
@@ -49,11 +51,12 @@ const PrescriptionMain = () => {
         { headers: { token: userToken } }
       );
       if (data.success) {
-        setLoading(false)
-        toast.success("Prescription added")
+        setLoading(false);
+        toast.success("Prescription added");
         setFileName("");
         setDoctorName("");
         setPrescription("");
+        fetchPrescriptions();
       } else {
         toast.error(data.message);
       }
@@ -63,12 +66,15 @@ const PrescriptionMain = () => {
   };
 
   const deletePrescriptions = async (id) => {
+    setLoading(true);
     try {
       const { data } = await axios.get(
         backendUrl + `/api/prescriptions/deletePrescription/${id}`,
         { headers: { token: userToken } }
       );
       if (data.success) {
+        setLoading(false);
+        fetchPrescriptions();
         toast.success(data.message);
       } else {
         toast.error(data.message);
@@ -80,11 +86,13 @@ const PrescriptionMain = () => {
 
   useEffect(() => {
     fetchPrescriptions();
-  }, [results]);
+  }, []);
 
-  return !loading? (
+  return !loading ? (
     <div
-          className={`min-h-screen w-4/5 ${view ? "max-md:relative max-md:w-full" : "w-full"} px-8 py-10 flex flex-col gap-5`}
+      className={`min-h-screen w-4/5 ${
+        view ? "max-md:relative max-md:w-full" : "w-full"
+      } px-8 py-10 flex flex-col gap-5`}
     >
       <h1 className="text-6xl font-semibold">Prescriptions</h1>
       <p className="text-gray-500">
@@ -129,7 +137,7 @@ const PrescriptionMain = () => {
             </h3>
             <p className="text-center pt-2">Accepted file types: PDF, Docs</p>
             <label
-              className="text-center cursor-pointer bg-gray-300 mt-2 p-2 h-9 pt-1 rounded-md font-semibold"
+              className="text-center cursor-pointer bg-[#814de5] font-semibold text-white mt-2 p-2 h-9 pt-1 rounded-md font-semibold"
               htmlFor="file"
             >
               Browse Files
@@ -142,10 +150,10 @@ const PrescriptionMain = () => {
                 required
               />
             </label>
-              <p>{prescription ? prescription.name : ""}</p>
+            <p>{prescription ? prescription.name : ""}</p>
           </div>
           <input
-            className="w-full bg-blue-300 h-8 cursor-pointer hover:bg-blue-600"
+            className="w-full bg-[#814de5] font-semibold text-white h-8 cursor-pointer"
             type="submit"
             value="Upload"
           />
@@ -154,58 +162,67 @@ const PrescriptionMain = () => {
       <div className="flex flex-col gap-3 pt-5">
         <h3 className="text-xl font-bold">Uploaded Prescriptions</h3>
         <div>
-          {results.length>0?(
+          {results.length > 0 ? (
             <table className="w-full max-w-4xl bg-white rounded border border-gray-200 border-b max-sm:text-sm">
-            <thead>
-              <tr className="border-b border-gray-200">
-                <th className="py-2 px-4 text-left">File Name</th>
-                <th className="py-2 max-sm:hidden px-4 text-left">Doctor Name</th>
-                <th className="py-2 px-4 text-left">Upload Date</th>
-                <th className="py-2 px-4 text-left"></th>
-                <th className="py-2 px-4 text-center">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {results.map((a, index) => (
-                <tr key={index} className="text-gray-800">
-                  <td className="py-2 px-4 border-b border-gray-200 text-left">
-                    {a.fileName}
-                  </td>
-                  <td className="py-2 px-4 max-sm:hidden border-b border-gray-200 text-left">
-                    {a.doctorName}
-                  </td>
-                  <td className="py-2 px-4 border-b border-gray-200 text-left">
-                    {moment(a.data).format("lll")}
-                  </td>
-                  <td className="py-2 px-3 border-b border-gray-200 text-left">
-                    <a href={a.link} target="_blank">
-                      <button className="w-15 h-9 bg-blue-100 cursor-pointer">
-                        View
-                      </button>
-                    </a>
-                  </td>
-                  <td className="py-2 px-4 border-b border-gray-200 text-left">
-                    <div className="flex flex-col gap-3">
-                      <button onClick={()=>navigate(`/editPrescription/${a._id}`)} className="w-full rounded-md h-7 bg-blue-300 cursor-pointer">
-                        Edit
-                      </button>
-                      <button onClick={()=>deletePrescriptions(a._id)} className="w-full px-1 rounded-md h-7 bg-red-300 cursor-pointer">
-                        Delete
-                      </button>
-                    </div>
-                  </td>
+              <thead>
+                <tr className="border-b border-gray-200">
+                  <th className="py-2 px-4 text-left">File Name</th>
+                  <th className="py-2 max-sm:hidden px-4 text-left">
+                    Doctor Name
+                  </th>
+                  <th className="py-2 px-4 text-left">Upload Date</th>
+                  <th className="py-2 px-4 text-left"></th>
+                  <th className="py-2 px-4 text-center">Action</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-          ):(
+              </thead>
+              <tbody>
+                {results.reverse().map((a, index) => (
+                  <tr key={index} className="text-gray-800">
+                    <td className="py-2 px-4 border-b border-gray-200 text-left">
+                      {a.fileName}
+                    </td>
+                    <td className="py-2 px-4 max-sm:hidden border-b border-gray-200 text-left">
+                      {a.doctorName}
+                    </td>
+                    <td className="py-2 px-4 border-b border-gray-200 text-left">
+                      {moment(a.date).format("lll")}
+                    </td>
+                    <td className="py-2 px-3 border-b border-gray-200 text-left">
+                      <a href={a.link} target="_blank">
+                        <button className="w-15 h-9 bg-[#814de5] font-semibold text-white cursor-pointer">
+                          View
+                        </button>
+                      </a>
+                    </td>
+                    <td className="py-2 px-4 border-b border-gray-200 text-left">
+                      <div className="flex flex-col gap-3">
+                        <button
+                          onClick={() => navigate(`/editPrescription/${a._id}`)}
+                          className="w-full rounded-md h-7 bg-blue-300 cursor-pointer"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => deletePrescriptions(a._id)}
+                          className="w-full px-1 rounded-md h-7 bg-red-300 cursor-pointer"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
             <p className="text-xl text-gray-400 text-center">No Record</p>
-          )
-          }
+          )}
         </div>
       </div>
     </div>
-  ):<Loading/>;
+  ) : (
+    <Loading />
+  );
 };
 
 export default PrescriptionMain;

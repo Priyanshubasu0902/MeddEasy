@@ -1,9 +1,14 @@
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
 import Navbar from '../components/Navbar'
 import Dashboard from '../components/Dashboard'
 import MainAddReading from '../components/MainAddReading'
+import { AppContext } from '../Context/AppContext'
 
 const AddReadings = () => {
+
+    const {setView} = useContext(AppContext)
+    useEffect(()=>setView(false),[])
+
   return (
     <div className='min-h-screen'>
       <Navbar/>

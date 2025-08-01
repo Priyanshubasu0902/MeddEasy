@@ -2,55 +2,83 @@ import React, { useContext, useState, useEffect } from "react";
 import { AppContext } from "../Context/AppContext";
 import axios from "axios";
 import { toast } from "react-toastify";
+import Loading from "./Loading";
 
 const MainAddReading = () => {
   const { view, backendUrl, userToken } = useContext(AppContext);
-  const [reading, setReading] = useState(null);
+  let [reading, setReading] = useState(null);
+  const [upperPressure, setUpperPressure] = useState(null);
+  const [lowerPressure, setLowerPressure] = useState(null);
   const [date, setDate] = useState();
   const [time, setTime] = useState();
   const [type, setType] = useState("sugar");
+  const [loading, setLoading] = useState(false);
 
   const onSubmitHandler = async (e) => {
+    setLoading(true);
     e.preventDefault();
     try {
-        const { data } = await axios.post(
-          backendUrl + "/api/readings/addReadings",
-          { reading, date, time, type },
-          { headers: { token: userToken } }
-        );
-        if (data.success) {
-          toast.success("Reading added")
-          setReading("");
-          setDate("");
-          setTime("");
-        } else {
-          toast.error(data.message);
-        }
+      if (type === "pressure") {
+        reading = `${upperPressure}/${lowerPressure}`;
+      }
+      const { data } = await axios.post(
+        backendUrl + "/api/readings/addReadings",
+        { reading, upperPressure, lowerPressure, date, time, type },
+        { headers: { token: userToken } }
+      );
+      if (data.success) {
+        setLoading(false);
+        toast.success("Reading added");
+        setReading("");
+        setUpperPressure("");
+        setLowerPressure("");
+        setDate("");
+        setTime("");
+      } else {
+        toast.error(data.message);
+      }
     } catch (error) {
       toast.error(error.message);
     }
   };
 
-  return (
+  return !loading ? (
     <div
-          className={`min-h-screen w-4/5 ${view ? "max-md:relative max-md:w-full" : "w-full"} px-10 py-10 flex flex-col gap-6`}
-
+      className={`min-h-screen w-4/5 ${
+        view ? "max-md:relative max-md:w-full" : "w-full"
+      } px-10 py-10 flex flex-col gap-6`}
     >
       <h1 className="text-5xl font-semibold">Add Readings</h1>
       <p className="text-gray-500">Add your readings here</p>
       <div className="flex gap-3 pt-2">
         <button
-          onClick={() => setType("sugar")}
+          onClick={() => {
+            setType("sugar");
+            setReading("");
+            setDate("");
+            setTime("");
+            setLowerPressure("");
+            setUpperPressure("");
+          }}
           className={`${
-            type == "sugar" ? "bg-gray-200" : "bg-gray-300"
+            type == "sugar"
+              ? "bg-[#9d75eb] text-white font-semibold"
+              : "bg-[#d6c5f7]"
           } px-2 py-1 rounded-lg max-sm:text-sm cursor-pointer`}
         >
           Sugar
         </button>
         <button
-          onClick={() => setType("pressure")}
+          onClick={() => {
+            setType("pressure");
+            setReading("");
+            setDate("");
+            setTime("");
+          }}
           className={`${
-            type == "pressure" ? "bg-gray-200" : "bg-gray-300"
+            type == "pressure"
+              ? "bg-[#9d75eb] text-white font-semibold"
+              : "bg-[#d6c5f7]"
           } px-2 py-1 rounded-lg max-sm:text-sm cursor-pointer`}
         >
           Pressure
@@ -68,7 +96,7 @@ const MainAddReading = () => {
               <br />
               <input
                 className="w-1/2 max-sm:w-full mt-1 h-[50px] outline-none border border-gray-100 rounded-xl bg-gray-100 text-sm p-5"
-                type="Text"
+                type="number"
                 id="sugar"
                 placeholder="Enter Suger level"
                 onChange={(e) => setReading(e.target.value)}
@@ -103,7 +131,7 @@ const MainAddReading = () => {
               />
             </label>
             <button
-              className="bg-blue-500 text-white h-[50px] w-[200px] rounded-3xl cursor-pointer text-center"
+              className="bg-[#814de5] font-semibold text-white h-[50px] w-[200px] rounded-3xl cursor-pointer text-center"
               type="Submit"
             >
               Add Sugar Reading
@@ -120,15 +148,27 @@ const MainAddReading = () => {
             <label htmlFor="pressure" className="text-lg font-semibold">
               Pressure Reading (mmHg)
               <br />
-              <input
-                className="w-1/2 max-sm:w-full mt-1 h-[50px] outline-none border border-gray-100 rounded-xl bg-gray-100 text-sm p-5"
-                type="text"
-                id="pressure"
-                placeholder="Enter Pressure level"
-                onChange={(e) => setReading(e.target.value)}
-                value={reading}
-                required
-              />
+              <div className="w-1/2 flex items-center max-sm:w-full mt-2 h-[50px]">
+                <input
+                  className="w-1/2 h-full outline-none border border-gray-100 rounded-xl bg-gray-100 text-sm p-5"
+                  type="number"
+                  id="pressure"
+                  placeholder="Upper"
+                  onChange={(e) => setUpperPressure(e.target.value)}
+                  value={upperPressure}
+                  required
+                />
+                <span className="text-4xl font-normal">/</span>
+                <input
+                  className="w-1/2 h-full outline-none border border-gray-100 rounded-xl bg-gray-100 text-sm p-5"
+                  type="number"
+                  id="pressure"
+                  placeholder="Lower"
+                  onChange={(e) => setLowerPressure(e.target.value)}
+                  value={lowerPressure}
+                  required
+                />
+              </div>
             </label>
             <label htmlFor="date" className="text-lg font-semibold">
               Date
@@ -157,7 +197,7 @@ const MainAddReading = () => {
               />
             </label>
             <button
-              className="bg-blue-500 text-white h-[50px] w-[200px] rounded-3xl cursor-pointer text-center"
+              className="bg-[#814de5] font-semibold text-white h-[50px] w-[200px] rounded-3xl cursor-pointer text-center"
               type="Submit"
             >
               Add Pressure Reading
@@ -166,6 +206,8 @@ const MainAddReading = () => {
         </div>
       )}
     </div>
+  ) : (
+    <Loading />
   );
 };
 

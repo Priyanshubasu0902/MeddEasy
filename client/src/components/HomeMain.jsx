@@ -7,6 +7,7 @@ import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import editIcon from "../assets/edit.png";
 import { toast } from "react-toastify";
+import Loading from "./Loading";
 
 const HomeMain = () => {
   const { view, userData, setUserData, fetchUserData, userToken, backendUrl } =
@@ -24,15 +25,19 @@ const HomeMain = () => {
   const [age, setAge] = useState(userData.age);
   const [gender, setGender] = useState(userData.gender);
 
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
 
   const fetchAppointments = async () => {
+    setLoading(true);
     try {
       const { data } = await axios.get(
         backendUrl + "/api/appointments/getAppointments",
         { headers: { token: userToken } }
       );
       if (data.success) {
+        setLoading(false);
         setAppointments(data.appointments);
       } else {
         toast.error(data.message);
@@ -43,11 +48,13 @@ const HomeMain = () => {
   };
 
   const fetchDoctors = async () => {
+    setLoading(true);
     try {
       const { data } = await axios.get(backendUrl + "/api/doctors/getDoctor", {
         headers: { token: userToken },
       });
       if (data.success) {
+        setLoading(false);
         setDoctors(data.doctor);
       } else {
         console.log(data.message);
@@ -58,10 +65,12 @@ const HomeMain = () => {
   };
 
   const doctorSubmitHandler = async(e) => {
+    setLoading(true);
     e.preventDefault()
     try {
       const {data} = await axios.post(backendUrl + '/api/doctors/addDoctor', {name:doctorName, speciality:doctorSpeciality, number:doctorNumber}, {headers:{token:userToken}})
       if(data.success) {
+        setLoading(false);
         toast.success(data.message);
         fetchDoctors();
         setDoctorName('')
@@ -77,6 +86,7 @@ const HomeMain = () => {
   }
 
   const detailOnSubmit = async (e) => {
+    setLoading(true);
     e.preventDefault();
     try {
       const { data } = await axios.post(
@@ -85,6 +95,7 @@ const HomeMain = () => {
         { headers: { token: userToken } }
       );
       if (data.success) {
+        setLoading(false);
         fetchUserData();
         setDetailEdit(false);
         toast.success(data.message);
@@ -97,10 +108,12 @@ const HomeMain = () => {
   };
 
   const deleteDoctor = async(id) => {
+    setLoading(true);
     try {
       const {data} = await axios.get( backendUrl + `/api/doctors/deleteDoctor/${id}`,
         { headers: { token: userToken }})
         if(data.success) {
+          setLoading(false);
           toast.success(data.message)
           fetchDoctors()
         }
@@ -117,7 +130,7 @@ const HomeMain = () => {
     fetchDoctors();
   }, []);
 
-  return (
+  return !loading? (
     <div className={`min-h-screen w-4/5 ${view ? "max-md:relative max-md:w-full" : "w-full"} px-8 py-10`}>
       <h1 className="text-5xl font-bold md:text-5xl md:font-bold">
         My Health Record
@@ -158,7 +171,7 @@ const HomeMain = () => {
                 <label className="flex gap-3 pt-3" htmlFor="">
                   <span className="font-semibold text-lg">Name:</span>
                   <input
-                    className="border-b"
+                    className="border-b focus:outline-none"
                     onChange={(e) => setName(e.target.value)}
                     value={name}
                     type="text"
@@ -168,7 +181,7 @@ const HomeMain = () => {
                 <label className="flex gap-3 pt-2" htmlFor="">
                   <span className="font-semibold text-lg">Age:</span>
                   <input
-                    className="border-b"
+                    className="border-b focus:outline-none"
                     value={age}
                     onChange={(e) => setAge(e.target.value)}
                     type="number"
@@ -208,7 +221,7 @@ const HomeMain = () => {
                 </label>
                 <div className="w-full flex justify-end">
                   <input
-                    className="bg-green-300 w-13 py-1 rounded-lg cursor-pointer"
+                    className="bg-[#814de5] text-white font-semibold w-13 py-1 rounded-lg cursor-pointer"
                     type="submit"
                     value="Save"
                   />
@@ -247,15 +260,15 @@ const HomeMain = () => {
           )}
           <form onSubmit={(e)=>doctorSubmitHandler(e)} className="flex gap-6 mt-5 items-center" action="">
             <label htmlFor="">
-              <input className="border-b w-20" required value={doctorName} onChange={(e)=>setDoctorName(e.target.value)} type="text" placeholder="Name" />
+              <input className="border-b w-20 focus:outline-none" required value={doctorName} onChange={(e)=>setDoctorName(e.target.value)} type="text" placeholder="Name" />
             </label>
             <label htmlFor="">
-              <input className="border-b w-25" required value={doctorSpeciality} onChange={(e)=>setDoctorSpeciality(e.target.value)} type="text" placeholder="Speciality" />
+              <input className="border-b w-25 focus:outline-none" required value={doctorSpeciality} onChange={(e)=>setDoctorSpeciality(e.target.value)} type="text" placeholder="Speciality" />
             </label>
             <label htmlFor="">
-              <input className="border-b w-26" value={doctorNumber} onChange={(e)=>setDoctorNumber(e.target.value)} type="number" placeholder="Number" />
+              <input className="border-b w-26 focus:outline-none" value={doctorNumber} onChange={(e)=>setDoctorNumber(e.target.value)} type="number" placeholder="Number" />
             </label>
-            <input type="submit" value="Add" className="bg-green-300 w-27 py-1 rounded-lg cursor-pointer" />
+            <input type="submit" value="Add" className="bg-[#814de5] text-white font-semibold w-27 py-1 rounded-lg cursor-pointer" />
           </form>
         </div>
         <div className="py-5">
@@ -266,17 +279,17 @@ const HomeMain = () => {
             .map((a, index) => (
               <div
                 key={index}
-                className={`flex items-center gap-5 p-2 mt-3 h-full md:w-2/4 lg:w-1/4 cursor-pointer bg-gray-100 rounded-xl`}
+                className={`flex items-center gap-5 p-2 mt-3 h-full md:w-2/4 lg:w-1/4 cursor-pointer text-white bg-[#ba9df1] rounded-xl`}
                 onClick={() => navigate("/appointment")}
               >
-                <div className="bg-gray-200 w-15 h-full p-3 flex rounded-xl items-center justify-center">
+                <div className=" w-15 h-full p-3 flex rounded-xl items-center justify-center">
                   <img className="h-8" src={appointment} alt="" />
                 </div>
                 <div>
                   <p className="font-bold">
                     {moment(a.date).format("DD-MM-YYYY")}, {a.time}
                   </p>
-                  <p className="text-gray-600 text-sm">
+                  <p className="text-white text-sm font-semibold ">
                     {a.doctorName}, {a.purpose}
                   </p>
                 </div>
@@ -287,7 +300,7 @@ const HomeMain = () => {
         </div>
       </div>
     </div>
-  );
+  ):<Loading/>;
 };
 
 export default HomeMain;

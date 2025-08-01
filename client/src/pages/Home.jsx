@@ -1,14 +1,19 @@
+import { useContext, useEffect } from "react";
 import Dashboard from "../components/Dashboard";
 import HomeMain from "../components/HomeMain";
 import Navbar from "../components/Navbar";
-import { useNavigate } from "react-router-dom";
+import { AppContext } from "../Context/AppContext";
 
 const Home = () => {
 
+  const {setView} = useContext(AppContext)
+
+  useEffect(()=>setView(false),[])
+
   return (
-    <div className="h-screen">
+    <div className="">
       <Navbar />
-      <div className="flex h-1/2">
+      <div className="flex">
         <Dashboard section="home" />
         <HomeMain />
       </div>
