@@ -43,9 +43,11 @@ const EditReadingMain = () => {
         setTime(data.reading.time);
         setType(data.reading.type);
       } else {
+        setLoading(false);
         toast.error(data.message);
       }
     } catch (error) {
+      setLoading(false);
       toast.error(error.message);
     }
   };
@@ -138,7 +140,7 @@ const EditReadingMain = () => {
               />
             </label>
             <button
-              className="bg-[#814de5] font-semibold text-white h-[50px] w-[200px] rounded-3xl text-center cursor-pointer"
+              className="bg-[#814de5] font-semibold text-white h-[50px] w-[200px] rounded-3xl text-center cursor-pointer hover:bg-[#692be0]"
               type="Submit"
             >
               Save Changes
@@ -155,7 +157,7 @@ const EditReadingMain = () => {
             <label htmlFor="pressure" className="text-lg font-semibold">
               Pressure Reading (mmHg)
               <br />
-              <div className="w-1/2 flex items-center max-sm:w-full mt-2 h-[50px]">
+              <div className="w-1/2 flex items-center max-sm:w-full mt-2 h-[50px] gap-1">
                 <input
                   className="w-1/2 h-full outline-none border border-gray-100 rounded-xl bg-gray-100 text-sm p-5"
                   type="number"
@@ -204,7 +206,7 @@ const EditReadingMain = () => {
               />
             </label>
             <button
-              className="bg-[#814de5] font-semibold text-white h-[50px] w-[200px] rounded-3xl cursor-pointer text-center"
+              className="bg-[#814de5] font-semibold text-white h-[50px] w-[200px] rounded-3xl cursor-pointer text-center hover:bg-[#692be0]"
               type="Submit"
             >
               Save Changes

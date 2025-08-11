@@ -29,9 +29,11 @@ const TestResultMain = () => {
         setLoading(false);
         setResults(data.testResults);
       } else {
+        setLoading(false);
         toast.error(data.message);
       }
     } catch (error) {
+      setLoading(false);
       toast.error(error.message);
     }
   };
@@ -58,9 +60,11 @@ const TestResultMain = () => {
         setTestResult("");
         fetchTestResults();
       } else {
+        setLoading(false);
         toast.error(data.message);
       }
     } catch (error) {
+      setLoading(false);
       toast.error(error.message);
     }
   };
@@ -77,9 +81,11 @@ const TestResultMain = () => {
         fetchTestResults();
         toast.success(data.message);
       } else {
+        setLoading(false);
         toast.error(data.message);
       }
     } catch (error) {
+      setLoading(false);
       toast.error(error.message);
     }
   };
@@ -99,16 +105,14 @@ const TestResultMain = () => {
       <div className="lg:w-3/4">
         <form
           onSubmit={(e) => onSubmitHandler(e)}
-          className="flex flex-col gap-5"
+          className="flex flex-col gap-3"
           action=""
         >
-          <div className="flex w-full gap-3">
+          <div className="flex w-full gap-3 mt-1">
             <label className="w-1/2" htmlFor="">
-              <span className="text-lg font-medium">File Name:</span>
-              <br />
               <input
-                className="w-full pl-1 h-8 bg-gray-100 border border-gray-500 rounded mt-1"
-                placeholder="Enter file name"
+                className="w-full pl-2 focus:outline-[#692be0] focus:outline-3 border h-12 rounded"
+                placeholder="File name"
                 type="text"
                 value={fileName}
                 onChange={(e) => setFileName(e.target.value)}
@@ -116,11 +120,9 @@ const TestResultMain = () => {
               />
             </label>
             <label className="w-1/2" htmlFor="">
-              <span className="text-lg font-medium">File Description:</span>
-              <br />
               <input
-                className="w-full pl-1 h-8 bg-gray-100 border border-gray-500 rounded mt-1"
-                placeholder="Enter test details"
+                className="w-full pl-2 h-12 focus:outline-[#692be0] focus:outline-3 border rounded"
+                placeholder="Test details"
                 type="text"
                 onChange={(e) => setFileDescription(e.target.value)}
                 value={fileDescription}
@@ -128,13 +130,13 @@ const TestResultMain = () => {
               />
             </label>
           </div>
-          <div className="w-full h-80 border border-dashed border-gray-500 flex flex-col items-center justify-center gap-1">
+          <div className="w-full h-80 border border-dashed border-3 border-[#814de5] flex flex-col items-center justify-center gap-1">
             <h3 className="text-center text-lg font-medium">
               Drag and Drop or browse to upload
             </h3>
             <p className="text-center pt-2">Accepted file types: PDF, Docs</p>
             <label
-              className="text-center cursor-pointer bg-[#814de5] font-semibold text-white mt-2 p-2 h-9 pt-1 rounded-md font-semibold"
+              className="text-center cursor-pointer bg-[#814de5] font-semibold text-white mt-2 p-2 h-9 pt-1 rounded-md font-semibold hover:bg-[#692be0]"
               htmlFor="file"
             >
               Browse Files
@@ -144,13 +146,12 @@ const TestResultMain = () => {
                 className="hidden"
                 accept=".pdf, .doc, .docx"
                 onChange={(e) => setTestResult(e.target.files[0])}
-                required
               />
             </label>
             <p>{testResult ? testResult.name : ""}</p>
           </div>
           <input
-            className="w-full bg-[#814de5] font-semibold text-white h-8 cursor-pointer "
+            className="w-full bg-[#814de5] font-semibold text-white text-lg h-12 cursor-pointer hover:bg-[#692be0]"
             type="submit"
             value="Upload"
           />
@@ -186,7 +187,7 @@ const TestResultMain = () => {
                     </td>
                     <td className="py-2 px-3 border-b border-gray-200 text-left">
                       <a href={a.link} target="_blank">
-                        <button className="w-15 h-9 bg-[#814de5] font-semibold text-white cursor-pointer">
+                        <button className="w-15 h-9 bg-[#814de5] font-semibold text-white cursor-pointer hover:bg-[#692be0]">
                           View
                         </button>
                       </a>

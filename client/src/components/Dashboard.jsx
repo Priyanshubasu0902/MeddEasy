@@ -1,17 +1,19 @@
 import React, { useContext, useState } from "react";
 import home from "../assets/home.png";
 import appointment from "../assets/doctor-appointment.png";
-import injection from "../assets/injection.png";
 import report from "../assets/medical-result.png";
 import prescription from "../assets/prescription.png";
+import stethoscope from "../assets/stethoscope.png";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../Context/AppContext";
 import person_icon from "../assets/person_icon.svg";
 import { toast } from "react-toastify";
 import axios from "axios";
+import Loading from "./Loading";
 
 const Dashboard = ({ section }) => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const { view, userData, userToken, backendUrl, setUserToken, setUserData } =
     useContext(AppContext);
@@ -25,25 +27,29 @@ const Dashboard = ({ section }) => {
   };
 
   const deleteUser = async () => {
+    setLoading(true);
     try {
       const { data } = await axios.get(backendUrl + "/api/users/deleteUser", {
         headers: { token: userToken },
       });
       if (data.success) {
+        setLoading(false);
         setUserToken(null);
         setUserData(null);
         localStorage.removeItem("token");
         toast.success(data.message);
         navigate("/");
       } else {
+        setLoading(false);
         toast.error(data.message);
       }
     } catch (error) {
+      setLoading(false);
       toast.error(error.message);
     }
   };
 
-  return (
+  return !loading ? (
     <>
       <div
         className={`text-white bg-[#814de5] ${
@@ -77,8 +83,8 @@ const Dashboard = ({ section }) => {
             <li
               onClick={() => navigate("/home")}
               className={`flex block gap-4 px-5 py-2 rounded-xl ${
-                section === "home" ? "bg-[#9d75eb]" : ""
-              }  items-center w-full cursor-pointer hover:bg-[#692be0]`}
+                section === "home" ? "bg-[#692be0]" : ""
+              }  items-center w-full cursor-pointer hover:bg-[#9d75eb]`}
             >
               <img className="w-8" src={home} alt="" />
               <span className="text-xl font-medium">Home</span>
@@ -86,8 +92,8 @@ const Dashboard = ({ section }) => {
             <li
               onClick={() => navigate("/appointment")}
               className={`flex block gap-4 px-5 py-2 rounded-xl ${
-                section === "appointment" ? "bg-[#9d75eb] " : ""
-              }  items-center w-full cursor-pointer hover:bg-[#692be0]`}
+                section === "appointment" ? "bg-[#692be0]" : ""
+              }  items-center w-full cursor-pointer hover:bg-[#9d75eb]`}
             >
               <img className="w-8" src={appointment} alt="" />
               <span className="text-xl font-medium">Appointments</span>
@@ -95,17 +101,17 @@ const Dashboard = ({ section }) => {
             <li
               onClick={() => navigate("/readings")}
               className={`flex block gap-4 px-5 py-2 rounded-xl ${
-                section === "readings" ? "bg-[#9d75eb]" : ""
-              }  items-center w-full cursor-pointer hover:bg-[#692be0]`}
+                section === "readings" ? "bg-[#692be0]" : ""
+              }  items-center w-full cursor-pointer hover:bg-[#9d75eb]`}
             >
-              <img className="w-8" src={injection} alt="" />
+              <img className="w-8" src={stethoscope} alt="" />
               <span className="text-xl font-medium">Readings</span>
             </li>
             <li
               onClick={() => navigate("/prescriptions")}
               className={`flex block gap-4 px-5 py-2 rounded-xl ${
-                section === "prescriptions" ? "bg-[#9d75eb]" : ""
-              }  items-center w-full cursor-pointer hover:bg-[#692be0]`}
+                section === "prescriptions" ? "bg-[#692be0]" : ""
+              }  items-center w-full cursor-pointer hover:bg-[#9d75eb]`}
             >
               <img className="w-8" src={prescription} alt="" />
               <span className="text-xl font-medium">Prescriptions</span>
@@ -113,8 +119,8 @@ const Dashboard = ({ section }) => {
             <li
               onClick={() => navigate("/testResults")}
               className={`flex block gap-4 px-5 py-2 rounded-xl ${
-                section === "testresults" ? "bg-[#9d75eb]" : ""
-              }  items-center w-full cursor-pointer hover:bg-[#692be0]`}
+                section === "testresults" ? "bg-[#692be0]" : ""
+              }  items-center w-full cursor-pointer hover:bg-[#9d75eb]`}
             >
               <img className="w-8" src={report} alt="" />
               <span className="text-xl font-medium">Test Results</span>
@@ -123,6 +129,8 @@ const Dashboard = ({ section }) => {
         </div>
       </div>
     </>
+  ) : (
+    <Loading />
   );
 };
 

@@ -25,9 +25,11 @@ const ReadingMain = () => {
         setLoading(false);
         setReadings(data.readings);
       } else {
+        setLoading(false);
         toast.error(data.message);
       }
     } catch (error) {
+      setLoading(false);
       toast.error(error.message);
     }
   };
@@ -44,9 +46,11 @@ const ReadingMain = () => {
         toast.success(data.message);
         fetchReadings();
       } else {
+        setLoading(false);
         toast.error(data.message);
       }
     } catch (error) {
+      setLoading(false);
       toast.error(error.message);
     }
   };
@@ -105,7 +109,7 @@ const ReadingMain = () => {
           </button>
           <button
             onClick={() => navigate("/addReadings")}
-            className="bg-[#814de5] font-semibold text-white px-2 py-2 max-sm:text-sm rounded-lg cursor-pointer"
+            className="bg-[#814de5] font-semibold text-white px-2 py-2 max-sm:text-sm rounded-lg cursor-pointer hover:bg-[#692be0]"
           >
             Add
           </button>

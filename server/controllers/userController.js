@@ -12,6 +12,10 @@ import { transporter } from "../config/nodeMailer.js";
 export const signUpUser = async (req, res) => {
   const { name, email, number, age, gender, password } = req.body;
 
+  if(!req.file) {
+    return res.json({ success: false, message: "Image is missing" });
+  }
+
   const image = req.file;
 
   if (!name || !email || !number || !age || !gender || !password) {
@@ -20,7 +24,7 @@ export const signUpUser = async (req, res) => {
 
   try {
     const imageUpload = await cloudinary.uploader.upload(image.path);
-    const userExists = await userModel.findOne({ number });
+    const userExists = await userModel.findOne({ email });
     if (userExists) {
       return res.json({
         success: false,

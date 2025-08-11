@@ -25,9 +25,11 @@ const AppointmentMain = () => {
         setLoading(false);
         setAppointments(data.appointments);
       } else {
+        setLoading(false);
         toast.error(data.message);
       }
     } catch (error) {
+      setLoading(false);
       toast.error(error.message);
     }
   };
@@ -44,9 +46,11 @@ const AppointmentMain = () => {
         fetchAppointments();
         toast.success(data.message);
       } else {
+        setLoading(false);
         toast.error(data.message);
       }
     } catch (error) {
+      setLoading(false);
       toast.error(error.message);
     }
   };
@@ -68,7 +72,7 @@ const AppointmentMain = () => {
           </h1>
           <button
             onClick={() => navigate("/addAppointments")}
-            className="bg-[#814de5] text-white font-semibold px-2 py-2 mt-5 max-sm:text-sm rounded-lg cursor-pointer"
+            className="bg-[#814de5] text-white font-semibold px-2 py-2 mt-5 max-sm:text-sm rounded-lg cursor-pointer hover:bg-[#692be0]"
           >
             Add Appointment
           </button>

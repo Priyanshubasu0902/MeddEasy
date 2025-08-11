@@ -3,6 +3,7 @@ import { AppContext } from "../Context/AppContext";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Loading from "../components/Loading";
 
 const ForgotPassword = () => {
   const { backendUrl, setUserToken } = useContext(AppContext);
@@ -10,25 +11,31 @@ const ForgotPassword = () => {
   const [email, setEmail] = useState();
   const [otp, setOtp] = useState();
   const [emailSubmitted, setEmailSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const submitEmail = async (e) => {
+    setLoading(true);
     e.preventDefault();
     try {
       const { data } = await axios.post(backendUrl + "/api/generate-otp", {
         email,
       });
       if (data.success) {
+        setLoading(false);
         toast.success(data.message);
         setEmailSubmitted(true);
       } else {
+        setLoading(false);
         toast.error(data.message);
       }
     } catch (error) {
+      setLoading(false);
       toast.error(error.message);
     }
   };
 
   const onSubmitOtp = async (e) => {
+    setLoading(true);
     e.preventDefault();
     try {
       const { data } = await axios.post(backendUrl + "/api/verify-otp", {
@@ -36,6 +43,7 @@ const ForgotPassword = () => {
         otp,
       });
       if (data.success) {
+        setLoading(false);
         toast.success(data.message);
         setUserToken(data.token);
         localStorage.setItem("token", data.token);
@@ -44,17 +52,21 @@ const ForgotPassword = () => {
         setOtp("");
         navigate("/setPassword");
       } else {
+        setLoading(false);
         toast.error(data.message);
       }
     } catch (error) {
+      setLoading(false);
       toast.error(error.message);
     }
   };
 
-  return (
+  return !loading ? (
     <div className="w-full bg-[#692be0] min-h-screen flex items-center justify-center">
       <div className="w-90 bg-white border border-[#692be0] shadow-2xl border-3 rounded-3xl p-5">
-        <h2 className="text-center text-[#692be0] text-3xl mt-4 font-bold">Forgot Password</h2>
+        <h2 className="text-center text-[#692be0] text-3xl mt-4 font-bold">
+          Forgot Password
+        </h2>
         {!emailSubmitted ? (
           <form
             onSubmit={(e) => submitEmail(e)}
@@ -83,7 +95,10 @@ const ForgotPassword = () => {
             className="flex flex-col gap-1 mt-8"
             action=""
           >
-            <label className="justify-center flex gap-3 items-center" htmlFor="">
+            <label
+              className="justify-center flex gap-3 items-center"
+              htmlFor=""
+            >
               <input
                 onChange={(e) => setOtp(e.target.value)}
                 value={otp}
@@ -104,7 +119,7 @@ const ForgotPassword = () => {
         )}
       </div>
     </div>
-  );
+  ):(<Loading/>);
 };
 
 export default ForgotPassword;

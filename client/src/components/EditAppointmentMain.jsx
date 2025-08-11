@@ -6,7 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Loading from "./Loading";
 
 const EditAppointmentMain = () => {
-  const { view, backendUrl, userToken } = useContext(AppContext);
+  const { view, backendUrl, userToken, doctors } = useContext(AppContext);
   const [date, setDate] = useState();
   const [time, setTime] = useState();
   const [doctorName, setDoctorName] = useState();
@@ -14,6 +14,8 @@ const EditAppointmentMain = () => {
   const [status, setStatus] = useState();
   const { id } = useParams();
   const [loading, setLoading] = useState(false);
+  const [query, setQuery] = useState("");
+  const [filteredItems, setFilteredItems] = useState([]);
   const navigate = useNavigate();
 
   const onSubmitHandler = async (e) => {
@@ -33,11 +35,15 @@ const EditAppointmentMain = () => {
         setDoctorName("");
         setPurpose("");
         setStatus("");
+        setQuery("");
+        setFilteredItems([]);
         navigate("/appointment");
       } else {
+        setLoading(false);
         toast.error(data.message);
       }
     } catch (error) {
+      setLoading(false);
       toast.error(data.message);
     }
   };
@@ -55,11 +61,14 @@ const EditAppointmentMain = () => {
         setTime(data.appointment.time);
         setPurpose(data.appointment.purpose);
         setDoctorName(data.appointment.doctorName);
+        setQuery(data.appointment.doctorName);
         setStatus(data.appointment.status);
       } else {
+        setLoading(false);
         toast.error(data.message);
       }
     } catch (error) {
+      setLoading(false);
       toast.error(error.message);
     }
   };
@@ -67,6 +76,20 @@ const EditAppointmentMain = () => {
   useEffect(() => {
     fetchAppointment();
   }, []);
+
+  useEffect(() => {
+    if (query !== "") {
+      const filtered = doctors.filter((doctor) =>
+        doctor.name.toLowerCase().includes(query.toLowerCase())
+      );
+      setFilteredItems(filtered);
+    } else {
+      setFilteredItems([]);
+    }
+    if (query !== doctorName) {
+      setDoctorName(false);
+    }
+  }, [query]);
 
   return !loading ? (
     <div
@@ -92,6 +115,7 @@ const EditAppointmentMain = () => {
               type="Date"
               onChange={(e) => setDate(e.target.value)}
               value={date}
+              required
             />
           </label>
           <label className="flex flex-col gap-2" htmlFor="">
@@ -103,17 +127,48 @@ const EditAppointmentMain = () => {
               id=""
               onChange={(e) => setTime(e.target.value)}
               value={time}
+              required
             />
           </label>
           <label className="flex flex-col gap-2" htmlFor="">
             <span className="text-xl font-semibold">Doctor Name</span>
-            <input
-              className="w-full lg:w-full h-12 border rounded-md p-3  bg-gray-100"
-              placeholder="Enter Doctor Name"
-              type="text"
-              onChange={(e) => setDoctorName(e.target.value)}
-              value={doctorName}
-            />
+            <div>
+              <input
+                className="w-full lg:w-full h-12 border rounded-md p-3  bg-gray-100"
+                placeholder="Enter Doctor Name"
+                type="text"
+                onChange={(e) => setQuery(e.target.value)}
+                value={query}
+                required
+              />
+              <ul
+                className={`w-1/2 shadow-lg bg-gray-200 mt-1 ${
+                  filteredItems.length === 0 ? "" : "border border-gray-600"
+                }`}
+              >
+                {filteredItems.map((doctor, index) => (
+                  <li
+                    className="px-3 py-2 hover:bg-gray-300 font-bold"
+                    onClick={() => {
+                      setDoctorName(doctor.name);
+                      setQuery(doctor.name);
+                      setFilteredItems([]);
+                    }}
+                    key={index}
+                  >
+                    {doctor.name}
+                  </li>
+                ))}
+                {query !== "" && !doctorName && (
+                  <li
+                    onClick={() => navigate("/home")}
+                    className="px-3 py-2 hover:bg-gray-300 font-bold"
+                  >
+                    Add More Doctor
+                  </li>
+                )}
+              </ul>
+            </div>
           </label>
           <label className="flex flex-col gap-2" htmlFor="">
             <span className="text-xl font-semibold">Purpose of Visit</span>
@@ -163,7 +218,7 @@ const EditAppointmentMain = () => {
             <input
               type="submit"
               value="Save Changes"
-              className="bg-[#814de5] font-semibold text-white px-4 py-2 font-semibold rounded-2xl cursor-pointer"
+              className="bg-[#814de5] font-semibold text-white px-4 py-2 font-semibold rounded-2xl cursor-pointer hover:bg-[#692be0]"
             />
           </div>
         </form>

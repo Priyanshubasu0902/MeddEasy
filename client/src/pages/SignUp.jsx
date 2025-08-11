@@ -44,9 +44,11 @@ const SignUp = () => {
         toast.success("Account Created");
         navigate("/home");
       } else {
+        setLoading(false);
         toast.error(data.message);
       }
     } catch (error) {
+      setLoading(false);
       toast.error(error.message);
     }
   };
@@ -62,8 +64,6 @@ const SignUp = () => {
           action=""
         >
           <label htmlFor="">
-            {/* <span className="font-semibold">Name:</span>
-            <br /> */}
             <input
               onChange={(e) => setName(e.target.value)}
               value={name}
@@ -74,8 +74,6 @@ const SignUp = () => {
             />
           </label>
           <label htmlFor="">
-            {/* <span className="font-semibold">Email:</span>
-            <br /> */}
             <input
               onChange={(e) => setEmail(e.target.value)}
               value={email}
@@ -86,8 +84,6 @@ const SignUp = () => {
             />
           </label>
           <label htmlFor="">
-            {/* <span className="font-semibold">Number:</span>
-            <br /> */}
             <input
               onChange={(e) => setNumber(e.target.value)}
               value={number}
@@ -99,8 +95,6 @@ const SignUp = () => {
             />
           </label>
           <label htmlFor="">
-            {/* <span className="font-semibold">Age:</span>
-            <br /> */}
             <input
               onChange={(e) => setAge(e.target.value)}
               value={age}
@@ -112,8 +106,6 @@ const SignUp = () => {
             />
           </label>
           <label htmlFor="">
-            {/* <span className="font-semibold">Gender:</span>
-            <br /> */}
             <select
               onChange={(e) => setGender(e.target.value)}
               className="text-gray-600 border rounded-md focus:outline-[#692be0] focus:outline-3 text-lg font-semibold mt-1 h-14"
@@ -130,8 +122,6 @@ const SignUp = () => {
             </select>
           </label>
           <label htmlFor="">
-            {/* <span className="font-semibold">Password:</span>
-            <br /> */}
             <input
               onChange={(e) => setPassword(e.target.value)}
               value={password}
@@ -152,7 +142,6 @@ const SignUp = () => {
                 type="file"
                 hidden
                 id="img"
-                required
               />
             <p>Upload image</p>
             </label>

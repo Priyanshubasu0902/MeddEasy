@@ -6,7 +6,7 @@ export const addPrescription = async (req, res) => {
   const user = req.user;
   const prescriptionFile = req.file;
 
-  if (!fileName || !doctorName || !prescriptionFile) {
+  if (fileName==='' || doctorName==='' || !prescriptionFile) {
     return res.json({ success: false, message: "Missing Details" });
   }
 
@@ -55,7 +55,7 @@ export const editPrescription = async (req, res) => {
   const { fileName, doctorName } = req.body;
   const prescriptionFile = req.file;
 
-  if (!fileName || !doctorName) {
+  if (fileName==='' || doctorName==='') {
     return res.json({ success: false, message: "Missing Details" });
   }
 

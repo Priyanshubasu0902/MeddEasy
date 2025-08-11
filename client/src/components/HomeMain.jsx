@@ -10,14 +10,17 @@ import { toast } from "react-toastify";
 import Loading from "./Loading";
 
 const HomeMain = () => {
-  const { view, userData, setUserData, fetchUserData, userToken, backendUrl } =
+  const { view, userData, fetchUserData, userToken, backendUrl, doctors, fetchDoctors } =
     useContext(AppContext);
   const [appointments, setAppointments] = useState([]);
-  const [doctors, setDoctors] = useState([]);
 
-  const [doctorName, setDoctorName ] = useState(null)
-  const [doctorSpeciality, setDoctorSpeciality ] = useState(null)
-  const [doctorNumber, setDoctorNumber ] = useState(null)
+  const [doctorName, setDoctorName] = useState('');
+  const [doctorSpeciality, setDoctorSpeciality] = useState('');
+  const [doctorNumber, setDoctorNumber] = useState('');
+
+  const [editDoctorName, setEditDoctorName] = useState('');
+  const [editDoctorSpeciality, setEditDoctorSpeciality] = useState('');
+  const [editDoctorNumber, setEditDoctorNumber] = useState('');
 
   const [detailEdit, setDetailEdit] = useState(false);
 
@@ -26,6 +29,7 @@ const HomeMain = () => {
   const [gender, setGender] = useState(userData.gender);
 
   const [loading, setLoading] = useState(false);
+  const [editDoctor, setEditDoctor] = useState(false);
 
   const navigate = useNavigate();
 
@@ -40,50 +44,44 @@ const HomeMain = () => {
         setLoading(false);
         setAppointments(data.appointments);
       } else {
+        setLoading(false);
         toast.error(data.message);
       }
     } catch (error) {
+      setLoading(false);
       toast.error(error.message);
     }
   };
 
-  const fetchDoctors = async () => {
+  const doctorSubmitHandler = async (e) => {
     setLoading(true);
+    e.preventDefault();
     try {
-      const { data } = await axios.get(backendUrl + "/api/doctors/getDoctor", {
-        headers: { token: userToken },
-      });
+      const { data } = await axios.post(
+        backendUrl + "/api/doctors/addDoctor",
+        {
+          name: doctorName,
+          speciality: doctorSpeciality,
+          number: doctorNumber,
+        },
+        { headers: { token: userToken } }
+      );
       if (data.success) {
-        setLoading(false);
-        setDoctors(data.doctor);
-      } else {
-        console.log(data.message);
-      }
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
-
-  const doctorSubmitHandler = async(e) => {
-    setLoading(true);
-    e.preventDefault()
-    try {
-      const {data} = await axios.post(backendUrl + '/api/doctors/addDoctor', {name:doctorName, speciality:doctorSpeciality, number:doctorNumber}, {headers:{token:userToken}})
-      if(data.success) {
         setLoading(false);
         toast.success(data.message);
         fetchDoctors();
-        setDoctorName('')
-        setDoctorSpeciality('')
-        setDoctorNumber('')
-      }
-      else{
-        toast.error(data.message)
+        setDoctorName("");
+        setDoctorSpeciality("");
+        setDoctorNumber("");
+      } else {
+        setLoading(false);
+        toast.error(data.message);
       }
     } catch (error) {
-      toast.error(error.message)
+      setLoading(false);
+      toast.error(error.message);
     }
-  }
+  };
 
   const detailOnSubmit = async (e) => {
     setLoading(true);
@@ -100,38 +98,77 @@ const HomeMain = () => {
         setDetailEdit(false);
         toast.success(data.message);
       } else {
+        setLoading(false);
         toast.error(data.message);
       }
     } catch (error) {
+      setLoading(false);
       toast.error(error.message);
     }
   };
 
-  const deleteDoctor = async(id) => {
+  const deleteDoctor = async (id) => {
     setLoading(true);
     try {
-      const {data} = await axios.get( backendUrl + `/api/doctors/deleteDoctor/${id}`,
-        { headers: { token: userToken }})
-        if(data.success) {
-          setLoading(false);
-          toast.success(data.message)
-          fetchDoctors()
-        }
-        else{
-          toast.error(data.message)
-        }
+      const { data } = await axios.get(
+        backendUrl + `/api/doctors/deleteDoctor/${id}`,
+        { headers: { token: userToken } }
+      );
+      if (data.success) {
+        setLoading(false);
+        toast.success(data.message);
+        fetchDoctors();
+      } else {
+        setLoading(false);
+        toast.error(data.message);
+      }
     } catch (error) {
-      toast.error(error.message)
+      setLoading(false);
+      toast.error(error.message);
     }
-  }
+  };
+
+  const editDoctorHandler = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const { data } = await axios.post(
+        backendUrl + `/api/doctors/editDoctor/${editDoctor}`,
+        {
+          name: editDoctorName,
+          speciality: editDoctorSpeciality,
+          number: editDoctorNumber,
+        },
+        { headers: { token: userToken } }
+      );
+      if (data.success) {
+        setLoading(false);
+        toast.success(data.message);
+        setEditDoctor(false);
+        setEditDoctorName('');
+        setEditDoctorSpeciality('');
+        setEditDoctorNumber('');
+        fetchDoctors();
+      } else {
+        setLoading(false);
+        toast.error(data.message);
+      }
+    } catch (error) {
+      setLoading(false);
+      toast.error(error.message);
+    }
+  };
 
   useEffect(() => {
     fetchAppointments();
-    fetchDoctors();
   }, []);
 
-  return !loading? (
-    <div className={`min-h-screen w-4/5 ${view ? "max-md:relative max-md:w-full" : "w-full"} px-8 py-10`}>
+  return !loading ? (
+    <div
+      className={`min-h-screen w-4/5 ${
+        view ? "max-md:relative max-md:w-full" : "w-full"
+      } px-8 py-10`}
+    >
       <h1 className="text-5xl font-bold md:text-5xl md:font-bold">
         My Health Record
       </h1>
@@ -221,7 +258,7 @@ const HomeMain = () => {
                 </label>
                 <div className="w-full flex justify-end">
                   <input
-                    className="bg-[#814de5] text-white font-semibold w-13 py-1 rounded-lg cursor-pointer"
+                    className="bg-[#814de5] text-white font-semibold w-13 py-1 rounded-lg cursor-pointer hover:bg-[#692be0]"
                     type="submit"
                     value="Save"
                   />
@@ -233,74 +270,186 @@ const HomeMain = () => {
         <div className="border-b border-gray-300 py-6">
           <h3 className="text-2xl font-bold">Doctors</h3>
           {doctors.length > 0 ? (
-            <table className="mt-2">
-              <thead>
-                <tr>
-                  <th className="text-start py-1 pr-10">Name</th>
-                  <th className="text-start py-1 pr-10">Specialist</th>
-                  <th className="text-start py-1 pr-10">Number</th>
-                  <th className="text-start py-1 pr-10">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {doctors.map((a, index) => (
-                  <tr key={index}>
-                    <td className="text-start py-2 pr-10">{a.name}</td>
-                    <td className="text-start py-2 pr-10">{a.speciality}</td>
-                    <td className="text-start py-2 pr-10">{a.number}</td>
-                    <td className="text-start py-2 pr-10"><button onClick={()=>deleteDoctor(a._id)} className="cursor-pointer bg-red-300 px-2 py-1 rounded-lg">Delete</button></td>
+            <>
+              <table className="mt-2">
+                <thead>
+                  <tr>
+                    <th className="text-start py-1 pr-10">Name</th>
+                    <th className="text-start py-1 pr-10">Specialist</th>
+                    <th className="text-start py-1 pr-10">Number</th>
+                    <th className="text-center py-1 pr-10">Action</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {doctors.map((a, index) => {
+                    return (
+                      <tr key={index}>
+                        <td className="text-start py-2 pr-10">{a.name}</td>
+                        <td className="text-start py-2 pr-10">
+                          {a.speciality}
+                        </td>
+                        <td className="text-start py-2 pr-10">{a.number}</td>
+                        <td className="text-start py-2 pr-10 flex gap-3">
+                          <button
+                            onClick={() => deleteDoctor(a._id)}
+                            className="cursor-pointer bg-red-300 px-2 py-1 rounded-lg"
+                          >
+                            Delete
+                          </button>
+                          <button
+                            onClick={() => {
+                              setEditDoctor(a._id);
+                              setEditDoctorName(a.name);
+                              setEditDoctorSpeciality(a.speciality);
+                              setEditDoctorNumber(a.number);
+                            }}
+                            className="bg-green-300 px-5 rounded-lg py-1 cursor-pointer"
+                          >
+                            Edit
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+              {editDoctor !== false ? (
+                <form
+                  onSubmit={(e) => editDoctorHandler(e)}
+                  className="flex gap-6 mt-5 items-center"
+                  action=""
+                >
+                  <label htmlFor="">
+                    <input
+                      className="border-b w-20 focus:outline-none"
+                      required
+                      value={editDoctorName}
+                      onChange={(e) => setEditDoctorName(e.target.value)}
+                      type="text"
+                      placeholder="Name"
+                    />
+                  </label>
+                  <label htmlFor="">
+                    <input
+                      className="border-b w-25 focus:outline-none"
+                      required
+                      value={editDoctorSpeciality}
+                      onChange={(e) => setEditDoctorSpeciality(e.target.value)}
+                      type="text"
+                      placeholder="Speciality"
+                    />
+                  </label>
+                  <label htmlFor="">
+                    <input
+                      className="border-b w-26 focus:outline-none"
+                      value={editDoctorNumber}
+                      onChange={(e) => setEditDoctorNumber(e.target.value)}
+                      type="number"
+                      placeholder="Number"
+                      required
+                    />
+                  </label>
+                  <input
+                    type="submit"
+                    value="Save Changes"
+                    className="bg-[#814de5] text-white font-semibold py-1 px-2 rounded-lg cursor-pointer hover:bg-[#692be0]"
+                  />
+                </form>
+              ) : (
+                ""
+              )}
+            </>
           ) : (
             <p className="text-xl text-gray-400 text-center">
               No doctor record
             </p>
           )}
-          <form onSubmit={(e)=>doctorSubmitHandler(e)} className="flex gap-6 mt-5 items-center" action="">
+          <form
+            onSubmit={(e) => doctorSubmitHandler(e)}
+            className="flex gap-6 mt-5 items-center"
+            action=""
+          >
             <label htmlFor="">
-              <input className="border-b w-20 focus:outline-none" required value={doctorName} onChange={(e)=>setDoctorName(e.target.value)} type="text" placeholder="Name" />
+              <input
+                className="border-b w-20 focus:outline-none"
+                required
+                value={doctorName}
+                onChange={(e) => setDoctorName(e.target.value)}
+                type="text"
+                placeholder="Name"
+              />
             </label>
             <label htmlFor="">
-              <input className="border-b w-25 focus:outline-none" required value={doctorSpeciality} onChange={(e)=>setDoctorSpeciality(e.target.value)} type="text" placeholder="Speciality" />
+              <input
+                className="border-b w-25 focus:outline-none"
+                required
+                value={doctorSpeciality}
+                onChange={(e) => setDoctorSpeciality(e.target.value)}
+                type="text"
+                placeholder="Speciality"
+              />
             </label>
             <label htmlFor="">
-              <input className="border-b w-26 focus:outline-none" value={doctorNumber} onChange={(e)=>setDoctorNumber(e.target.value)} type="number" placeholder="Number" />
+              <input
+                className="border-b w-26 focus:outline-none"
+                value={doctorNumber}
+                onChange={(e) => setDoctorNumber(e.target.value)}
+                type="number"
+                placeholder="Number"
+                required
+              />
             </label>
-            <input type="submit" value="Add" className="bg-[#814de5] text-white font-semibold w-27 py-1 rounded-lg cursor-pointer" />
+            <input
+              type="submit"
+              value="Add"
+              className="bg-[#814de5] text-white font-semibold w-27 py-1 rounded-lg cursor-pointer hover:bg-[#692be0]"
+            />
           </form>
         </div>
         <div className="py-5">
           <h3 className="text-2xl font-bold">Upcoming Appointments</h3>
-          {appointments.filter((a) => new Date(a.date) >= new Date().setHours(0, 0, 0, 0)).length>0?appointments
-            .filter((a) => new Date(a.date) >= new Date().setHours(0, 0, 0, 0))
-            .sort((a, b) => new Date(`${a.date}T${a.time}`) - new Date(`${b.date}T${b.time}`))
-            .map((a, index) => (
-              <div
-                key={index}
-                className={`flex items-center gap-5 p-2 mt-3 h-full md:w-2/4 lg:w-1/4 cursor-pointer text-white bg-[#ba9df1] rounded-xl`}
-                onClick={() => navigate("/appointment")}
-              >
-                <div className=" w-15 h-full p-3 flex rounded-xl items-center justify-center">
-                  <img className="h-8" src={appointment} alt="" />
+          {appointments.filter(
+            (a) => new Date(a.date) >= new Date().setHours(0, 0, 0, 0)
+          ).length > 0 ? (
+            appointments
+              .filter(
+                (a) => new Date(a.date) >= new Date().setHours(0, 0, 0, 0)
+              )
+              .sort(
+                (a, b) =>
+                  new Date(`${a.date}T${a.time}`) -
+                  new Date(`${b.date}T${b.time}`)
+              )
+              .map((a, index) => (
+                <div
+                  key={index}
+                  className={`flex items-center gap-5 p-2 mt-3 h-full md:w-2/4 lg:w-1/4 cursor-pointer text-white bg-[#9d75eb] rounded-xl hover:bg-[#814de5]`}
+                  onClick={() => navigate("/appointment")}
+                >
+                  <div className="w-15 h-full p-3 flex rounded-xl items-center justify-center">
+                    <img className="h-8" src={appointment} alt="" />
+                  </div>
+                  <div>
+                    <p className="font-bold">
+                      {moment(a.date).format("DD-MM-YYYY")}, {a.time}
+                    </p>
+                    <p className="text-white text-sm font-semibold ">
+                      {a.doctorName}, {a.purpose}
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <p className="font-bold">
-                    {moment(a.date).format("DD-MM-YYYY")}, {a.time}
-                  </p>
-                  <p className="text-white text-sm font-semibold ">
-                    {a.doctorName}, {a.purpose}
-                  </p>
-                </div>
-              </div>
-            )):<p className="text-xl text-gray-400 pt-5 text-center">
+              ))
+          ) : (
+            <p className="text-xl text-gray-400 pt-5 text-center">
               No Upcoming Appointments
-            </p>}
+            </p>
+          )}
         </div>
       </div>
     </div>
-  ):<Loading/>;
+  ) : (
+    <Loading />
+  );
 };
 
 export default HomeMain;

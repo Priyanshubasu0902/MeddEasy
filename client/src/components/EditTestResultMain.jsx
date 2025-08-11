@@ -27,12 +27,14 @@ const EditTestResultMain = () => {
       );
       if (data.success) {
         setLoading(false);
-         setFileName(data.testResult.fileName)
-         setFileDescription(data.testResult.fileDescription)
+        setFileName(data.testResult.fileName)
+        setFileDescription(data.testResult.fileDescription)
       } else {
+        setLoading(false);
         toast.error(data.message);
       }
     } catch (error) {
+      setLoading(false);
       toast.error(error.message);
     }
   };
@@ -53,15 +55,17 @@ const EditTestResultMain = () => {
       );
       if (data.success) {
         setLoading(false)
-         toast.success(data.message);
-         navigate('/testResults')
+        toast.success(data.message);
+        navigate('/testResults')
         setFileName("");
         setFileDescription("");
         setTestResult("");
       } else {
+        setLoading(false)
         toast.error(data.message);
       }
     } catch (error) {
+      setLoading(false)
       toast.error(error.message);
     }
   };
@@ -82,7 +86,7 @@ const EditTestResultMain = () => {
       <div className="lg:w-3/4">
         <form
           onSubmit={(e) => onSubmitHandler(e)}
-          className="flex flex-col gap-5"
+          className="flex flex-col gap-3"
           action=""
         >
           <div className="flex w-full gap-3">
@@ -90,7 +94,7 @@ const EditTestResultMain = () => {
               <span className="text-lg font-medium">File Name:</span>
               <br />
               <input
-                className="w-full pl-1 h-8 bg-gray-100 border border-gray-500 rounded mt-1"
+                className="w-full pl-2 h-12 focus:outline-[#692be0] focus:outline-3 border rounded mt-1"
                 placeholder="Enter file name"
                 type="text"
                 value={fileName}
@@ -101,7 +105,7 @@ const EditTestResultMain = () => {
               <span className="text-lg font-medium">File Description:</span>
               <br />
               <input
-                className="w-full pl-1 h-8 bg-gray-100 border border-gray-500 rounded mt-1"
+                className="w-full pl-2 h-12 focus:outline-[#692be0] focus:outline-3 border rounded mt-1"
                 placeholder="Enter test details"
                 type="text"
                 onChange={(e) => setFileDescription(e.target.value)}
@@ -109,13 +113,13 @@ const EditTestResultMain = () => {
               />
             </label>
           </div>
-          <div className="w-full h-80 border border-dashed border-gray-500 flex flex-col items-center justify-center gap-1">
+          <div className="w-full h-80 border border-dashed border-3 border-[#814de5] flex flex-col items-center justify-center gap-1">
             <h3 className="text-center text-lg font-medium">
               Drag and Drop or browse to upload
             </h3>
             <p className="text-center mt-2">Accepted file types: PDF, Docs</p>
             <label
-              className="text-center cursor-pointer bg-[#814de5] font-semibold text-white p-2 h-9 pt-1 mt-2 rounded-md font-semibold"
+              className="text-center cursor-pointer bg-[#814de5] font-semibold text-white p-2 h-9 pt-1 mt-2 rounded-md font-semibold hover:bg-[#692be0]"
               htmlFor="file"
             >
               Browse Files
@@ -130,7 +134,7 @@ const EditTestResultMain = () => {
               <p>{testResult? testResult.name:fileName+'.pdf'}</p>
           </div>
           <input
-            className="w-full bg-[#814de5] font-semibold text-white h-8 cursor-pointer "
+            className="w-full bg-[#814de5] font-semibold text-white h-12 text-lg cursor-pointer hover:bg-[#692be0]"
             type="submit"
             value="Save Changes"
           />

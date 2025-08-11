@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { AppContext } from "../Context/AppContext";
 import axios from "axios";
 import { toast } from "react-toastify";
+import Loading from "../components/Loading";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -13,10 +14,12 @@ const Login = () => {
   const [password, setPassword] = useState(null);
 
   const [emailType, setEmailType] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const { backendUrl, setUserToken } = useContext(AppContext);
 
   const onSubmitHandler = async (e) => {
+    setLoading(true);
     e.preventDefault();
     try {
       const { data } = await axios.post(backendUrl + "/api/users/login", {
@@ -25,22 +28,27 @@ const Login = () => {
         password,
       });
       if (data.success) {
+        setLoading(false);
         setUserToken(data.token);
         localStorage.setItem("token", data.token);
         toast.success("Logged In");
         navigate("/home");
       } else {
+        setLoading(false);
         toast.error(data.message);
       }
     } catch (error) {
+      setLoading(false);
       toast.error(error.message);
     }
   };
 
-  return (
+  return !loading ? (
     <div className="w-full bg-[#692be0] min-h-screen flex items-center justify-center">
       <div className="w-90 bg-white border border-[#692be0] shadow-2xl border-3 rounded-3xl p-5">
-        <h2 className="text-center text-[#692be0] text-3xl mt-4 font-bold">Welcome</h2>
+        <h2 className="text-center text-[#692be0] text-3xl mt-4 font-bold">
+          Welcome
+        </h2>
         <p className="text-center text-gray-500">Login to our platform</p>
         <div className="w-full bg-[#814de5] font-semibold text-white flex h-10 mb-3 mt-8 items-center ">
           <div
@@ -75,8 +83,6 @@ const Login = () => {
             action=""
           >
             <label htmlFor="">
-              {/* <span className="font-semibold">Email:</span> */}
-              {/* <br /> */}
               <input
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
@@ -87,8 +93,6 @@ const Login = () => {
               />
             </label>
             <label htmlFor="">
-              {/* <span className="font-semibold">Password:</span> */}
-              {/* <br /> */}
               <input
                 onChange={(e) => setPassword(e.target.value)}
                 value={password}
@@ -104,11 +108,11 @@ const Login = () => {
               className="bg-[#814de5] text-white text-lg h-14 rounded-lg mt-2 font-semibold cursor-pointer hover:bg-[#692be0]"
             />
             <p
-                className="text-md text-[#692be0] mt-2 font-semibold text-center cursor-pointer"
-                onClick={() => navigate("/forgotPassword")}
-              >
-                Forgot Password?
-              </p>
+              className="text-md text-[#692be0] mt-2 font-semibold text-center cursor-pointer"
+              onClick={() => navigate("/forgotPassword")}
+            >
+              Forgot Password?
+            </p>
           </form>
         ) : (
           <form
@@ -117,8 +121,6 @@ const Login = () => {
             action=""
           >
             <label htmlFor="">
-              {/* <span className="font-semibold">Number:</span>
-              <br /> */}
               <input
                 onChange={(e) => setNumber(e.target.value)}
                 value={number}
@@ -129,8 +131,6 @@ const Login = () => {
               />
             </label>
             <label htmlFor="">
-              {/* <span className="font-semibold">Password:</span>
-              <br /> */}
               <input
                 onChange={(e) => setPassword(e.target.value)}
                 value={password}
@@ -164,7 +164,7 @@ const Login = () => {
         </div>
       </div>
     </div>
-  );
+  ):(<Loading/>);
 };
 
 export default Login;

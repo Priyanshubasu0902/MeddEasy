@@ -3,7 +3,7 @@ import doctorModel from '../models/Doctor.js'
 export const addDoctor = async(req, res) => {
    const user = req.user
    const {name, speciality, number} = req.body
-   if(!name||!speciality) {
+   if(name===''||speciality===''||number==='') {
       return res.json({success: false, message:"Missing Details"})
    }
    try {
@@ -13,7 +13,7 @@ export const addDoctor = async(req, res) => {
          number,
          userId: user._id
       })
-
+      
       res.json({success: true, message:"Doctor Added", doctor})
    } catch (error) {
       res.json({success:false, message:error.message})
@@ -21,7 +21,17 @@ export const addDoctor = async(req, res) => {
 }
 
 export const editDoctor = async(req, res) => {
-   
+   const user = req.user
+   const {name, speciality, number} = req.body;
+   if(name===''||speciality===''||number==='') {
+      return res.json({success: false, message:"Missing Details"})
+   }
+   try {
+      const doctor = await doctorModel.findOneAndUpdate({_id:req.params.id, userId:user._id}, {name, speciality, number}); 
+      res.json({success:true, message:'Details Updated'})
+   } catch (error) {
+      res.json({success:false, message:error.message});
+   }
 }
 
 export const getDoctor = async(req, res) => {
