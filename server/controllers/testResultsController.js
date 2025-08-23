@@ -6,7 +6,7 @@ export const addTestResult = async (req, res) => {
   const user = req.user;
   const testFile = req.file;
 
-  if (!fileName || !fileDescription || !testFile) {
+  if (fileName ==='' || fileDescription==='' || !testFile) {
     return res.json({ success: false, message: "Missing Details" });
   }
 
@@ -19,6 +19,7 @@ export const addTestResult = async (req, res) => {
       fileDescription,
       userId: user._id,
       link: fileUpload.secure_url,
+      public_id: fileUpload.public_id,
       date,
     });
 
@@ -55,23 +56,26 @@ export const editTestResult = async (req, res) => {
   const { fileName, fileDescription } = req.body;
   const testFile = req.file;
 
-  if (!fileName || !fileDescription) {
+  if (fileName==='' || fileDescription==='') {
     return res.json({ success: false, message: "Missing Details" });
   }
 
   try {
     if (testFile) {
+      const testResult = await testResultModel.findOne({_id:req.params.id});
+      await cloudinary.uploader.destroy(testResult.public_id); 
       const fileUpload = await cloudinary.uploader.upload(testFile.path);
-      const testResult = await testResultModel.findOneAndUpdate(
+      const updatedTestResult = await testResultModel.findOneAndUpdate(
         { _id: req.params.id },
         {
           fileName,
           fileDescription,
           link: fileUpload.secure_url,
+          public_id: fileUpload.public_id,
         }
       );
     } else {
-      const testResult = await testResultModel.findOneAndUpdate(
+      const updatedTestResult = await testResultModel.findOneAndUpdate(
         { _id: req.params.id },
         {
           fileName,
@@ -91,7 +95,8 @@ export const editTestResult = async (req, res) => {
 
 export const deleteTestResult = async (req, res) => {
   try {
-    await testResultModel.findOneAndDelete({ _id: req.params.id });
+    const deleted = await testResultModel.findOneAndDelete({ _id: req.params.id });
+    await cloudinary.uploader.destroy(deleted.public_id);
     res.json({ success: true, message: "Record deleted" });
   } catch (error) {
     res.json({ success: false, message: error.message });

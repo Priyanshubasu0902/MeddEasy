@@ -7,11 +7,11 @@ import Loading from "./Loading";
 
 const EditAppointmentMain = () => {
   const { view, backendUrl, userToken, doctors } = useContext(AppContext);
-  const [date, setDate] = useState();
-  const [time, setTime] = useState();
-  const [doctorName, setDoctorName] = useState();
-  const [purpose, setPurpose] = useState();
-  const [status, setStatus] = useState();
+  const [date, setDate] = useState('');
+  const [time, setTime] = useState('');
+  const [doctorName, setDoctorName] = useState('');
+  const [purpose, setPurpose] = useState('');
+  const [status, setStatus] = useState('');
   const { id } = useParams();
   const [loading, setLoading] = useState(false);
   const [query, setQuery] = useState("");

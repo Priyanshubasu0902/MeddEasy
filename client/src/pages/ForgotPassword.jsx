@@ -8,8 +8,8 @@ import Loading from "../components/Loading";
 const ForgotPassword = () => {
   const { backendUrl, setUserToken } = useContext(AppContext);
   const navigate = useNavigate();
-  const [email, setEmail] = useState();
-  const [otp, setOtp] = useState();
+  const [email, setEmail] = useState('');
+  const [otp, setOtp] = useState('');
   const [emailSubmitted, setEmailSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
 

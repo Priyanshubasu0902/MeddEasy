@@ -5,7 +5,7 @@ export const addAppointment = async (req, res) => {
    const {date, time, doctorName, purpose, status} = req.body
 
    try {
-      if(!date || !time || !doctorName || !purpose || !status) {
+      if(date==='' || time==='' || doctorName==='' || purpose==='' || status==='') {
          return res.json({success: false, message:"Missing Details"})
       }
 
@@ -47,7 +47,7 @@ export const editAppointment = async (req, res) => {
    const {date, time, doctorName, purpose, status} = req.body
 
    try {
-      if(!date || !time || !doctorName || !purpose || !status) {
+      if(date==='' || time==='' || doctorName==='' || purpose==='' || status==='') {
          return res.json({success: false, message:"Missing Details"})
       }
 

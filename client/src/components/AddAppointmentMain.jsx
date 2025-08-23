@@ -8,10 +8,10 @@ import { useNavigate } from "react-router-dom";
 
 const AddAppointmentMain = () => {
   const { view, backendUrl, userToken, doctors } = useContext(AppContext);
-  const [date, setDate] = useState();
-  const [time, setTime] = useState();
-  const [doctorName, setDoctorName] = useState();
-  const [purpose, setPurpose] = useState();
+  const [date, setDate] = useState('');
+  const [time, setTime] = useState('');
+  const [doctorName, setDoctorName] = useState('');
+  const [purpose, setPurpose] = useState('');
   const [status, setStatus] = useState("not booked");
   const [loading, setLoading] = useState(false);
   const [query, setQuery] = useState("");

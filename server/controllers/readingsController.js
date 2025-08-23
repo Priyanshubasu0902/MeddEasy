@@ -23,7 +23,7 @@ export const addReadings = async (req, res) => {
   const user = req.user;
   const { type, reading, date, time } = req.body;
 
-    if (!reading || !date || !time || !type) {
+    if (reading==='' || date==='' || time==='' || type==='') {
       return res.json({ success: false, message: "Missing Details" });
     }
     try {
@@ -50,7 +50,7 @@ export const deleteReadings = async (req, res) => {
 };
 export const editReadings = async (req, res) => {
   const {reading, date, time, type} = req.body;
-  if(!reading||!date||!time||!type) {
+  if(reading==='' || date==='' || time==='' || type==='') {
     res.json({success:false, message:'Missing Details'})
   }
   try {

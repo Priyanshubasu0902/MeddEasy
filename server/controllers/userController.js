@@ -12,13 +12,21 @@ import { transporter } from "../config/nodeMailer.js";
 export const signUpUser = async (req, res) => {
   const { name, email, number, age, gender, password } = req.body;
 
-  if(!req.file) {
+  if (!req.file) {
     return res.json({ success: false, message: "Image is missing" });
   }
 
   const image = req.file;
 
-  if (!name || !email || !number || !age || !gender || !password) {
+  if (
+    name === "" ||
+    email === "" ||
+    number === "" ||
+    age === "" ||
+    gender === "" ||
+    password === "" ||
+    !image
+  ) {
     return res.json({ success: false, message: "Missing Details" });
   }
 
@@ -41,6 +49,7 @@ export const signUpUser = async (req, res) => {
       age,
       gender,
       image: imageUpload.secure_url,
+      public_id: imageUpload.public_id,
       password: hashPassword,
       email,
     });
@@ -82,8 +91,14 @@ export const signUpUser = async (req, res) => {
 
 export const loginUser = async (req, res) => {
   const { number, email, password } = req.body;
+  if (password === "") {
+    return res.json({ success: false, message: "Missing Details" });
+  }
   try {
-    if (number == '') {
+    if (number === "") {
+      if (email === "") {
+        return res.json({ success: false, message: "Missing Details" });
+      }
       const user = await userModel.findOne({ email });
       if (!user) {
         return res.json({ success: false, message: "Invalid credentials" });
@@ -104,7 +119,10 @@ export const loginUser = async (req, res) => {
       } else {
         res.json({ success: false, message: "Invalid credentials" });
       }
-    } else if (email == '') {
+    } else if (email === "") {
+      if (number === "") {
+        return res.json({ success: false, message: "Missing Details" });
+      }
       const user = await userModel.findOne({ number });
       if (!user) {
         return res.json({ success: false, message: "Invalid credentials" });
@@ -146,11 +164,28 @@ export const getUser = async (req, res) => {
 export const deleteUser = async (req, res) => {
   const user = req.user;
   try {
-    await userModel.findOneAndDelete({ _id: user._id });
+    const deletedUser = await userModel.findOneAndDelete({ _id: user._id });
+    await cloudinary.uploader.destroy(deletedUser.public_id);
+
     await readingModel.deleteMany({ userId: user._id });
     await appointmentModel.deleteMany({ userId: user._id });
+
+    const prescriptions = await prescriptionModel.find(
+      { userId: user._id },
+      { public_id: 1, _id: 0 }
+    );
+    const prescriptions_id = prescriptions.map((item) => item.public_id);
     await prescriptionModel.deleteMany({ userId: user._id });
+    cloudinary.api.delete_resources(prescriptions_id);
+
+    const results = await testResultModel.find(
+      { userId: user._id },
+      { public_id: 1, _id: 0 }
+    );
+    const testResult = results.map((item) => item.public_id);
     await testResultModel.deleteMany({ userId: user._id });
+    cloudinary.api.delete_resources(testResult);
+
     await doctorModel.deleteMany({ userId: user._id });
     let mailOptions = {
       from: process.env.EMAIL_ID,
@@ -206,11 +241,13 @@ export const setPassword = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashPassword = await bcrypt.hash(password, salt);
 
-    const foundedUser = await userModel.findOneAndUpdate({ _id: user._id }, { password: hashPassword });
+    const foundedUser = await userModel.findOneAndUpdate(
+      { _id: user._id },
+      { password: hashPassword }
+    );
 
-    res.json({success: true, message: 'Password updated successfully'})
-
+    res.json({ success: true, message: "Password updated successfully" });
   } catch (error) {
-    res.json({success:false, message:error.message})
+    res.json({ success: false, message: error.message });
   }
 };

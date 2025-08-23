@@ -142,8 +142,12 @@ const SignUp = () => {
                 type="file"
                 hidden
                 id="img"
+                 accept=".png, .jpeg, .jpg"
               />
-            <p>Upload image</p>
+            <p className="font-semibold">Upload image
+              <br />
+              <span className="font-normal text-sm">Accepted file types: png, jpeg</span>
+            </p>
             </label>
           <input
             type="submit"

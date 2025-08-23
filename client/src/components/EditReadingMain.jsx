@@ -7,12 +7,12 @@ import Loading from "./Loading";
 
 const EditReadingMain = () => {
   const { view, backendUrl, userToken } = useContext(AppContext);
-  let [reading, setReading] = useState(null);
-  const [date, setDate] = useState();
-  const [time, setTime] = useState();
-  const [type, setType] = useState();
-  const [upperPressure, setUpperPressure] = useState(null);
-  const [lowerPressure, setLowerPressure] = useState(null);
+  let [reading, setReading] = useState('');
+  const [date, setDate] = useState('');
+  const [time, setTime] = useState('');
+  const [type, setType] = useState('');
+  const [upperPressure, setUpperPressure] = useState('');
+  const [lowerPressure, setLowerPressure] = useState('');
   const { id } = useParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);

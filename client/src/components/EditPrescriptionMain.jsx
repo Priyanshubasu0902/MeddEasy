@@ -9,7 +9,7 @@ import Loading from "./Loading";
 const EditPrescriptionMain = () => {
   const { view, userToken, backendUrl, doctors } = useContext(AppContext);
 
-  const [prescription, setPrescription] = useState();
+  const [prescription, setPrescription] = useState(false);
   const [fileName, setFileName] = useState('');
   const [doctorName, setDoctorName] = useState('');
   const [loading, setLoading] = useState(false);
@@ -60,7 +60,7 @@ const EditPrescriptionMain = () => {
         toast.success(data.message);
         setFileName("");
         setDoctorName("");
-        setPrescription("");
+        setPrescription(false);
         setQuery("");
         setFilteredItems([]);
         navigate("/prescriptions");

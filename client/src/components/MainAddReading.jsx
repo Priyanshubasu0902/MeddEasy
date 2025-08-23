@@ -8,11 +8,11 @@ import { useNavigate } from "react-router-dom";
 
 const MainAddReading = () => {
   const { view, backendUrl, userToken } = useContext(AppContext);
-  let [reading, setReading] = useState(null);
-  const [upperPressure, setUpperPressure] = useState(null);
-  const [lowerPressure, setLowerPressure] = useState(null);
-  const [date, setDate] = useState();
-  const [time, setTime] = useState();
+  let [reading, setReading] = useState('');
+  const [upperPressure, setUpperPressure] = useState('');
+  const [lowerPressure, setLowerPressure] = useState('');
+  const [date, setDate] = useState('');
+  const [time, setTime] = useState('');
   const [type, setType] = useState("sugar");
   const [loading, setLoading] = useState(false);
 
@@ -27,7 +27,7 @@ const MainAddReading = () => {
       }
       const { data } = await axios.post(
         backendUrl + "/api/readings/addReadings",
-        { reading, upperPressure, lowerPressure, date, time, type },
+        { reading, date, time, type },
         { headers: { token: userToken } }
       );
       if (data.success) {

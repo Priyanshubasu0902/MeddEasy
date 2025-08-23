@@ -11,7 +11,7 @@ const Login = () => {
 
   const [email, setEmail] = useState("");
   const [number, setNumber] = useState("");
-  const [password, setPassword] = useState(null);
+  const [password, setPassword] = useState('');
 
   const [emailType, setEmailType] = useState(true);
   const [loading, setLoading] = useState(false);

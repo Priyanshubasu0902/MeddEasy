@@ -1,12 +1,12 @@
 import { v2 as cloudinary } from "cloudinary";
-import prescriptionsModel from '../models/Prescription.js';
+import prescriptionsModel from "../models/Prescription.js";
 
 export const addPrescription = async (req, res) => {
   const { fileName, doctorName } = req.body;
   const user = req.user;
   const prescriptionFile = req.file;
 
-  if (fileName==='' || doctorName==='' || !prescriptionFile) {
+  if (fileName === "" || doctorName === "" || !prescriptionFile) {
     return res.json({ success: false, message: "Missing Details" });
   }
 
@@ -19,6 +19,7 @@ export const addPrescription = async (req, res) => {
       doctorName,
       userId: user._id,
       link: fileUpload.secure_url,
+      public_id: fileUpload.public_id,
       date,
     });
 
@@ -44,34 +45,43 @@ export const getPrescriptions = async (req, res) => {
 
 export const getPrescription = async (req, res) => {
   try {
-    const prescription = await prescriptionsModel.findOne({_id:req.params.id})
-    res.json({success:true, prescription})
+    const prescription = await prescriptionsModel.findOne({
+      _id: req.params.id,
+    });
+    res.json({ success: true, prescription });
   } catch (error) {
-    res.json({success:false, message: error.message})
+    res.json({ success: false, message: error.message });
   }
-}
+};
 
 export const editPrescription = async (req, res) => {
   const { fileName, doctorName } = req.body;
   const prescriptionFile = req.file;
 
-  if (fileName==='' || doctorName==='') {
+  if (fileName === "" || doctorName === "") {
     return res.json({ success: false, message: "Missing Details" });
   }
 
   try {
     if (prescriptionFile) {
-      const fileUpload = await cloudinary.uploader.upload(prescriptionFile.path);
-      const prescription = await prescriptionsModel.findOneAndUpdate(
+      const prescription = await prescriptionsModel.findOne({
+        _id: req.params.id,
+      });
+      await cloudinary.uploader.destroy(prescription.public_id);
+      const fileUpload = await cloudinary.uploader.upload(
+        prescriptionFile.path
+      );
+      const updatedPrescription = await prescriptionsModel.findOneAndUpdate(
         { _id: req.params.id },
         {
           fileName,
           doctorName,
           link: fileUpload.secure_url,
+          public_id: fileUpload.public_id,
         }
       );
     } else {
-      const prescription = await prescriptionsModel.findOneAndUpdate(
+      const updatedPrescription = await prescriptionsModel.findOneAndUpdate(
         { _id: req.params.id },
         {
           fileName,
@@ -91,7 +101,8 @@ export const editPrescription = async (req, res) => {
 
 export const deletePrescription = async (req, res) => {
   try {
-    await prescriptionsModel.findOneAndDelete({ _id: req.params.id });
+    const prescription = await prescriptionsModel.findOneAndDelete({ _id: req.params.id });
+    await cloudinary.uploader.destroy(prescription.public_id);
     res.json({ success: true, message: "Record deleted" });
   } catch (error) {
     res.json({ success: false, message: error.message });

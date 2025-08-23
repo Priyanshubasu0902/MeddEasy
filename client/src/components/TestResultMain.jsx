@@ -10,9 +10,9 @@ import Loading from "./Loading";
 const TestResultMain = () => {
   const { view, userToken, backendUrl } = useContext(AppContext);
 
-  const [testResult, setTestResult] = useState(null);
-  const [fileName, setFileName] = useState(null);
-  const [fileDescription, setFileDescription] = useState(null);
+  const [testResult, setTestResult] = useState(false);
+  const [fileName, setFileName] = useState("");
+  const [fileDescription, setFileDescription] = useState("");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -57,7 +57,7 @@ const TestResultMain = () => {
         toast.success("Test Result added");
         setFileName("");
         setFileDescription("");
-        setTestResult("");
+        setTestResult(false);
         fetchTestResults();
       } else {
         setLoading(false);
@@ -90,6 +90,25 @@ const TestResultMain = () => {
     }
   };
 
+  const handleDownload = async (url, fileName) => {
+  try {
+    const response = await fetch(url, { mode: "cors" });
+    const blob = await response.blob();
+    const downloadUrl = window.URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = downloadUrl;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    window.URL.revokeObjectURL(downloadUrl);
+  } catch (error) {
+    console.error("Download failed:", error);
+  }
+};
+
   useEffect(() => {
     fetchTestResults();
   }, []);
@@ -100,8 +119,8 @@ const TestResultMain = () => {
         view ? "max-md:relative max-md:w-full" : "w-full"
       } px-8 py-10 flex flex-col gap-5`}
     >
-      <h1 className="text-6xl font-semibold">Test Results</h1>
-      <p className="text-gray-500">Upload and manage your test results</p>
+      <h1 className="text-6xl font-semibold">Lab Test Results</h1>
+      <p className="text-gray-500">Upload and manage your lab test results</p>
       <div className="lg:w-3/4">
         <form
           onSubmit={(e) => onSubmitHandler(e)}
@@ -174,7 +193,7 @@ const TestResultMain = () => {
                 </tr>
               </thead>
               <tbody>
-                {results.reverse().map((a, index) => (
+                {results.filter(()=>true).reverse().map((a, index) => (
                   <tr key={index} className="text-gray-800">
                     <td className="py-2 px-4 border-b border-gray-200 text-left">
                       {a.fileName}
@@ -208,6 +227,11 @@ const TestResultMain = () => {
                         >
                           Delete
                         </button>
+                        <a >
+                          <button onClick={() => handleDownload(a.link, a.fileName)} className="w-full rounded-md h-7 bg-red-300 cursor-pointer">
+                            Download
+                          </button>
+                        </a>
                       </div>
                     </td>
                   </tr>

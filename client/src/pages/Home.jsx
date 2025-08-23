@@ -8,7 +8,9 @@ const Home = () => {
 
   const {setView} = useContext(AppContext)
 
-  useEffect(()=>setView(false),[])
+  useEffect(()=>{
+    setView(false);
+  },[])
 
   return (
     <div className="">

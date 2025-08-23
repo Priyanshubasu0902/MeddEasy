@@ -9,10 +9,10 @@ import Loading from "./Loading";
 const EditTestResultMain = () => {
   const { view, userToken, backendUrl } = useContext(AppContext);
 
-  const [testResult, setTestResult] = useState(null);
-  const [fileName, setFileName] = useState(null);
-  const [fileDescription, setFileDescription] = useState(null);
-  const [loading, setLoading] = useState(null);
+  const [testResult, setTestResult] = useState(false);
+  const [fileName, setFileName] = useState('');
+  const [fileDescription, setFileDescription] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate()
 
@@ -59,7 +59,7 @@ const EditTestResultMain = () => {
         navigate('/testResults')
         setFileName("");
         setFileDescription("");
-        setTestResult("");
+        setTestResult(false);
       } else {
         setLoading(false)
         toast.error(data.message);
@@ -81,8 +81,8 @@ const EditTestResultMain = () => {
         view ? "max-md:relative max-md:w-full" : "w-full"
       } px-10 py-10 flex flex-col gap-5`}
     >
-      <h1 className="text-6xl font-semibold">Test Results</h1>
-      <p className="text-gray-500">Edit your test result</p>
+      <h1 className="text-6xl font-semibold">Lab Test Results</h1>
+      <p className="text-gray-500">Edit your lab test result</p>
       <div className="lg:w-3/4">
         <form
           onSubmit={(e) => onSubmitHandler(e)}

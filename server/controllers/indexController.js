@@ -7,7 +7,7 @@ import generateToken from "../utils/generateToken.js";
 export const generateOtp = async (req, res) => {
   const { email } = req.body;
 
-  if (!email) {
+  if (email==='') {
     return res.json({ success: false, message: "Missing Details" });
   }
 
@@ -53,7 +53,7 @@ export const generateOtp = async (req, res) => {
 export const verifyOtp = async (req, res) => {
   const { email, otp } = req.body;
 
-  if (!email || !otp) {
+  if (email==='' || otp==='') {
     return res.json({ success: false, message: "Missing Details" });
   }
 

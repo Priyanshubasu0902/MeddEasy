@@ -10,7 +10,7 @@ import Loading from "./Loading";
 const PrescriptionMain = () => {
   const { view, userToken, backendUrl, doctors } = useContext(AppContext);
 
-  const [prescription, setPrescription] = useState(null);
+  const [prescription, setPrescription] = useState(false);
   const [fileName, setFileName] = useState("");
   const [doctorName, setDoctorName] = useState("");
   const [results, setResults] = useState([]);
@@ -60,7 +60,7 @@ const PrescriptionMain = () => {
         setFileName("");
         setDoctorName("");
         setPrescription("");
-        fetchPrescriptions();
+        fetchPrescriptions(false);
         setQuery("");
         setFilteredItems([]);
       } else {
@@ -93,6 +93,26 @@ const PrescriptionMain = () => {
       toast.error(error.message);
     }
   };
+
+  const handleDownload = async (url, fileName) => {
+  try {
+    const response = await fetch(url, { mode: "cors" });
+    const blob = await response.blob();
+    const downloadUrl = window.URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = downloadUrl;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    window.URL.revokeObjectURL(downloadUrl);
+    toast.success("File Donwloaded")
+  } catch (error) {
+    console.error("Download failed:", error);
+  }
+};
 
   useEffect(() => {
     fetchPrescriptions();
@@ -222,7 +242,7 @@ const PrescriptionMain = () => {
                 </tr>
               </thead>
               <tbody>
-                {results.reverse().map((a, index) => (
+                {results.filter(()=>true).reverse().map((a, index) => (
                   <tr key={index} className="text-gray-800">
                     <td className="py-2 px-4 border-b border-gray-200 text-left">
                       {a.fileName}
@@ -253,6 +273,12 @@ const PrescriptionMain = () => {
                           className="w-full px-1 rounded-md h-7 bg-red-300 cursor-pointer"
                         >
                           Delete
+                        </button>
+                        <button
+                          onClick={() => handleDownload(a.link, a.fileName)}
+                          className="w-full px-1 rounded-md h-7 bg-red-300 cursor-pointer"
+                        >
+                          Download
                         </button>
                       </div>
                     </td>

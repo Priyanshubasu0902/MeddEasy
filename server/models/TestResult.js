@@ -5,6 +5,7 @@ const testSchema = new mongoose.Schema({
   fileDescription: { type: String, required: true },
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "user", required: true },
   link: { type: String, required: true },
+  public_id: { type: String, required: true },
   date: { type: Number, required: true, default: Date.now() },
 });
 
