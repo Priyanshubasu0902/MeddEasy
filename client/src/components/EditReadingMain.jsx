@@ -216,7 +216,7 @@ const EditReadingMain = () => {
       )}
     </div>
   ) : (
-    <Loading />
+    <Loading dashboard={false}/>
   );
 };
 

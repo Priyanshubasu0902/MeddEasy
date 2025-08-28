@@ -167,7 +167,7 @@ const SignUp = () => {
       </div>
     </div>
   ) : (
-    <Loading />
+    <Loading dashboard={false}/>
   );
 };
 

@@ -85,7 +85,7 @@ const SetPassword = () => {
       </div>
     </div>
   ) : (
-    <Loading />
+    <Loading dashboard={false}/>
   );
 };
 

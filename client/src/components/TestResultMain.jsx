@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { AppContext } from "../Context/AppContext";
 import axios from "axios";
 import { useEffect } from "react";
@@ -6,6 +6,7 @@ import moment from "moment";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import Loading from "./Loading";
+import dot from "../assets/dots.png";
 
 const TestResultMain = () => {
   const { view, userToken, backendUrl } = useContext(AppContext);
@@ -15,6 +16,14 @@ const TestResultMain = () => {
   const [fileDescription, setFileDescription] = useState("");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [menuView, setMenuView] = useState(false);
+  const menu = useRef(null);
+
+  const closeMenu = (e) => {
+    if (e.target !== menu.current && menuView !== false) {
+      setMenuView(false);
+    }
+  };
 
   const navigate = useNavigate();
 
@@ -78,6 +87,7 @@ const TestResultMain = () => {
       );
       if (data.success) {
         setLoading(false);
+        setMenuView(false);
         fetchTestResults();
         toast.success(data.message);
       } else {
@@ -91,23 +101,23 @@ const TestResultMain = () => {
   };
 
   const handleDownload = async (url, fileName) => {
-  try {
-    const response = await fetch(url, { mode: "cors" });
-    const blob = await response.blob();
-    const downloadUrl = window.URL.createObjectURL(blob);
+    try {
+      const response = await fetch(url, { mode: "cors" });
+      const blob = await response.blob();
+      const downloadUrl = window.URL.createObjectURL(blob);
 
-    const link = document.createElement("a");
-    link.href = downloadUrl;
-    link.download = fileName;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+      const link = document.createElement("a");
+      link.href = downloadUrl;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
 
-    window.URL.revokeObjectURL(downloadUrl);
-  } catch (error) {
-    console.error("Download failed:", error);
-  }
-};
+      window.URL.revokeObjectURL(downloadUrl);
+    } catch (error) {
+      console.error("Download failed:", error);
+    }
+  };
 
   useEffect(() => {
     fetchTestResults();
@@ -118,6 +128,7 @@ const TestResultMain = () => {
       className={`min-h-screen w-4/5 ${
         view ? "max-md:relative max-md:w-full" : "w-full"
       } px-8 py-10 flex flex-col gap-5`}
+      onClick={closeMenu}
     >
       <h1 className="text-6xl font-semibold">Lab Test Results</h1>
       <p className="text-gray-500">Upload and manage your lab test results</p>
@@ -193,49 +204,74 @@ const TestResultMain = () => {
                 </tr>
               </thead>
               <tbody>
-                {results.filter(()=>true).reverse().map((a, index) => (
-                  <tr key={index} className="text-gray-800">
-                    <td className="py-2 px-4 border-b border-gray-200 text-left">
-                      {a.fileName}
-                    </td>
-                    <td className="py-2 px-4 border-b border-gray-200 text-left">
-                      {moment(a.date).format("lll")}
-                    </td>
-                    <td className="py-2 max-sm:hidden px-4 border-b border-gray-200 text-left">
-                      {a.fileDescription}
-                    </td>
-                    <td className="py-2 px-3 border-b border-gray-200 text-left">
-                      <a href={a.link} target="_blank">
-                        <button className="w-15 h-9 bg-[#814de5] font-semibold text-white cursor-pointer hover:bg-[#692be0]">
-                          View
-                        </button>
-                      </a>
-                    </td>
-                    <td className="py-2 px-4 border-b border-gray-200 text-left">
-                      <div className="flex flex-col gap-3">
-                        <button
-                          onClick={() => navigate(`/editTestResult/${a._id}`)}
-                          className="w-full rounded-md h-7 bg-blue-300 cursor-pointer"
-                        >
-                          Edit
-                        </button>
-                        <button
-                          onClick={() => {
-                            deleteTestResult(a._id);
-                          }}
-                          className="w-full rounded-md h-7 bg-red-300 cursor-pointer"
-                        >
-                          Delete
-                        </button>
-                        <a >
-                          <button onClick={() => handleDownload(a.link, a.fileName)} className="w-full rounded-md h-7 bg-red-300 cursor-pointer">
-                            Download
+                {results
+                  .filter(() => true)
+                  .reverse()
+                  .map((a, index) => (
+                    <tr key={index} className="text-gray-800">
+                      <td className="py-2 px-4 border-b border-gray-200 text-left">
+                        {a.fileName}
+                      </td>
+                      <td className="py-2 px-4 border-b border-gray-200 text-left">
+                        {moment(a.date).format("lll")}
+                      </td>
+                      <td className="py-2 max-sm:hidden px-4 border-b border-gray-200 text-left">
+                        {a.fileDescription}
+                      </td>
+                      <td className="py-2 px-3 border-b border-gray-200 text-left">
+                        <a href={a.link} target="_blank">
+                          <button className="w-15 h-9 bg-[#814de5] font-semibold text-white cursor-pointer hover:bg-[#692be0]">
+                            View
                           </button>
                         </a>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                      </td>
+                      <td className="py-2 px-4 border-b flex justify-center border-gray-200 text-left relative py-5">
+                        <img
+                          src={dot}
+                          onClick={() =>
+                            menuView === false || menuView !== index
+                              ? setMenuView(index)
+                              : setMenuView(false)
+                          }
+                          className="w-10 cursor-pointer"
+                          alt=""
+                        />
+                        {menuView !== false && menuView === index ? (
+                          <ul
+                            ref={menu}
+                            className="flex flex-col bg-gray-200 absolute text-center text-[#692be0] font-semibold z-15 top-14"
+                          >
+                            <li
+                              onClick={() =>
+                                navigate(`/editTestResult/${a._id}`)
+                              }
+                              className="w-full p-2 cursor-pointer border-b hover:bg-gray-300"
+                            >
+                              Edit
+                            </li>
+                            <li
+                              onClick={() => {
+                                deleteTestResult(a._id);
+                              }}
+                              className="w-full p-2 cursor-pointer border-b hover:bg-gray-300"
+                            >
+                              Delete
+                            </li>
+                            <a>
+                              <li
+                                onClick={() =>
+                                  handleDownload(a.link, a.fileName)
+                                }
+                                className="w-full p-2 cursor-pointer hover:bg-gray-300"
+                              >
+                                Download
+                              </li>
+                            </a>
+                          </ul>
+                        ) : null}
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           ) : (
@@ -245,7 +281,7 @@ const TestResultMain = () => {
       </div>
     </div>
   ) : (
-    <Loading />
+    <Loading dashboard={false} />
   );
 };
 

@@ -187,7 +187,7 @@ const ReadingMain = () => {
         )}
       </div>
     </div>
-  ):<Loading/>;
+  ):<Loading dashboard={false}/>;
 };
 
 export default ReadingMain;

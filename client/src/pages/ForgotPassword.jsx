@@ -119,7 +119,7 @@ const ForgotPassword = () => {
         )}
       </div>
     </div>
-  ):(<Loading/>);
+  ):(<Loading dashboard={false}/>);
 };
 
 export default ForgotPassword;

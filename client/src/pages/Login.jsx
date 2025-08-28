@@ -164,7 +164,7 @@ const Login = () => {
         </div>
       </div>
     </div>
-  ):(<Loading/>);
+  ):(<Loading dashboard={false}/>);
 };
 
 export default Login;

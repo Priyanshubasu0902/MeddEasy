@@ -50,7 +50,7 @@ const AddAppointmentMain = () => {
   };
 
   useEffect(() => {
-    if (query !== "") {
+    if (query !== ""&&doctorName==='') {
       const filtered = doctors.filter((doctor) =>
         doctor.name.toLowerCase().includes(query.toLowerCase())
       );
@@ -59,7 +59,7 @@ const AddAppointmentMain = () => {
       setFilteredItems([]);
     }
     if(query!==doctorName) {
-      setDoctorName(false);
+      setDoctorName('');
     }
   }, [query]);
 
@@ -203,7 +203,7 @@ const AddAppointmentMain = () => {
       </div>
     </div>
   ) : (
-    <Loading />
+    <Loading dashboard={false}/>
   );
 };
 

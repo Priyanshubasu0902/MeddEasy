@@ -448,7 +448,7 @@ const HomeMain = () => {
       </div>
     </div>
   ) : (
-    <Loading />
+    <Loading dashboard={false}/>
   );
 };
 

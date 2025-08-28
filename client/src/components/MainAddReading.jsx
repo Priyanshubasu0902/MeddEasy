@@ -224,7 +224,7 @@ const MainAddReading = () => {
       </div>
     </div>
   ) : (
-    <Loading />
+    <Loading dashboard={false}/>
   );
 };
 

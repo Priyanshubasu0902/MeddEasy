@@ -141,7 +141,7 @@ const EditTestResultMain = () => {
         </form>
       </div>
     </div>
-  ):<Loading/>;
+  ):<Loading dashboard={false}/>;
 };
 
 export default EditTestResultMain;

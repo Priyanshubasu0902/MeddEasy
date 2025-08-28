@@ -130,7 +130,7 @@ const Dashboard = ({ section }) => {
       </div>
     </>
   ) : (
-    <Loading />
+    <Loading dashboard={true}/>
   );
 };
 

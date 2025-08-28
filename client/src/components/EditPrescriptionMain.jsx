@@ -79,7 +79,7 @@ const EditPrescriptionMain = () => {
   }, []);
 
   useEffect(() => {
-    if (query !== "") {
+    if (query !== ""&&doctorName==='') {
       const filtered = doctors.filter((doctor) =>
         doctor.name.toLowerCase().includes(query.toLowerCase())
       );
@@ -185,7 +185,7 @@ const EditPrescriptionMain = () => {
       </div>
     </div>
   ) : (
-    <Loading />
+    <Loading dashboard={false}/>
   );
 };
 

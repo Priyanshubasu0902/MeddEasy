@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { AppContext } from "../Context/AppContext";
 import axios from "axios";
 import { useEffect } from "react";
@@ -6,6 +6,7 @@ import moment from "moment";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import Loading from "./Loading";
+import dot from "../assets/dots.png";
 
 const PrescriptionMain = () => {
   const { view, userToken, backendUrl, doctors } = useContext(AppContext);
@@ -17,6 +18,14 @@ const PrescriptionMain = () => {
   const [loading, setLoading] = useState(false);
   const [query, setQuery] = useState("");
   const [filteredItems, setFilteredItems] = useState([]);
+  const [menuView, setMenuView] = useState(false);
+  const menu = useRef(null);
+
+  const closeMenu = (e) => {
+    if (e.target !== menu.current && menuView !== false) {
+      setMenuView(false);
+    }
+  };
 
   const navigate = useNavigate();
 
@@ -60,7 +69,7 @@ const PrescriptionMain = () => {
         setFileName("");
         setDoctorName("");
         setPrescription("");
-        fetchPrescriptions(false);
+        fetchPrescriptions();
         setQuery("");
         setFilteredItems([]);
       } else {
@@ -82,6 +91,7 @@ const PrescriptionMain = () => {
       );
       if (data.success) {
         setLoading(false);
+        setMenuView(false);
         fetchPrescriptions();
         toast.success(data.message);
       } else {
@@ -95,31 +105,31 @@ const PrescriptionMain = () => {
   };
 
   const handleDownload = async (url, fileName) => {
-  try {
-    const response = await fetch(url, { mode: "cors" });
-    const blob = await response.blob();
-    const downloadUrl = window.URL.createObjectURL(blob);
+    try {
+      const response = await fetch(url, { mode: "cors" });
+      const blob = await response.blob();
+      const downloadUrl = window.URL.createObjectURL(blob);
 
-    const link = document.createElement("a");
-    link.href = downloadUrl;
-    link.download = fileName;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-
-    window.URL.revokeObjectURL(downloadUrl);
-    toast.success("File Donwloaded")
-  } catch (error) {
-    console.error("Download failed:", error);
-  }
-};
+      const link = document.createElement("a");
+      link.href = downloadUrl;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(downloadUrl);
+      setMenuView(false);
+      toast.success("File Donwloaded");
+    } catch (error) {
+      console.error("Download failed:", error);
+    }
+  };
 
   useEffect(() => {
     fetchPrescriptions();
   }, []);
 
   useEffect(() => {
-    if (query !== "") {
+    if (query !== "" && doctorName === "") {
       const filtered = doctors.filter((doctor) =>
         doctor.name.toLowerCase().includes(query.toLowerCase())
       );
@@ -137,6 +147,7 @@ const PrescriptionMain = () => {
       className={`min-h-screen w-4/5 ${
         view ? "max-md:relative max-md:w-full" : "w-full"
       } px-8 py-10 flex flex-col gap-5`}
+      onClick={closeMenu}
     >
       <h1 className="text-6xl font-semibold">Prescriptions</h1>
       <p className="text-gray-500">
@@ -242,48 +253,68 @@ const PrescriptionMain = () => {
                 </tr>
               </thead>
               <tbody>
-                {results.filter(()=>true).reverse().map((a, index) => (
-                  <tr key={index} className="text-gray-800">
-                    <td className="py-2 px-4 border-b border-gray-200 text-left">
-                      {a.fileName}
-                    </td>
-                    <td className="py-2 px-4 max-sm:hidden border-b border-gray-200 text-left">
-                      {a.doctorName}
-                    </td>
-                    <td className="py-2 px-4 border-b border-gray-200 text-left">
-                      {moment(a.date).format("lll")}
-                    </td>
-                    <td className="py-2 px-3 border-b border-gray-200 text-left">
-                      <a href={a.link} target="_blank">
-                        <button className="w-15 h-9 bg-[#814de5] font-semibold text-white cursor-pointer hover:bg-[#692be0]">
-                          View
-                        </button>
-                      </a>
-                    </td>
-                    <td className="py-2 px-4 border-b border-gray-200 text-left">
-                      <div className="flex flex-col gap-3">
-                        <button
-                          onClick={() => navigate(`/editPrescription/${a._id}`)}
-                          className="w-full rounded-md h-7 bg-blue-300 cursor-pointer"
-                        >
-                          Edit
-                        </button>
-                        <button
-                          onClick={() => deletePrescriptions(a._id)}
-                          className="w-full px-1 rounded-md h-7 bg-red-300 cursor-pointer"
-                        >
-                          Delete
-                        </button>
-                        <button
-                          onClick={() => handleDownload(a.link, a.fileName)}
-                          className="w-full px-1 rounded-md h-7 bg-red-300 cursor-pointer"
-                        >
-                          Download
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                {results
+                  .filter(() => true)
+                  .reverse()
+                  .map((a, index) => (
+                    <tr key={index} className="text-gray-800">
+                      <td className="py-2 px-4 border-b border-gray-200 text-left">
+                        {a.fileName}
+                      </td>
+                      <td className="py-2 px-4 max-sm:hidden border-b border-gray-200 text-left">
+                        {a.doctorName}
+                      </td>
+                      <td className="py-2 px-4 border-b border-gray-200 text-left">
+                        {moment(a.date).format("lll")}
+                      </td>
+                      <td className="py-2 px-3 border-b border-gray-200 text-left">
+                        <a href={a.link} target="_blank">
+                          <button className="w-15 h-9 bg-[#814de5] font-semibold text-white cursor-pointer hover:bg-[#692be0]">
+                            View
+                          </button>
+                        </a>
+                      </td>
+                      <td className="py-2 px-4 border-b flex justify-center border-gray-200 text-left relative py-5">
+                        <img
+                          src={dot}
+                          onClick={() =>
+                            menuView === false || menuView !== index
+                              ? setMenuView(index)
+                              : setMenuView(false)
+                          }
+                          className="w-10 cursor-pointer"
+                          alt=""
+                        />
+                        {menuView !== false && menuView === index ? (
+                          <ul
+                            ref={menu}
+                            className="flex flex-col bg-gray-200 absolute text-center text-[#692be0] font-semibold z-15 top-14"
+                          >
+                            <li
+                              onClick={() =>
+                                navigate(`/editPrescription/${a._id}`)
+                              }
+                              className="w-full p-2 cursor-pointer border-b hover:bg-gray-300"
+                            >
+                              Edit
+                            </li>
+                            <li
+                              onClick={() => deletePrescriptions(a._id)}
+                              className="w-full p-2 cursor-pointer border-b hover:bg-gray-300"
+                            >
+                              Delete
+                            </li>
+                            <li
+                              onClick={() => handleDownload(a.link, a.fileName)}
+                              className="w-full p-2 cursor-pointer hover:bg-gray-300"
+                            >
+                              Download
+                            </li>
+                          </ul>
+                        ) : null}
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           ) : (
@@ -293,7 +324,7 @@ const PrescriptionMain = () => {
       </div>
     </div>
   ) : (
-    <Loading />
+    <Loading dashboard={false} />
   );
 };
 

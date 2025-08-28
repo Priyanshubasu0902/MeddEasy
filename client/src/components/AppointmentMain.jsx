@@ -402,7 +402,7 @@ const AppointmentMain = () => {
         </div>
       </div>
     </div>
-  ):<Loading/>;
+  ):<Loading dashboard={false}/>;
 };
 
 export default AppointmentMain;
