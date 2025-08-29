@@ -26,6 +26,9 @@ app.get('/', (req, res)=> {
    res.send("api working");
 })
 
+app.get('/api/cronJon', (req, res)=> {
+   console.log("Successfull");
+})
 app.use('/api', indexRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/appointments', appointmentRoutes);

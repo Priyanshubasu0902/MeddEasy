@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { AppContext } from "../Context/AppContext";
 import appointment from "../assets/doctor-appointment.png";
 import { useEffect } from "react";
@@ -8,19 +8,27 @@ import { useNavigate } from "react-router-dom";
 import editIcon from "../assets/edit.png";
 import { toast } from "react-toastify";
 import Loading from "./Loading";
+import dot from "../assets/dots.png";
 
 const HomeMain = () => {
-  const { view, userData, fetchUserData, userToken, backendUrl, doctors, fetchDoctors } =
-    useContext(AppContext);
+  const {
+    view,
+    userData,
+    fetchUserData,
+    userToken,
+    backendUrl,
+    doctors,
+    fetchDoctors,
+  } = useContext(AppContext);
   const [appointments, setAppointments] = useState([]);
 
-  const [doctorName, setDoctorName] = useState('');
-  const [doctorSpeciality, setDoctorSpeciality] = useState('');
-  const [doctorNumber, setDoctorNumber] = useState('');
+  const [doctorName, setDoctorName] = useState("");
+  const [doctorSpeciality, setDoctorSpeciality] = useState("");
+  const [doctorNumber, setDoctorNumber] = useState("");
 
-  const [editDoctorName, setEditDoctorName] = useState('');
-  const [editDoctorSpeciality, setEditDoctorSpeciality] = useState('');
-  const [editDoctorNumber, setEditDoctorNumber] = useState('');
+  const [editDoctorName, setEditDoctorName] = useState("");
+  const [editDoctorSpeciality, setEditDoctorSpeciality] = useState("");
+  const [editDoctorNumber, setEditDoctorNumber] = useState("");
 
   const [detailEdit, setDetailEdit] = useState(false);
 
@@ -31,7 +39,16 @@ const HomeMain = () => {
   const [loading, setLoading] = useState(false);
   const [editDoctor, setEditDoctor] = useState(false);
 
+  const [menuView, setMenuView] = useState(false);
+  const menu = useRef(null);
+
   const navigate = useNavigate();
+
+  const closeMenu = (e) => {
+    if (e.target !== menu.current && menuView !== false) {
+      setMenuView(false);
+    }
+  };
 
   const fetchAppointments = async () => {
     setLoading(true);
@@ -70,6 +87,7 @@ const HomeMain = () => {
         setLoading(false);
         toast.success(data.message);
         fetchDoctors();
+        setMenuView(false);
         setDoctorName("");
         setDoctorSpeciality("");
         setDoctorNumber("");
@@ -95,6 +113,7 @@ const HomeMain = () => {
       if (data.success) {
         setLoading(false);
         fetchUserData();
+        setMenuView(false);
         setDetailEdit(false);
         toast.success(data.message);
       } else {
@@ -116,6 +135,7 @@ const HomeMain = () => {
       );
       if (data.success) {
         setLoading(false);
+        setMenuView(false);
         toast.success(data.message);
         fetchDoctors();
       } else {
@@ -145,9 +165,9 @@ const HomeMain = () => {
         setLoading(false);
         toast.success(data.message);
         setEditDoctor(false);
-        setEditDoctorName('');
-        setEditDoctorSpeciality('');
-        setEditDoctorNumber('');
+        setEditDoctorName("");
+        setEditDoctorSpeciality("");
+        setEditDoctorNumber("");
         fetchDoctors();
       } else {
         setLoading(false);
@@ -168,6 +188,7 @@ const HomeMain = () => {
       className={`min-h-screen w-4/5 ${
         view ? "max-md:relative max-md:w-full" : "w-full"
       } px-8 py-10`}
+      onClick={closeMenu}
     >
       <h1 className="text-5xl font-bold md:text-5xl md:font-bold">
         My Health Record
@@ -289,24 +310,42 @@ const HomeMain = () => {
                           {a.speciality}
                         </td>
                         <td className="text-start py-2 pr-10">{a.number}</td>
-                        <td className="text-start py-2 pr-10 flex gap-3">
-                          <button
-                            onClick={() => deleteDoctor(a._id)}
-                            className="cursor-pointer bg-red-300 px-2 py-1 rounded-lg"
-                          >
-                            Delete
-                          </button>
-                          <button
-                            onClick={() => {
-                              setEditDoctor(a._id);
-                              setEditDoctorName(a.name);
-                              setEditDoctorSpeciality(a.speciality);
-                              setEditDoctorNumber(a.number);
-                            }}
-                            className="bg-green-300 px-5 rounded-lg py-1 cursor-pointer"
-                          >
-                            Edit
-                          </button>
+                        <td className="flex border-gray-200 relative py-5">
+                          <img
+                            src={dot}
+                            onClick={() =>
+                              menuView === false || menuView !== index
+                                ? setMenuView(index)
+                                : setMenuView(false)
+                            }
+                            className="w-10 cursor-pointer"
+                            alt=""
+                          />
+                          {menuView !== false && menuView === index ? (
+                            <ul
+                              ref={menu}
+                              className="flex flex-col bg-gray-200 absolute text-center text-[#692be0] font-semibold z-15 top-14"
+                            >
+                              <li
+                                onClick={() => deleteDoctor(a._id)}
+                                className="w-full p-2 px-3 cursor-pointer border-b hover:bg-gray-300"
+                              >
+                                Delete
+                              </li>
+                              <li
+                                onClick={() => {
+                                  setMenuView(false);
+                                  setEditDoctor(a._id);
+                                  setEditDoctorName(a.name);
+                                  setEditDoctorSpeciality(a.speciality);
+                                  setEditDoctorNumber(a.number);
+                                }}
+                                className="w-full p-2 px-3 cursor-pointer hover:bg-gray-300"
+                              >
+                                Edit
+                              </li>
+                            </ul>
+                          ) : null}
                         </td>
                       </tr>
                     );
@@ -402,7 +441,7 @@ const HomeMain = () => {
             <input
               type="submit"
               value="Add"
-              className="bg-[#814de5] text-white font-semibold w-27 py-1 rounded-lg cursor-pointer hover:bg-[#692be0]"
+              className="bg-[#814de5] text-white font-semibold px-3 py-1 rounded-lg cursor-pointer hover:bg-[#692be0]"
             />
           </form>
         </div>
@@ -448,7 +487,7 @@ const HomeMain = () => {
       </div>
     </div>
   ) : (
-    <Loading dashboard={false}/>
+    <Loading dashboard={false} />
   );
 };
 

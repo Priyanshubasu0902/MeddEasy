@@ -11,7 +11,7 @@ const connectDB = async () => {
     if (env == "development") {
       mongoose.connect("mongodb://127.0.0.1:27017/medEasy");
     } else if (env == "production") {
-      await mongoose.connect(`${process.env.MONGODB_URI}/medEasy`);
+      mongoose.connect(`${process.env.MONGODB_URI}`);
     }
   } catch (error) {
     console.log(error.message);
