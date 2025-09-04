@@ -187,7 +187,7 @@ const HomeMain = () => {
     <div
       className={`min-h-screen w-4/5 ${
         view ? "max-md:relative max-md:w-full" : "w-full"
-      } px-8 py-10`}
+      } px-8 py-10 overflow-x-hidden`}
       onClick={closeMenu}
     >
       <h1 className="text-5xl font-bold md:text-5xl md:font-bold">
@@ -292,7 +292,7 @@ const HomeMain = () => {
           <h3 className="text-2xl font-bold">Doctors</h3>
           {doctors.length > 0 ? (
             <>
-              <table className="mt-2">
+              <table className="mt-2 max-w-6xl max-sm:text-sm">
                 <thead>
                   <tr>
                     <th className="text-start py-1 pr-10">Name</th>
@@ -355,10 +355,10 @@ const HomeMain = () => {
               {editDoctor !== false ? (
                 <form
                   onSubmit={(e) => editDoctorHandler(e)}
-                  className="flex gap-6 mt-5 items-center"
+                  className="sm:flex gap-6 mt-5 mb-8 items-center w-full max-sm:text-sm"
                   action=""
                 >
-                  <label htmlFor="">
+                  <label className="max-sm:inline-block mr-6" htmlFor="">
                     <input
                       className="border-b w-20 focus:outline-none"
                       required
@@ -368,7 +368,7 @@ const HomeMain = () => {
                       placeholder="Name"
                     />
                   </label>
-                  <label htmlFor="">
+                  <label className="max-sm:inline-block mr-6" htmlFor="">
                     <input
                       className="border-b w-25 focus:outline-none"
                       required
@@ -378,7 +378,7 @@ const HomeMain = () => {
                       placeholder="Speciality"
                     />
                   </label>
-                  <label htmlFor="">
+                  <label className="max-sm:inline-block" htmlFor="">
                     <input
                       className="border-b w-26 focus:outline-none"
                       value={editDoctorNumber}
@@ -391,7 +391,7 @@ const HomeMain = () => {
                   <input
                     type="submit"
                     value="Save Changes"
-                    className="bg-[#814de5] text-white font-semibold py-1 px-2 rounded-lg cursor-pointer hover:bg-[#692be0]"
+                    className="bg-[#814de5] text-white font-semibold py-1 px-2 max-sm:py-2 rounded-lg cursor-pointer hover:bg-[#692be0] max-sm:block max-sm:mt-3 max-sm:w-full"
                   />
                 </form>
               ) : (
@@ -405,10 +405,10 @@ const HomeMain = () => {
           )}
           <form
             onSubmit={(e) => doctorSubmitHandler(e)}
-            className="flex gap-6 mt-5 items-center"
+            className="sm:flex gap-6 mt-5 items-center w-full max-sm:text-sm"
             action=""
           >
-            <label htmlFor="">
+            <label className="max-sm:inline-block mr-6" htmlFor="">
               <input
                 className="border-b w-20 focus:outline-none"
                 required
@@ -418,7 +418,7 @@ const HomeMain = () => {
                 placeholder="Name"
               />
             </label>
-            <label htmlFor="">
+            <label className="max-sm:inline-block mr-6" htmlFor="">
               <input
                 className="border-b w-25 focus:outline-none"
                 required
@@ -428,7 +428,7 @@ const HomeMain = () => {
                 placeholder="Speciality"
               />
             </label>
-            <label htmlFor="">
+            <label className="max-sm:inline-block" htmlFor="">
               <input
                 className="border-b w-26 focus:outline-none"
                 value={doctorNumber}
@@ -441,7 +441,7 @@ const HomeMain = () => {
             <input
               type="submit"
               value="Add"
-              className="bg-[#814de5] text-white font-semibold px-3 py-1 rounded-lg cursor-pointer hover:bg-[#692be0]"
+              className="bg-[#814de5] text-white font-semibold px-3 py-1 max-sm:py-2 rounded-lg cursor-pointer hover:bg-[#692be0] max-sm:block max-sm:mt-3 max-sm:w-full"
             />
           </form>
         </div>

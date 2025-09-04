@@ -225,7 +225,7 @@ const TestResultMain = () => {
                           </button>
                         </a>
                       </td>
-                      <td className="py-2 px-4 border-b flex justify-center border-gray-200 text-left relative py-5">
+                      <td className="py-2 px-4 border-b border-gray-200 flex justify-center text-left relative py-5">
                         <img
                           src={dot}
                           onClick={() =>
