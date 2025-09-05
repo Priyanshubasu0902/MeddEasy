@@ -57,11 +57,11 @@ export const signUpUser = async (req, res) => {
     let mailOptions = {
       from: process.env.EMAIL_ID,
       to: user.email,
-      subject: "Email from MedEasy",
+      subject: "Email from MeddEasy",
       text:
         "Hi " +
         user.name +
-        ", you are registered successfully. Thank You for trusting our application. Hope you enjoy your journey in MedEasy",
+        ", you are registered successfully. Thank You for trusting our application. Hope you enjoy your journey in MeddEasy",
     };
 
     await transporter.sendMail(mailOptions, function (error, info) {
@@ -190,7 +190,7 @@ export const deleteUser = async (req, res) => {
     let mailOptions = {
       from: process.env.EMAIL_ID,
       to: user.email,
-      subject: "Email from MedEasy",
+      subject: "Email from MeddEasy",
       text:
         "Hi " +
         user.name +

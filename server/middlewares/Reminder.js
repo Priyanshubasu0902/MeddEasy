@@ -18,7 +18,7 @@ export const checkAppointment = () => {
           let mailOptions = {
             from: process.env.EMAIL_ID,
             to: user.email,
-            subject: "Email from MedEasy",
+            subject: "Email from MeddEasy",
             text:
               "Hi " +
               user.name +
@@ -34,36 +34,12 @@ export const checkAppointment = () => {
               console.log("Email sent: " + info.response);
             }
           });
-        } else if (
-          new Date(a.date).setHours(0, 0, 0, 0) <
-            new Date().setHours(0, 0, 0, 0) &&
-          a.status !== "visited"
-        ) {
-          let mailOptions = {
-            from: process.env.EMAIL_ID,
-            to: user.email,
-            subject: "Email from MedEasy",
-            text:
-              "Hi " +
-              user.name +
-              ", you have missed an appointment on " +
-              a.date +
-              " with " +
-              a.doctorName,
-          };
-          await transporter.sendMail(mailOptions, function (error, info) {
-            if (error) {
-              console.log(error);
-            } else {
-              console.log("Email sent: " + info.response);
-            }
-          });
         }
         if (((moment(new Date(`${a.date}T${a.time}`)).toNow(true) === "2 days")||(moment(`${a.date}T${a.time}`).toNow(true) === "a day")||(moment(`${a.date}T${a.time}`).toNow(true) === "3 days"))&&(a.status==="not booked")) {
           let mailOptions = {
             from: process.env.EMAIL_ID,
             to: user.email,
-            subject: "Email from MedEasy",
+            subject: "Email from MeddEasy",
             text:
               "Hi " +
               user.name +
