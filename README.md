@@ -41,7 +41,7 @@ To get this project up and running on your local machine, follow these steps.
 ### 1. Clone the Repository
 
 ```sh
-git clone https://github.com/Priyanshubasu0902/MedEasy.git
+git clone https://github.com/Priyanshubasu0902/MeddEasy.git
 cd MedEasy
 ```
 
