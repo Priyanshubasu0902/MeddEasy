@@ -1,6 +1,6 @@
-# MedEasy
+# MeddEasy
 
-MedEasy is a comprehensive personal health record management system designed to help users effortlessly track their medical information. This full-stack application allows users to manage appointments, monitor vital health readings, store prescriptions and test results securely, and keep a list of their doctors. It also features an automated email reminder system for upcoming appointments.
+MeddEasy is a comprehensive personal health record management system designed to help users effortlessly track their medical information. This full-stack application allows users to manage appointments, monitor vital health readings, store prescriptions and test results securely, and keep a list of their doctors. It also features an automated email reminder system for upcoming appointments.
 
 ## Key Features
 
@@ -41,7 +41,7 @@ To get this project up and running on your local machine, follow these steps.
 ### 1. Clone the Repository
 
 ```sh
-git clone https://github.com/Priyanshubasu0902/MedEasy.git
+git clone https://github.com/Priyanshubasu0902/MeddEasy.git
 cd MedEasy
 ```
 
