@@ -10,7 +10,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="p-5 w-full bg-[#814de5] cursor-pointer lg:hidden">
+    <div className="p-5 w-full bg-[#814de5] cursor-pointer max-md:fixed z-2 lg:hidden">
       <img
         onClick={() => {
           toggle();

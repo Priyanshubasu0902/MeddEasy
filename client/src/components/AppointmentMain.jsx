@@ -79,7 +79,7 @@ const AppointmentMain = () => {
     <div
       className={`min-h-screen w-4/5 ${
         view ? "max-md:relative max-md:w-full" : "w-full"
-      } flex flex-col gap-8 sm:px-10 px-2 py-10`}
+      } flex flex-col gap-8 px-10 max-sm:px-3 max-md:mt-20 py-10`}
       onClick={closeMenu}
     >
       <div className="w-full">
@@ -103,12 +103,12 @@ const AppointmentMain = () => {
             <table className="w-full max-w-6xl bg-white rounded border border-gray-200 border-b max-sm:text-sm">
               <thead>
                 <tr className="border-b border-gray-200 lg:h-14">
-                  <th className="py-2 px-4 text-left">Date</th>
-                  <th className="py-2 px-4 text-left">Time</th>
-                  <th className="py-2 px-4 text-left">Doctor</th>
-                  <th className="py-2 px-4 max-sm:hidden text-left">Purpose</th>
-                  <th className="py-2 px-4 text-left">Status</th>
-                  <th className="py-2 px-4 text-center">Action</th>
+                  <th className="py-2 px-4 max-sm:px-2 text-left">Date</th>
+                  <th className="py-2 px-4 max-sm:px-2 text-left">Time</th>
+                  <th className="py-2 px-4 max-sm:px-2 text-left">Doctor</th>
+                  <th className="py-2 px-4 max-sm:px-2 max-sm:hidden text-left">Purpose</th>
+                  <th className="py-2 px-4 max-sm:px-2 text-left max-sm:text-center">Status</th>
+                  <th className="py-2 px-4 max-sm:px-2 text-center">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -125,16 +125,16 @@ const AppointmentMain = () => {
                   )
                   .map((a, index) => (
                     <tr key={index} className="text-gray-800 lg:h-18">
-                      <td className="py-2 px-4 border-b border-gray-200 text-left">
+                      <td className="py-2 px-4 max-sm:px-2 border-b border-gray-200 text-left">
                         {moment(a.date).format("DD-MM-YYYY")}
                       </td>
-                      <td className="py-2 px-4 border-b border-gray-200 text-left">
+                      <td className="py-2 px-4 max-sm:px-2 border-b border-gray-200 text-left">
                         {a.time}
                       </td>
-                      <td className="py-2 px-4 border-b border-gray-200 text-left">
+                      <td className="py-2 px-4 max-sm:px-2 border-b border-gray-200 text-left">
                         {a.doctorName}
                       </td>
-                      <td className="py-2 px-4 border-b border-gray-200 max-sm:hidden text-left">
+                      <td className="py-2 px-4 max-sm:px-2 border-b border-gray-200 max-sm:hidden text-left">
                         {a.purpose}
                       </td>
                       <td className="py-2 px-3 border-b border-gray-200 text-left">
@@ -142,7 +142,7 @@ const AppointmentMain = () => {
                           {a.status}
                         </button>
                       </td>
-                      <td className="py-2 px-4 border-b border-gray-200 flex justify-center text-left relative py-5">
+                      <td className="py-2 px-4 max-sm:px-2 border-b border-gray-200 flex justify-center text-left relative py-5">
                         <img
                           src={dot}
                           onClick={() =>
@@ -159,7 +159,7 @@ const AppointmentMain = () => {
                           className="flex flex-col bg-gray-200 absolute text-center text-[#692be0] font-semibold z-15 top-14"
                         >
                           <li
-                            className="w-full py-2 px-4 cursor-pointer border-b hover:bg-gray-300"
+                            className="w-full py-2 px-4 max-sm:px-2 cursor-pointer border-b hover:bg-gray-300"
                             onClick={() =>
                               navigate(`/editAppointments/${a._id}`)
                             }
@@ -167,12 +167,12 @@ const AppointmentMain = () => {
                             Edit
                           </li>
                           <li
-                            className="w-full py-2 px-4 cursor-pointer border-b hover:bg-gray-300"
+                            className="w-full py-2 px-4 max-sm:px-2 cursor-pointer border-b hover:bg-gray-300"
                             onClick={() => deleteAppointment(a._id)}
                           >
                             Delete
                           </li>
-                          <li className="w-full py-2 px-4 cursor-pointer hover:bg-gray-300">
+                          <li className="w-full py-2 px-4 max-sm:px-2 cursor-pointer hover:bg-gray-300">
                             Update
                           </li>
                         </ul>
@@ -204,12 +204,12 @@ const AppointmentMain = () => {
             <table className="w-full max-w-6xl bg-white rounded border border-gray-200 border-b max-sm:text-sm">
               <thead>
                 <tr className="border-b border-gray-200 lg:h-14">
-                  <th className="py-2 px-4 text-left">Date</th>
-                  <th className="py-2 px-4 text-left">Time</th>
-                  <th className="py-2 px-4 text-left">Doctor</th>
-                  <th className="py-2 px-4 max-sm:hidden text-left">Purpose</th>
-                  <th className="py-2 px-4 text-left">Status</th>
-                  <th className="py-2 px-4 text-center">Action</th>
+                  <th className="py-2 px-4 max-sm:px-2 text-left">Date</th>
+                  <th className="py-2 px-4 max-sm:px-2 text-left">Time</th>
+                  <th className="py-2 px-4 max-sm:px-2 text-left">Doctor</th>
+                  <th className="py-2 px-4 max-sm:px-2 max-sm:hidden text-left">Purpose</th>
+                  <th className="py-2 px-4 max-sm:px-2 text-left max-sm:text-center">Status</th>
+                  <th className="py-2 px-4 max-sm:px-2 text-center">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -226,24 +226,24 @@ const AppointmentMain = () => {
                   )
                   .map((a, index) => (
                     <tr key={index} className="text-gray-800 lg:h-18">
-                      <td className="py-2 px-4 border-b border-gray-200 text-left">
+                      <td className="py-2 px-4 max-sm:px-2 border-b border-gray-200 text-left">
                         {moment(a.date).format("DD-MM-YYYY")}
                       </td>
-                      <td className="py-2 px-4 border-b border-gray-200 text-left">
+                      <td className="py-2 px-4 max-sm:px-2 border-b border-gray-200 text-left">
                         {a.time}
                       </td>
-                      <td className="py-2 px-4 border-b border-gray-200 text-left">
+                      <td className="py-2 px-4 max-sm:px-2 border-b border-gray-200 text-left">
                         {a.doctorName}
                       </td>
-                      <td className="py-2 px-4 border-b border-gray-200 max-sm:hidden text-left">
+                      <td className="py-2 px-4 max-sm:px-2 border-b border-gray-200 max-sm:hidden text-left">
                         {a.purpose}
                       </td>
-                      <td className="py-2 px-3 border-b border-gray-200 text-left">
+                      <td className="py-2 px-3 max-sm:px-2 border-b border-gray-200 text-left">
                         <button className="w-23 h-9 bg-blue-100 text-sm font-bold rounded-2xl cursor-pointer">
                           {a.status}
                         </button>
                       </td>
-                      <td className="py-2 px-4 border-b border-gray-200 flex text-left justify-center relative py-5">
+                      <td className="py-2 px-4 max-sm:px-2 border-b border-gray-200 flex text-left justify-center relative py-5">
                         <img
                           src={dot}
                           onClick={() =>
@@ -260,7 +260,7 @@ const AppointmentMain = () => {
                           className="flex flex-col bg-gray-200 absolute text-center text-[#692be0] font-semibold z-15 top-14"
                         >
                           <li
-                            className="w-full py-2 px-4 cursor-pointer border-b hover:bg-gray-300"
+                            className="w-full py-2 px-4 max-sm:px-2 cursor-pointer border-b hover:bg-gray-300"
                             onClick={() =>
                               navigate(`/editAppointments/${a._id}`)
                             }
@@ -268,12 +268,12 @@ const AppointmentMain = () => {
                             Edit
                           </li>
                           <li
-                            className="w-full py-2 px-4 cursor-pointer border-b hover:bg-gray-300"
+                            className="w-full py-2 px-4 max-sm:px-2 cursor-pointer border-b hover:bg-gray-300"
                             onClick={() => deleteAppointment(a._id)}
                           >
                             Delete
                           </li>
-                          <li className="w-full py-2 px-4 cursor-pointer hover:bg-gray-300">
+                          <li className="w-full py-2 px-4 max-sm:px-2 cursor-pointer hover:bg-gray-300">
                             Update
                           </li>
                         </ul>
@@ -303,12 +303,12 @@ const AppointmentMain = () => {
             <table className="w-full max-w-6xl bg-white rounded border border-gray-200 border-b max-sm:text-sm">
               <thead>
                 <tr className="border-b border-gray-200 lg:h-14">
-                  <th className="py-2 px-4 text-left">Date</th>
-                  <th className="py-2 px-4 text-left">Time</th>
-                  <th className="py-2 px-4 text-left">Doctor</th>
-                  <th className="py-2 px-4 max-sm:hidden text-left">Purpose</th>
-                  <th className="py-2 px-4 text-left">Status</th>
-                  <th className="py-2 px-4 text-center">Action</th>
+                  <th className="py-2 px-4 max-sm:px-2 text-left">Date</th>
+                  <th className="py-2 px-4 max-sm:px-2 text-left">Time</th>
+                  <th className="py-2 px-4 max-sm:px-2 text-left">Doctor</th>
+                  <th className="py-2 px-4 max-sm:px-2 max-sm:hidden text-left">Purpose</th>
+                  <th className="py-2 px-4 max-sm:px-2 text-left max-sm:text-center">Status</th>
+                  <th className="py-2 px-4 max-sm:px-2 text-center">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -325,16 +325,16 @@ const AppointmentMain = () => {
                   )
                   .map((a, index) => (
                     <tr key={index} className="text-gray-800 lg:h-18">
-                      <td className="py-2 px-4 border-b border-gray-200 text-left">
+                      <td className="py-2 px-4 max-sm:px-2 border-b border-gray-200 text-left">
                         {moment(a.date).format("DD-MM-YYYY")}
                       </td>
-                      <td className="py-2 px-4 border-b border-gray-200 text-left">
+                      <td className="py-2 px-4 max-sm:px-2 border-b border-gray-200 text-left">
                         {a.time}
                       </td>
-                      <td className="py-2 px-4 border-b border-gray-200 text-left">
+                      <td className="py-2 px-4 max-sm:px-2 border-b border-gray-200 text-left">
                         {a.doctorName}
                       </td>
-                      <td className="py-2 px-4 border-b border-gray-200 max-sm:hidden  text-left">
+                      <td className="py-2 px-4 max-sm:px-2 border-b border-gray-200 max-sm:hidden  text-left">
                         {a.purpose}
                       </td>
                       <td className="py-2 px-3 border-b border-gray-200 text-left">
@@ -342,7 +342,7 @@ const AppointmentMain = () => {
                           {a.status}
                         </button>
                       </td>
-                      <td className="py-2 px-4 border-b border-gray-200 flex text-left justify-center relative py-5">
+                      <td className="py-2 px-4 max-sm:px-2 border-b border-gray-200 flex text-left justify-center relative py-5">
                         <img
                           src={dot}
                           onClick={() =>
@@ -359,7 +359,7 @@ const AppointmentMain = () => {
                           className="flex flex-col bg-gray-200 absolute text-center text-[#692be0] font-semibold z-15 top-14"
                         >
                           <li
-                            className="w-full py-2 px-4 cursor-pointer border-b hover:bg-gray-300"
+                            className="w-full py-2 px-4 max-sm:px-2 cursor-pointer border-b hover:bg-gray-300"
                             onClick={() =>
                               navigate(`/editAppointments/${a._id}`)
                             }
@@ -367,12 +367,12 @@ const AppointmentMain = () => {
                             Edit
                           </li>
                           <li
-                            className="w-full py-2 px-4 cursor-pointer border-b hover:bg-gray-300"
+                            className="w-full py-2 px-4 max-sm:px-2 cursor-pointer border-b hover:bg-gray-300"
                             onClick={() => deleteAppointment(a._id)}
                           >
                             Delete
                           </li>
-                          <li className="w-full py-2 px-4 cursor-pointer hover:bg-gray-300">
+                          <li className="w-full py-2 px-4 max-sm:px-2 cursor-pointer hover:bg-gray-300">
                             Update
                           </li>
                         </ul>
@@ -402,12 +402,12 @@ const AppointmentMain = () => {
             <table className="w-full max-w-6xl bg-white rounded border border-gray-200 border-b max-sm:text-sm">
               <thead>
                 <tr className="border-b border-gray-200 lg:h-14">
-                  <th className="py-2 px-4 text-left">Date</th>
-                  <th className="py-2 px-4 text-left">Time</th>
-                  <th className="py-2 px-4 text-left">Doctor</th>
-                  <th className="py-2 px-4 max-sm:hidden text-left">Purpose</th>
-                  <th className="py-2 px-4 text-left">Status</th>
-                  <th className="py-2 px-4 text-center">Action</th>
+                  <th className="py-2 px-4 max-sm:px-2 text-left">Date</th>
+                  <th className="py-2 px-4 max-sm:px-2 text-left">Time</th>
+                  <th className="py-2 px-4 max-sm:px-2 text-left">Doctor</th>
+                  <th className="py-2 px-4 max-sm:px-2 max-sm:hidden text-left">Purpose</th>
+                  <th className="py-2 px-4 max-sm:px-2 text-left max-sm:text-center">Status</th>
+                  <th className="py-2 px-4 max-sm:px-2 text-center">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -424,16 +424,16 @@ const AppointmentMain = () => {
                   )
                   .map((a, index) => (
                     <tr key={index} className="text-gray-800 lg:h-18">
-                      <td className="py-2 px-4 border-b border-gray-200 text-left">
+                      <td className="py-2 px-4 max-sm:px-2 border-b border-gray-200 text-left">
                         {moment(a.date).format("DD-MM-YYYY")}
                       </td>
-                      <td className="py-2 px-4 border-b border-gray-200 text-left">
+                      <td className="py-2 px-4 max-sm:px-2 border-b border-gray-200 text-left">
                         {a.time}
                       </td>
-                      <td className="py-2 px-4 border-b border-gray-200 text-left">
+                      <td className="py-2 px-4 max-sm:px-2 border-b border-gray-200 text-left">
                         {a.doctorName}
                       </td>
-                      <td className="py-2 px-4 border-b border-gray-200 max-sm:hidden text-left">
+                      <td className="py-2 px-4 max-sm:px-2 border-b border-gray-200 max-sm:hidden text-left">
                         {a.purpose}
                       </td>
                       <td className="py-2 px-3 border-b border-gray-200 text-left">
@@ -441,7 +441,7 @@ const AppointmentMain = () => {
                           {a.status}
                         </button>
                       </td>
-                       <td className="py-2 px-4 border-b border-gray-200 flex text-left justify-center relative py-5">
+                       <td className="py-2 px-4 max-sm:px-2 border-b border-gray-200 flex text-left justify-center relative py-5">
                         <img
                           src={dot}
                           onClick={() =>
@@ -458,7 +458,7 @@ const AppointmentMain = () => {
                           className="flex flex-col bg-gray-200 absolute text-center text-[#692be0] font-semibold z-15 top-14"
                         >
                           <li
-                            className="w-full py-2 px-4 cursor-pointer border-b hover:bg-gray-300"
+                            className="w-full py-2 px-4 max-sm:px-2 cursor-pointer border-b hover:bg-gray-300"
                             onClick={() =>
                               navigate(`/editAppointments/${a._id}`)
                             }
@@ -466,12 +466,12 @@ const AppointmentMain = () => {
                             Edit
                           </li>
                           <li
-                            className="w-full py-2 px-4 cursor-pointer border-b hover:bg-gray-300"
+                            className="w-full py-2 px-4 max-sm:px-2 cursor-pointer border-b hover:bg-gray-300"
                             onClick={() => deleteAppointment(a._id)}
                           >
                             Delete
                           </li>
-                          <li className="w-full py-2 px-4 cursor-pointer hover:bg-gray-300">
+                          <li className="w-full py-2 px-4 max-sm:px-2 cursor-pointer hover:bg-gray-300">
                             Update
                           </li>
                         </ul>

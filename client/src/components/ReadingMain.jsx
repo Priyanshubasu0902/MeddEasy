@@ -73,7 +73,7 @@ const ReadingMain = () => {
     <div
       className={`min-h-screen w-4/5 ${
         view ? "max-md:relative max-md:w-full" : "w-full"
-      } px-10 py-10 flex flex-col gap-5`}
+      } px-10 py-10 max-sm:px-3 flex flex-col gap-5 max-md:mt-20`}
        onClick={closeMenu}
     >
       <h1 className="text-6xl font-semibold ">Readings</h1>
@@ -142,11 +142,11 @@ const ReadingMain = () => {
           <table className="w-full max-w-4xl bg-white rounded border border-gray-200 border-b max-sm:text-sm">
             <thead>
               <tr className="border-b border-gray-200">
-                <th className="py-2 px-4 text-left">Reading Type</th>
-                <th className="py-2 px-4 text-left">Value</th>
-                <th className="py-2 px-4 text-left">Date</th>
-                <th className="py-2 px-4 text-left">Time</th>
-                <th className="py-2 px-4 text-center">Action</th>
+                <th className="py-2 px-4 max-sm:px-2 text-left">Reading Type</th>
+                <th className="py-2 px-4 max-sm:px-2 text-left">Value</th>
+                <th className="py-2 px-4 max-sm:px-2 text-left">Date</th>
+                <th className="py-2 px-4 max-sm:px-2 text-left">Time</th>
+                <th className="py-2 px-4 max-sm:px-2 text-center">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -165,19 +165,19 @@ const ReadingMain = () => {
                 )
                 .map((a, index) => (
                   <tr key={index} className="text-gray-800">
-                    <td className="py-2 px-4 border-b border-gray-200 text-left">
+                    <td className="py-2 px-4 max-sm:px-2 border-b border-gray-200 text-left">
                       {a.type}
                     </td>
-                    <td className="py-2 px-4 border-b border-gray-200 text-left">
+                    <td className="py-2 px-4 max-sm:px-2 border-b border-gray-200 text-left">
                       {a.reading} {a.type == "sugar" ? "mg/dl" : "mmHg"}
                     </td>
-                    <td className="py-2 px-4 border-b border-gray-200 text-left">
+                    <td className="py-2 px-4 max-sm:px-2 border-b border-gray-200 text-left">
                       {moment(a.date).format("DD-MM-YYYY")}
                     </td>
-                    <td className="py-2 px-4 border-b border-gray-200 text-left">
+                    <td className="py-2 px-4 max-sm:px-2 border-b border-gray-200 text-left">
                       {a.time}
                     </td>
-                    <td className="py-2 px-4 border-b flex justify-center border-gray-200 text-left relative py-5">
+                    <td className="py-2 px-4 max-sm:px-2 border-b flex justify-center border-gray-200 text-left relative py-5">
                       <img
                         src={dot}
                         onClick={() =>
@@ -195,7 +195,7 @@ const ReadingMain = () => {
                         >
                           <li
                             onClick={() => navigate(`/editReadings/${a._id}`)}
-                           className="w-full p-2 px-3 cursor-pointer border-b hover:bg-gray-300"
+                           className="w-full p-2 sm:px-3 cursor-pointer border-b hover:bg-gray-300"
                           >
                             Edit
                           </li>
@@ -203,7 +203,7 @@ const ReadingMain = () => {
                             onClick={() => {
                               deleteReading(a._id);
                             }}
-                            className="w-full p-2 px-3 cursor-pointer hover:bg-gray-300"
+                            className="w-full p-2 sm:px-3 cursor-pointer hover:bg-gray-300"
                           >
                             Delete
                           </li>

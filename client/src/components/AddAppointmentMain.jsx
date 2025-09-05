@@ -67,7 +67,7 @@ const AddAppointmentMain = () => {
     <div
       className={`min-h-screen w-4/5 ${
         view ? "max-md:relative max-md:w-full" : "w-full"
-      } px-10 py-10 `}
+      } px-10 py-10 max-md:mt-20`}
     >
       <img
         src={arrow}

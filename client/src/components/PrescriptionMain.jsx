@@ -146,7 +146,7 @@ const PrescriptionMain = () => {
     <div
       className={`min-h-screen w-4/5 ${
         view ? "max-md:relative max-md:w-full" : "w-full"
-      } px-8 py-10 flex flex-col gap-5`}
+      } px-8 py-10 flex flex-col gap-5 max-md:mt-20`}
       onClick={closeMenu}
     >
       <h1 className="text-6xl font-semibold">Prescriptions</h1>

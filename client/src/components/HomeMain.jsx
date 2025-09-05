@@ -187,7 +187,7 @@ const HomeMain = () => {
     <div
       className={`min-h-screen w-4/5 ${
         view ? "max-md:relative max-md:w-full" : "w-full"
-      } px-8 py-10 overflow-x-hidden`}
+      } px-8 max-sm:px-3 py-10 max-md:mt-20`}
       onClick={closeMenu}
     >
       <h1 className="text-5xl font-bold md:text-5xl md:font-bold">
@@ -295,21 +295,21 @@ const HomeMain = () => {
               <table className="mt-2 max-w-6xl max-sm:text-sm">
                 <thead>
                   <tr>
-                    <th className="text-start py-1 pr-10">Name</th>
-                    <th className="text-start py-1 pr-10">Specialist</th>
-                    <th className="text-start py-1 pr-10">Number</th>
-                    <th className="text-center py-1 pr-10">Action</th>
+                    <th className="text-start py-1 max-sm:pr-6 pr-10">Name</th>
+                    <th className="text-start py-1 max-sm:pr-6 pr-10">Specialist</th>
+                    <th className="text-start py-1 max-sm:pr-6 pr-10">Number</th>
+                    <th className="text-start py-1 max-sm:pr-6 pr-10">Action</th>
                   </tr>
                 </thead>
                 <tbody>
                   {doctors.map((a, index) => {
                     return (
                       <tr key={index}>
-                        <td className="text-start py-2 pr-10">{a.name}</td>
-                        <td className="text-start py-2 pr-10">
+                        <td className="text-start py-2 max-sm:pr-6 pr-10">{a.name}</td>
+                        <td className="text-start py-2 max-sm:pr-6 pr-10">
                           {a.speciality}
                         </td>
-                        <td className="text-start py-2 pr-10">{a.number}</td>
+                        <td className="text-start py-2 max-sm:pr-6 pr-10">{a.number}</td>
                         <td className="flex border-gray-200 relative py-5">
                           <img
                             src={dot}
@@ -355,7 +355,7 @@ const HomeMain = () => {
               {editDoctor !== false ? (
                 <form
                   onSubmit={(e) => editDoctorHandler(e)}
-                  className="sm:flex gap-6 mt-5 mb-8 items-center w-full max-sm:text-sm"
+                  className="sm:flex mt-5 mb-8 items-center w-full max-sm:text-sm"
                   action=""
                 >
                   <label className="max-sm:inline-block mr-6" htmlFor="">
@@ -378,7 +378,7 @@ const HomeMain = () => {
                       placeholder="Speciality"
                     />
                   </label>
-                  <label className="max-sm:inline-block" htmlFor="">
+                  <label className="max-sm:inline-block sm:mr-6" htmlFor="">
                     <input
                       className="border-b w-26 focus:outline-none"
                       value={editDoctorNumber}
@@ -405,7 +405,7 @@ const HomeMain = () => {
           )}
           <form
             onSubmit={(e) => doctorSubmitHandler(e)}
-            className="sm:flex gap-6 mt-5 items-center w-full max-sm:text-sm"
+            className="sm:flex mt-5 items-center w-full max-sm:text-sm"
             action=""
           >
             <label className="max-sm:inline-block mr-6" htmlFor="">
@@ -428,7 +428,7 @@ const HomeMain = () => {
                 placeholder="Speciality"
               />
             </label>
-            <label className="max-sm:inline-block" htmlFor="">
+            <label className="max-sm:inline-block sm:mr-6" htmlFor="">
               <input
                 className="border-b w-26 focus:outline-none"
                 value={doctorNumber}
