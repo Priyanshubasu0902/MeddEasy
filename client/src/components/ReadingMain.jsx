@@ -31,8 +31,8 @@ const ReadingMain = () => {
         { headers: { token: userToken } }
       );
       if (data.success) {
-        setLoading(false);
         setReadings(data.readings);
+        setLoading(false);
       } else {
         setLoading(false);
         toast.error(data.message);
@@ -51,10 +51,10 @@ const ReadingMain = () => {
         { headers: { token: userToken } }
       );
       if (data.success) {
-        setLoading(false);
         setMenuView(false);
-        toast.success(data.message);
         fetchReadings();
+        setLoading(false);
+        toast.success(data.message);
       } else {
         setLoading(false);
         toast.error(data.message);

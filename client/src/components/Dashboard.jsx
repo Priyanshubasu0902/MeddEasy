@@ -33,10 +33,10 @@ const Dashboard = ({ section }) => {
         headers: { token: userToken },
       });
       if (data.success) {
-        setLoading(false);
         setUserToken(null);
         setUserData(null);
         localStorage.removeItem("token");
+        setLoading(false);
         toast.success(data.message);
         navigate("/");
       } else {

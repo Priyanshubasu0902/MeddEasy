@@ -31,13 +31,13 @@ const MainAddReading = () => {
         { headers: { token: userToken } }
       );
       if (data.success) {
-        setLoading(false);
-        toast.success("Reading added");
-        setReading("");
         setUpperPressure("");
         setLowerPressure("");
+        setReading("");
         setDate("");
         setTime("");
+        setLoading(false);
+        toast.success("Reading added");
       } else {
         setLoading(false);
         toast.error(data.message);

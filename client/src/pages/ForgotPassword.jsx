@@ -21,9 +21,9 @@ const ForgotPassword = () => {
         email,
       });
       if (data.success) {
+        setEmailSubmitted(true);
         setLoading(false);
         toast.success(data.message);
-        setEmailSubmitted(true);
       } else {
         setLoading(false);
         toast.error(data.message);
@@ -43,13 +43,13 @@ const ForgotPassword = () => {
         otp,
       });
       if (data.success) {
-        setLoading(false);
-        toast.success(data.message);
         setUserToken(data.token);
         localStorage.setItem("token", data.token);
         setEmailSubmitted(false);
         setEmail("");
         setOtp("");
+        setLoading(false);
+        toast.success(data.message);
         navigate("/setPassword");
       } else {
         setLoading(false);

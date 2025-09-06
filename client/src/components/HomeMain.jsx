@@ -58,8 +58,8 @@ const HomeMain = () => {
         { headers: { token: userToken } }
       );
       if (data.success) {
-        setLoading(false);
         setAppointments(data.appointments);
+        setLoading(false);
       } else {
         setLoading(false);
         toast.error(data.message);
@@ -84,13 +84,13 @@ const HomeMain = () => {
         { headers: { token: userToken } }
       );
       if (data.success) {
-        setLoading(false);
-        toast.success(data.message);
         fetchDoctors();
         setMenuView(false);
         setDoctorName("");
         setDoctorSpeciality("");
         setDoctorNumber("");
+        setLoading(false);
+        toast.success(data.message);
       } else {
         setLoading(false);
         toast.error(data.message);
@@ -111,10 +111,10 @@ const HomeMain = () => {
         { headers: { token: userToken } }
       );
       if (data.success) {
-        setLoading(false);
         fetchUserData();
         setMenuView(false);
         setDetailEdit(false);
+        setLoading(false);
         toast.success(data.message);
       } else {
         setLoading(false);
@@ -134,10 +134,10 @@ const HomeMain = () => {
         { headers: { token: userToken } }
       );
       if (data.success) {
-        setLoading(false);
         setMenuView(false);
-        toast.success(data.message);
         fetchDoctors();
+        setLoading(false);
+        toast.success(data.message);
       } else {
         setLoading(false);
         toast.error(data.message);
@@ -162,13 +162,13 @@ const HomeMain = () => {
         { headers: { token: userToken } }
       );
       if (data.success) {
-        setLoading(false);
-        toast.success(data.message);
         setEditDoctor(false);
         setEditDoctorName("");
         setEditDoctorSpeciality("");
         setEditDoctorNumber("");
         fetchDoctors();
+        setLoading(false);
+        toast.success(data.message);
       } else {
         setLoading(false);
         toast.error(data.message);

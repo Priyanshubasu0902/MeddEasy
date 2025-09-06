@@ -28,8 +28,6 @@ const EditAppointmentMain = () => {
         { headers: { token: userToken } }
       );
       if (data.success) {
-        setLoading(false);
-        toast.success(data.message);
         setDate("");
         setTime("");
         setDoctorName("");
@@ -37,6 +35,8 @@ const EditAppointmentMain = () => {
         setStatus("");
         setQuery("");
         setFilteredItems([]);
+        setLoading(false);
+        toast.success(data.message);
         navigate("/appointment");
       } else {
         setLoading(false);
@@ -56,13 +56,13 @@ const EditAppointmentMain = () => {
         { headers: { token: userToken } }
       );
       if (data.success) {
-        setLoading(false);
         setDate(data.appointment.date);
         setTime(data.appointment.time);
         setPurpose(data.appointment.purpose);
         setDoctorName(data.appointment.doctorName);
         setQuery(data.appointment.doctorName);
         setStatus(data.appointment.status);
+        setLoading(false);
       } else {
         setLoading(false);
         toast.error(data.message);

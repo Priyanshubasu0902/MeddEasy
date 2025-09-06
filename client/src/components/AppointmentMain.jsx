@@ -36,8 +36,8 @@ const AppointmentMain = () => {
         { headers: { token: userToken } }
       );
       if (data.success) {
-        setLoading(false);
         setAppointments(data.appointments);
+        setLoading(false);
       } else {
         setLoading(false);
         toast.error(data.message);
@@ -56,10 +56,10 @@ const AppointmentMain = () => {
         { headers: { token: userToken } }
       );
       if (data.success) {
-        setLoading(false);
         setMenuView(false);
         setMenuViewType(false);
         fetchAppointments();
+        setLoading(false);
         toast.success(data.message);
       } else {
         setLoading(false);

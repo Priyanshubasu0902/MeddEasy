@@ -30,8 +30,6 @@ const AddAppointmentMain = () => {
         { headers: { token: userToken } }
       );
       if (data.success) {
-        setLoading(false);
-        toast.success("Appointment added");
         setDate("");
         setTime("");
         setDoctorName("");
@@ -39,6 +37,8 @@ const AddAppointmentMain = () => {
         setStatus("not booked");
         setQuery("");
         setFilteredItems([]);
+        setLoading(false);
+        toast.success("Appointment added");
       } else {
         setLoading(false);
         toast.error(data.message);

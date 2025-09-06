@@ -35,8 +35,8 @@ const TestResultMain = () => {
         { headers: { token: userToken } }
       );
       if (data.success) {
-        setLoading(false);
         setResults(data.testResults);
+        setLoading(false);
       } else {
         setLoading(false);
         toast.error(data.message);
@@ -62,12 +62,12 @@ const TestResultMain = () => {
         { headers: { token: userToken } }
       );
       if (data.success) {
-        setLoading(false);
-        toast.success("Test Result added");
         setFileName("");
         setFileDescription("");
         setTestResult(false);
         fetchTestResults();
+        setLoading(false);
+        toast.success("Test Result added");
       } else {
         setLoading(false);
         toast.error(data.message);
@@ -86,9 +86,9 @@ const TestResultMain = () => {
         { headers: { token: userToken } }
       );
       if (data.success) {
-        setLoading(false);
         setMenuView(false);
         fetchTestResults();
+        setLoading(false);
         toast.success(data.message);
       } else {
         setLoading(false);

@@ -26,9 +26,9 @@ const EditTestResultMain = () => {
         { headers: { token: userToken } }
       );
       if (data.success) {
-        setLoading(false);
         setFileName(data.testResult.fileName)
         setFileDescription(data.testResult.fileDescription)
+        setLoading(false);
       } else {
         setLoading(false);
         toast.error(data.message);
@@ -54,12 +54,12 @@ const EditTestResultMain = () => {
         { headers: { token: userToken } }
       );
       if (data.success) {
-        setLoading(false)
-        toast.success(data.message);
-        navigate('/testResults')
         setFileName("");
         setFileDescription("");
         setTestResult(false);
+        setLoading(false)
+        toast.success(data.message);
+        navigate('/testResults')
       } else {
         setLoading(false)
         toast.error(data.message);

@@ -38,9 +38,9 @@ const SignUp = () => {
         formData
       );
       if (data.success) {
-        setLoading(false);
         setUserToken(data.token);
         localStorage.setItem("token", data.token);
+        setLoading(false);
         toast.success("Account Created");
         navigate("/home");
       } else {

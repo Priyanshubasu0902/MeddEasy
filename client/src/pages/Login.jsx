@@ -28,9 +28,9 @@ const Login = () => {
         password,
       });
       if (data.success) {
-        setLoading(false);
         setUserToken(data.token);
         localStorage.setItem("token", data.token);
+        setLoading(false);
         toast.success("Logged In");
         navigate("/home");
       } else {

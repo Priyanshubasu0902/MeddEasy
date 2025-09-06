@@ -27,10 +27,10 @@ const EditPrescriptionMain = () => {
         { headers: { token: userToken } }
       );
       if (data.success) {
-        setLoading(false);
         setFileName(data.prescription.fileName);
         setDoctorName(data.prescription.doctorName);
         setQuery(data.prescription.doctorName);
+        setLoading(false);
       } else {
         setLoading(false);
         toast.error(data.message);
@@ -56,13 +56,13 @@ const EditPrescriptionMain = () => {
         { headers: { token: userToken } }
       );
       if (data.success) {
-        setLoading(false);
-        toast.success(data.message);
         setFileName("");
         setDoctorName("");
         setPrescription(false);
         setQuery("");
         setFilteredItems([]);
+        setLoading(false);
+        toast.success(data.message);
         navigate("/prescriptions");
       } else {
         setLoading(false);

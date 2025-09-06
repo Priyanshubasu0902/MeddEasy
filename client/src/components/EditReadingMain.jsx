@@ -25,7 +25,6 @@ const EditReadingMain = () => {
         { headers: { token: userToken } }
       );
       if (data.success) {
-        setLoading(false);
         if (data.reading.type === "sugar") {
           setReading(data.reading.reading);
         } else if (data.reading.type === "pressure") {
@@ -42,6 +41,7 @@ const EditReadingMain = () => {
         setDate(data.reading.date);
         setTime(data.reading.time);
         setType(data.reading.type);
+        setLoading(false);
       } else {
         setLoading(false);
         toast.error(data.message);
@@ -65,13 +65,13 @@ const EditReadingMain = () => {
         { headers: { token: userToken } }
       );
       if (data.success) {
-        setLoading(false);
-        toast.success("Changes Updated");
         setReading("");
         setUpperPressure("");
         setLowerPressure("");
         setDate("");
         setTime("");
+        setLoading(false);
+        toast.success("Changes Updated");
         navigate("/readings");
       } else {
         toast.error(data.message);

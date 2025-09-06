@@ -37,8 +37,8 @@ const PrescriptionMain = () => {
         { headers: { token: userToken } }
       );
       if (data.success) {
-        setLoading(false);
         setResults(data.prescription);
+        setLoading(false);
       } else {
         setLoading(false);
         toast.error(data.message);
@@ -64,7 +64,6 @@ const PrescriptionMain = () => {
         { headers: { token: userToken } }
       );
       if (data.success) {
-        setLoading(false);
         toast.success("Prescription added");
         setFileName("");
         setDoctorName("");
@@ -72,6 +71,7 @@ const PrescriptionMain = () => {
         fetchPrescriptions();
         setQuery("");
         setFilteredItems([]);
+        setLoading(false);
       } else {
         setLoading(false);
         toast.error(data.message);
@@ -90,9 +90,9 @@ const PrescriptionMain = () => {
         { headers: { token: userToken } }
       );
       if (data.success) {
-        setLoading(false);
         setMenuView(false);
         fetchPrescriptions();
+        setLoading(false);
         toast.success(data.message);
       } else {
         setLoading(false);
