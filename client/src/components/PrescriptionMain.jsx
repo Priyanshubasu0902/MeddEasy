@@ -124,6 +124,25 @@ const PrescriptionMain = () => {
     }
   };
 
+  const handleShare = async (url, filename) => {
+    if (navigator.share) {
+      await navigator
+        .share({
+          title: filename || "Shared PDF",
+          text: 'Check out the shared document',
+          url: url,
+        })
+        .then(() => {
+          toast.success("Shared Successfully");
+        })
+        .catch((error) => {
+          toast.error(error.message);
+        });
+    } else {
+      toast.error("Web Share API is not supported in this browser");
+    }
+  };
+
   useEffect(() => {
     fetchPrescriptions();
   }, []);
@@ -146,10 +165,10 @@ const PrescriptionMain = () => {
     <div
       className={`min-h-screen w-4/5 ${
         view ? "max-md:relative max-md:w-full" : "w-full"
-      } px-8 py-10 flex flex-col gap-5 max-md:mt-20`}
+      } px-8 max-sm:px-4 py-10 flex flex-col gap-5 max-sm:gap-3 max-md:mt-20`}
       onClick={closeMenu}
     >
-      <h1 className="text-6xl font-semibold">Prescriptions</h1>
+      <h1 className="text-6xl max-sm:text-5xl font-semibold">Prescriptions</h1>
       <p className="text-gray-500">
         Upload and manage your prescription documents
       </p>
@@ -181,7 +200,7 @@ const PrescriptionMain = () => {
                 required
               />
               <ul
-                className={`w-1/4 shadow-lg bg-gray-200 mt-1 absolute z-10 ${
+                className={`w-1/4 max-sm:w-1/3 shadow-lg bg-gray-200 mt-1 absolute z-1 ${
                   filteredItems.length === 0 ? "" : "border border-gray-600"
                 }`}
               >
@@ -237,7 +256,7 @@ const PrescriptionMain = () => {
         </form>
       </div>
       <div className="flex flex-col gap-3 pt-5">
-        <h3 className="text-xl font-bold">Uploaded Prescriptions</h3>
+        <h3 className="text-2xl font-bold">Uploaded Prescriptions</h3>
         <div>
           {results.length > 0 ? (
             <table className="w-full max-w-4xl bg-white rounded border border-gray-200 border-b max-sm:text-sm">
@@ -288,7 +307,7 @@ const PrescriptionMain = () => {
                         {menuView !== false && menuView === index ? (
                           <ul
                             ref={menu}
-                            className="flex flex-col bg-gray-200 absolute text-center text-[#692be0] font-semibold z-15 top-14"
+                            className="flex flex-col bg-gray-200 absolute text-center text-[#692be0] font-semibold z-1 top-14"
                           >
                             <li
                               onClick={() =>
@@ -305,6 +324,12 @@ const PrescriptionMain = () => {
                               Delete
                             </li>
                             <li
+                              onClick={() => handleShare(a.link, a.fileName)}
+                              className="w-full p-2 cursor-pointer border-b hover:bg-gray-300"
+                            >
+                              Share
+                            </li>
+                            <li
                               onClick={() => handleDownload(a.link, a.fileName)}
                               className="w-full p-2 cursor-pointer hover:bg-gray-300"
                             >
@@ -318,7 +343,7 @@ const PrescriptionMain = () => {
               </tbody>
             </table>
           ) : (
-            <p className="text-xl text-gray-400 text-center">No Record</p>
+            <p className="text-xl max-sm:text-lg text-gray-400 text-center">No Record</p>
           )}
         </div>
       </div>

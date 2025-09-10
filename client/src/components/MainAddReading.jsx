@@ -52,16 +52,14 @@ const MainAddReading = () => {
     <div
       className={`min-h-screen w-4/5 ${
         view ? "max-md:relative max-md:w-full" : "w-full"
-      } px-10 py-10 max-md:mt-20`}
+      } px-8 max-sm:px-6 flex flex-col gap-6 py-10 max-md:mt-20`}
     >
       <img
         src={arrow}
-        className="w-10 cursor-pointer lg:mb-5 mb-3"
+        className="w-10 cursor-pointer"
         onClick={() => navigate("/readings")}
         alt=""
       />
-
-      <div className=" flex flex-col gap-6">
         <div>
           <h1 className="text-5xl font-semibold mb-3">Add Readings</h1>
           <p className="text-gray-500">Add your readings here</p>
@@ -222,7 +220,6 @@ const MainAddReading = () => {
           </div>
         )}
       </div>
-    </div>
   ) : (
     <Loading dashboard={false}/>
   );

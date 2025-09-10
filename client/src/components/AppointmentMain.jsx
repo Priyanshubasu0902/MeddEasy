@@ -84,7 +84,7 @@ const AppointmentMain = () => {
     >
       <div className="w-full">
         <div className="flex justify-between">
-          <h1 className="text-3xl max-md:text-3xl max-lg:text-3xl max-lg:pt-3 font-bold">
+          <h1 className="text-3xl max-sm:text-2xl max-lg:pt-3 font-bold">
             Todays Appointments
           </h1>
           <button
@@ -156,7 +156,7 @@ const AppointmentMain = () => {
                          {menuView !== false && menuView === index && menuViewType==='today' ? (
                         <ul
                           ref={today_menu}
-                          className="flex flex-col bg-gray-200 absolute text-center text-[#692be0] font-semibold z-15 top-14"
+                          className="flex flex-col bg-gray-200 absolute text-center text-[#692be0] font-semibold z-1 top-14"
                         >
                           <li
                             className="w-full py-2 px-4 max-sm:px-2 cursor-pointer border-b hover:bg-gray-300"
@@ -183,7 +183,7 @@ const AppointmentMain = () => {
               </tbody>
             </table>
           ) : (
-            <p className="text-xl text-gray-400 text-center">
+            <p className="text-xl max-sm:text-lg text-gray-400 text-center">
               No appointments today
             </p>
           )}
@@ -191,7 +191,7 @@ const AppointmentMain = () => {
       </div>
       <div className="w-full">
         <div className="flex justify-between">
-          <h1 className="text-3xl max-md:text-3xl max-lg:text-3xl max-lg:pt-3 font-bold">
+          <h1 className="text-3xl max-sm:text-2xl max-lg:pt-3 font-bold">
             Upcoming Appointments
           </h1>
         </div>
@@ -257,7 +257,7 @@ const AppointmentMain = () => {
                          {menuView !== false && menuView === index && menuViewType === 'upcomming' ? (
                         <ul
                           ref={upcomming_menu}
-                          className="flex flex-col bg-gray-200 absolute text-center text-[#692be0] font-semibold z-15 top-14"
+                          className="flex flex-col bg-gray-200 absolute text-center text-[#692be0] font-semibold z-1 top-14"
                         >
                           <li
                             className="w-full py-2 px-4 max-sm:px-2 cursor-pointer border-b hover:bg-gray-300"
@@ -284,14 +284,14 @@ const AppointmentMain = () => {
               </tbody>
             </table>
           ) : (
-            <p className="text-xl text-gray-400 text-center">
+            <p className="text-xl max-sm:text-lg text-gray-400 text-center">
               No upcomming appointments
             </p>
           )}
         </div>
       </div>
       <div>
-        <h3 className="text-3xl max-md:text-3xl max-lg:text-3xl max-lg:pt-3 font-bold">
+        <h3 className="text-3xl max-sm:text-2xl max-lg:pt-3 font-bold">
           Previous Appointments
         </h3>
         <div className="mt-3">
@@ -356,7 +356,7 @@ const AppointmentMain = () => {
                          {menuView !== false && menuView === index && menuViewType==='previous' ? (
                         <ul
                           ref={previous_menu}
-                          className="flex flex-col bg-gray-200 absolute text-center text-[#692be0] font-semibold z-15 top-14"
+                          className="flex flex-col bg-gray-200 absolute text-center text-[#692be0] font-semibold z-1 top-14"
                         >
                           <li
                             className="w-full py-2 px-4 max-sm:px-2 cursor-pointer border-b hover:bg-gray-300"
@@ -383,14 +383,14 @@ const AppointmentMain = () => {
               </tbody>
             </table>
           ) : (
-            <p className="text-xl text-gray-400 text-center">
+            <p className="text-xl max-sm:text-lg text-gray-400 text-center">
               No previous appointments
             </p>
           )}
         </div>
       </div>
       <div>
-        <h3 className="text-3xl max-md:text-3xl max-lg:text-3xl max-lg:pt-3 font-bold">
+        <h3 className="text-3xl max-sm:text-2xl max-lg:pt-3 font-bold">
           Missed Appointments
         </h3>
         <div className="mt-3">
@@ -455,7 +455,7 @@ const AppointmentMain = () => {
                          {menuView !== false && menuView === index && menuViewType==='missed' ? (
                         <ul
                           ref={missed_menu}
-                          className="flex flex-col bg-gray-200 absolute text-center text-[#692be0] font-semibold z-15 top-14"
+                          className="flex flex-col bg-gray-200 absolute text-center text-[#692be0] font-semibold z-1 top-14"
                         >
                           <li
                             className="w-full py-2 px-4 max-sm:px-2 cursor-pointer border-b hover:bg-gray-300"
@@ -482,7 +482,7 @@ const AppointmentMain = () => {
               </tbody>
             </table>
           ) : (
-            <p className="text-xl text-gray-400 text-center">
+            <p className="text-xl max-sm:text-lg text-gray-400 text-center">
               No missed appointments
             </p>
           )}

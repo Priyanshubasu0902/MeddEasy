@@ -95,14 +95,14 @@ const EditAppointmentMain = () => {
     <div
       className={`min-h-screen w-4/5 ${
         view ? "max-md:relative max-md:w-full" : "w-full"
-      } px-10 py-10 flex flex-col gap-8 max-md:mt-20`}
+      } px-10 py-10 max-sm:px-6 flex flex-col gap-8 max-lg:gap-3 max-md:mt-20`}
     >
       <h1 className="text-5xl max-md:text-3xl max-lg:text-4xl max-lg:pt-3 font-bold">
         Edit Appointment
       </h1>
       <p className="text-gray-500">Edit your appointment here</p>
 
-      <div className={`lg:w-2/7 w-full`}>
+      <div className={`lg:w-2/7 w-full sm:w-2/3 pt-2`}>
         <form
           onSubmit={(e) => onSubmitHandler(e)}
           className="flex flex-col gap-6"
@@ -142,7 +142,7 @@ const EditAppointmentMain = () => {
                 required
               />
               <ul
-                className={`w-1/2 shadow-lg bg-gray-200 mt-1 ${
+                className={`w-2/3 shadow-lg bg-gray-200 mt-1 ${
                   filteredItems.length === 0 ? "" : "border border-gray-600"
                 }`}
               >

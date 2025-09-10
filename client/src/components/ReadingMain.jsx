@@ -73,10 +73,10 @@ const ReadingMain = () => {
     <div
       className={`min-h-screen w-4/5 ${
         view ? "max-md:relative max-md:w-full" : "w-full"
-      } px-10 py-10 max-sm:px-3 flex flex-col gap-5 max-md:mt-20`}
+      } px-10 py-10 max-sm:px-3 flex flex-col gap-5 max-sm:gap-3 max-md:mt-20`}
        onClick={closeMenu}
     >
-      <h1 className="text-6xl font-semibold ">Readings</h1>
+      <h1 className="text-6xl max-sm:text-5xl font-semibold ">Readings</h1>
       <p className="text-gray-500">View and manage your health readings</p>
       <div>
         <h3 className="text-xl font-bold">Filter</h3>
@@ -191,7 +191,7 @@ const ReadingMain = () => {
                       {menuView !== false && menuView === index ? (
                         <ul
                           ref={menu}
-                          className="flex flex-col bg-gray-200 absolute text-center text-[#692be0] font-semibold z-15 top-14"
+                          className="flex flex-col bg-gray-200 absolute text-center text-[#692be0] font-semibold z-1 top-14"
                         >
                           <li
                             onClick={() => navigate(`/editReadings/${a._id}`)}
@@ -215,7 +215,7 @@ const ReadingMain = () => {
             </tbody>
           </table>
         ) : (
-          <p className="text-xl text-gray-400 text-center">No Record</p>
+          <p className="text-xl max-sm:text-lg text-gray-400 text-center">No Record</p>
         )}
       </div>
     </div>

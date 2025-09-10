@@ -190,10 +190,10 @@ const HomeMain = () => {
       } px-8 max-sm:px-3 py-10 max-md:mt-20`}
       onClick={closeMenu}
     >
-      <h1 className="text-5xl font-bold md:text-5xl md:font-bold">
+      <h1 className="text-5xl max-sm:text-4xl font-bold">
         My Health Record
       </h1>
-      <div className="py-5">
+      <div className="py-5 max-sm:py-2">
         <div className="flex flex-col py-6 border-b border-gray-300">
           <div className="flex justify-between items-center">
             <h3 className="text-2xl font-bold">Patient Information</h3>
@@ -324,7 +324,7 @@ const HomeMain = () => {
                           {menuView !== false && menuView === index ? (
                             <ul
                               ref={menu}
-                              className="flex flex-col bg-gray-200 absolute text-center text-[#692be0] font-semibold z-15 top-14"
+                              className="flex flex-col bg-gray-200 absolute text-center text-[#692be0] font-semibold z-1 top-14"
                             >
                               <li
                                 onClick={() => deleteDoctor(a._id)}
@@ -399,7 +399,7 @@ const HomeMain = () => {
               )}
             </>
           ) : (
-            <p className="text-xl text-gray-400 text-center">
+            <p className="text-xl max-sm:text-lg text-gray-400 text-center">
               No doctor record
             </p>
           )}
@@ -479,7 +479,7 @@ const HomeMain = () => {
                 </div>
               ))
           ) : (
-            <p className="text-xl text-gray-400 pt-5 text-center">
+            <p className="text-xl max-sm:text-lg text-gray-400 pt-5 text-center">
               No Upcoming Appointments
             </p>
           )}

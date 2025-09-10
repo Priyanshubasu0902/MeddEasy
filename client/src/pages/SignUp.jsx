@@ -54,8 +54,8 @@ const SignUp = () => {
   };
 
   return !loading ? (
-    <div className="w-full bg-[#692be0] min-h-screen flex items-center justify-center">
-      <div className="w-100 bg-white border border-[#692be0] shadow-2xl border-3 rounded-3xl p-5">
+    <div className="w-full bg-[#692be0] min-h-screen flex items-center justify-center max-sm:px-3">
+      <div className="w-100 bg-white border border-[#692be0] shadow-2xl border-3 rounded-3xl p-5 max-sm:px-3">
         <h2 className="text-center text-[#692be0] text-3xl mt-4 font-bold">Welcome</h2>
         <p className="text-center text-gray-500">Register to our platform</p>
         <form

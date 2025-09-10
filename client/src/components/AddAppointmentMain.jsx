@@ -67,7 +67,7 @@ const AddAppointmentMain = () => {
     <div
       className={`min-h-screen w-4/5 ${
         view ? "max-md:relative max-md:w-full" : "w-full"
-      } px-10 py-10 max-md:mt-20`}
+      } px-10 max-sm:px-6 py-10 max-md:mt-20`}
     >
       <img
         src={arrow}
@@ -83,7 +83,7 @@ const AddAppointmentMain = () => {
           <p className="text-gray-500 mt-2">Add your appointments here</p>
         </div>
 
-        <div className={`lg:w-2/7 w-full`}>
+        <div className={`lg:w-2/7 w-full sm:w-2/3`}>
           <form
             onSubmit={(e) => onSubmitHandler(e)}
             className="flex flex-col gap-6"
@@ -123,7 +123,7 @@ const AddAppointmentMain = () => {
                   required
                 />
                 <ul
-                  className={`w-1/2 shadow-lg bg-gray-200 mt-1 ${
+                  className={`w-2/3 shadow-lg bg-gray-200 mt-1 ${
                     filteredItems.length === 0 ? "" : "border border-gray-600"
                   }`}
                 >

@@ -96,9 +96,9 @@ const EditPrescriptionMain = () => {
     <div
       className={`min-h-screen w-4/5 ${
         view ? "max-md:relative max-md:w-full" : "w-full"
-      } px-8 py-10 flex flex-col gap-5 max-md:mt-20`}
+      } px-8 max-sm:px-4 py-10 flex flex-col gap-5 max-sm:gap-3 max-md:mt-20`}
     >
-      <h1 className="text-6xl font-semibold">Prescriptions</h1>
+      <h1 className="text-6xl max-sm:text-5xl font-semibold">Edit Prescriptions</h1>
       <p className="text-gray-500">Edit your prescription</p>
       <div className="lg:w-3/4">
         <form
@@ -133,7 +133,7 @@ const EditPrescriptionMain = () => {
                 required
               />
               <ul
-                className={`w-1/4 shadow-lg bg-gray-200 mt-1 absolute z-10 ${
+                className={`w-1/4 max-sm:w-1/3 shadow-lg bg-gray-200 mt-1 absolute z-1 ${
                   filteredItems.length === 0 ? "" : "border border-gray-600"
                 }`}
               >
