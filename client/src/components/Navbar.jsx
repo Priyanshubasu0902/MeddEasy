@@ -10,15 +10,16 @@ const Navbar = () => {
   };
 
   return (
-    <div className="p-5 w-full bg-[#814de5] cursor-pointer max-md:fixed z-2 lg:hidden">
+    <div className="p-5 w-full bg-[#814de5] cursor-pointer fixed z-2 h-20 flex items-center">
       <img
         onClick={() => {
           toggle();
         }}
-        className="w-10"
+        className="w-10 lg:hidden"
         src={menus}
         alt=""
       />
+      <h1 className="text-white text-3xl font-semibold mx-auto">MeddEasy</h1>
     </div>
   );
 };

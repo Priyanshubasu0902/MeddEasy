@@ -73,7 +73,7 @@ const ReadingMain = () => {
     <div
       className={`min-h-screen w-4/5 ${
         view ? "max-md:relative max-md:w-full" : "w-full"
-      } px-10 py-10 max-sm:px-3 flex flex-col gap-5 max-sm:gap-3 max-md:mt-20`}
+      } px-10 py-10 max-sm:px-3 flex flex-col gap-5 max-sm:gap-3 mt-20`}
        onClick={closeMenu}
     >
       <h1 className="text-6xl max-sm:text-5xl font-semibold ">Readings</h1>
@@ -215,7 +215,7 @@ const ReadingMain = () => {
             </tbody>
           </table>
         ) : (
-          <p className="text-xl max-sm:text-lg text-gray-400 text-center">No Record</p>
+          <p className="text-xl lg:w-1/2 max-sm:text-lg text-gray-400 text-center">No Records</p>
         )}
       </div>
     </div>

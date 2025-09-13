@@ -26,7 +26,7 @@ app.get('/', (req, res)=> {
    res.send("api working");
 })
 
-app.get('/api/cronJon', (req, res)=> {
+app.get('/api/cronJob', (req, res)=> {
    console.log("Successfull");
 })
 app.use('/api', indexRoutes);

@@ -187,7 +187,7 @@ const HomeMain = () => {
     <div
       className={`min-h-screen w-4/5 ${
         view ? "max-md:relative max-md:w-full" : "w-full"
-      } px-8 max-sm:px-3 py-10 max-md:mt-20`}
+      } px-8 max-sm:px-3 py-10 mt-20`}
       onClick={closeMenu}
     >
       <h1 className="text-5xl max-sm:text-4xl font-bold">
@@ -399,8 +399,8 @@ const HomeMain = () => {
               )}
             </>
           ) : (
-            <p className="text-xl max-sm:text-lg text-gray-400 text-center">
-              No doctor record
+            <p className="text-xl lg:w-1/2 max-sm:text-lg text-gray-400 text-center">
+              No doctor records
             </p>
           )}
           <form
@@ -479,7 +479,7 @@ const HomeMain = () => {
                 </div>
               ))
           ) : (
-            <p className="text-xl max-sm:text-lg text-gray-400 pt-5 text-center">
+            <p className="text-xl lg:w-1/2 max-sm:text-lg text-gray-400 pt-5 text-center">
               No Upcoming Appointments
             </p>
           )}

@@ -20,6 +20,7 @@ router.post("/editDetails", isLoggedIn, editUser);
 // Delete User
 router.get("/deleteUser", isLoggedIn, deleteUser);
 
+// Set Password
 router.post('/setPassword', isLoggedIn, setPassword);
 
 export default router;

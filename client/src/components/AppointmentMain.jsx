@@ -79,7 +79,7 @@ const AppointmentMain = () => {
     <div
       className={`min-h-screen w-4/5 ${
         view ? "max-md:relative max-md:w-full" : "w-full"
-      } flex flex-col gap-8 px-10 max-sm:px-3 max-md:mt-20 py-10`}
+      } flex flex-col gap-8 px-10 max-sm:px-3 mt-20 py-10`}
       onClick={closeMenu}
     >
       <div className="w-full">
@@ -183,7 +183,7 @@ const AppointmentMain = () => {
               </tbody>
             </table>
           ) : (
-            <p className="text-xl max-sm:text-lg text-gray-400 text-center">
+            <p className="text-xl lg:w-1/2 max-sm:text-lg text-gray-400 text-center">
               No appointments today
             </p>
           )}
@@ -284,7 +284,7 @@ const AppointmentMain = () => {
               </tbody>
             </table>
           ) : (
-            <p className="text-xl max-sm:text-lg text-gray-400 text-center">
+            <p className="text-xl lg:w-1/2 max-sm:text-lg text-gray-400 text-center">
               No upcomming appointments
             </p>
           )}
@@ -383,7 +383,7 @@ const AppointmentMain = () => {
               </tbody>
             </table>
           ) : (
-            <p className="text-xl max-sm:text-lg text-gray-400 text-center">
+            <p className="text-xl lg:w-1/2 max-sm:text-lg text-gray-400 text-center">
               No previous appointments
             </p>
           )}
@@ -482,7 +482,7 @@ const AppointmentMain = () => {
               </tbody>
             </table>
           ) : (
-            <p className="text-xl max-sm:text-lg text-gray-400 text-center">
+            <p className="text-xl lg:w-1/2 max-sm:text-lg text-gray-400 text-center">
               No missed appointments
             </p>
           )}

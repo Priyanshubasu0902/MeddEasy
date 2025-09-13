@@ -53,8 +53,8 @@ const Dashboard = ({ section }) => {
     <>
       <div
         className={`text-white bg-[#814de5] ${
-          view ? "md:w-2/5 max-md:fixed max-md:mt-20 z-2" : "max-lg:hidden"
-        } lg:w-1/5 min-h-screen`}
+          view ? "md:w-2/5 max-md:fixed z-2" : "max-lg:hidden"
+        } lg:w-1/5 min-h-screen mt-20`}
       >
         <div className={`flex flex-col gap-10 pt-8 p-5`}>
           <div className="flex px-3 py-2 gap-5 items-center">

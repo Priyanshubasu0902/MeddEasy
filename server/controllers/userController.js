@@ -185,8 +185,8 @@ export const deleteUser = async (req, res) => {
     const testResult = results.map((item) => item.public_id);
     await testResultModel.deleteMany({ userId: user._id });
     cloudinary.api.delete_resources(testResult);
-
     await doctorModel.deleteMany({ userId: user._id });
+    
     let mailOptions = {
       from: process.env.EMAIL_ID,
       to: user.email,

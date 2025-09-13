@@ -79,7 +79,7 @@ const EditTestResultMain = () => {
     <div
       className={`min-h-screen w-4/5 ${
         view ? "max-md:relative max-md:w-full" : "w-full"
-      } px-8 max-sm:px-4 py-10 flex flex-col gap-5 max-sm:gap-3 max-md:mt-20`}
+      } px-8 max-sm:px-4 py-10 flex flex-col gap-5 max-sm:gap-3 mt-20`}
     >
       <h1 className="text-6xl max-sm:text-4xl font-semibold">Edit Test Results</h1>
       <p className="text-gray-500">Edit your lab test result</p>

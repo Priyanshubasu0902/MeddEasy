@@ -165,7 +165,7 @@ const PrescriptionMain = () => {
     <div
       className={`min-h-screen w-4/5 ${
         view ? "max-md:relative max-md:w-full" : "w-full"
-      } px-8 max-sm:px-4 py-10 flex flex-col gap-5 max-sm:gap-3 max-md:mt-20`}
+      } px-8 max-sm:px-4 py-10 flex flex-col gap-5 max-sm:gap-3 mt-20`}
       onClick={closeMenu}
     >
       <h1 className="text-6xl max-sm:text-5xl font-semibold">Prescriptions</h1>
@@ -343,7 +343,7 @@ const PrescriptionMain = () => {
               </tbody>
             </table>
           ) : (
-            <p className="text-xl max-sm:text-lg text-gray-400 text-center">No Record</p>
+            <p className="text-xl lg:w-1/2 max-sm:text-lg text-gray-400 text-center">No Records</p>
           )}
         </div>
       </div>
