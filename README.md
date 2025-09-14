@@ -47,3 +47,106 @@ To get this project up and running on your local machine, follow these steps.
 ```sh
 git clone https://github.com/Priyanshubasu0902/MeddEasy.git
 cd MedEasy
+```
+
+### 2. Backend Setup
+
+1.  Navigate to the server directory:
+    ```sh
+    cd server
+    ```
+2.  Install dependencies:
+    ```sh
+    npm install
+    ```
+3.  Create a `.env` file in the `server` directory and add the following environment variables. Replace the placeholder values with your actual credentials.
+    ```env
+    # Server Configuration
+    PORT=5000
+    
+    # MongoDB Connection
+    MONGODB_URI=<your_mongodb_connection_string>
+    
+    # JWT
+    JWT_SECRET=<your_jwt_secret_key>
+    
+    # Cloudinary for file uploads
+    CLOUDINARY_NAME=<your_cloudinary_cloud_name>
+    CLOUDINARY_API_KEY=<your_cloudinary_api_key>
+    CLOUDINARY_SECRET_KEY=<your_cloudinary_api_secret_key>
+    
+    # Nodemailer for sending emails (using Gmail)
+    EMAIL_ID=<your_gmail_address>
+    EMAIL_PASSWORD=<your_gmail_app_password>
+    ```
+4.  Start the backend server:
+    ```sh
+    npm run server
+    ```
+    The server will be running on `http://localhost:5000`.
+
+### 3. Frontend Setup
+
+1.  Navigate to the client directory from the root folder:
+    ```sh
+    cd client
+    ```
+2.  Install dependencies:
+    ```sh
+    npm install
+    ```
+3.  Create a `.env` file in the `client` directory and add the backend URL:
+    ```env
+    VITE_BACKEND_URL=http://localhost:5000
+    ```
+4.  Start the frontend development server:
+    ```sh
+    npm run dev
+    ```
+    The application will be accessible at `http://localhost:5173` (or another port specified by Vite).
+
+## API Endpoints
+
+The backend provides the following RESTful API endpoints:
+
+-   **Authentication & Users (`/api/users`)**
+    -   `POST /signUp`: Register a new user.
+    -   `POST /login`: Log in an existing user.
+    -   `GET /user`: Fetch authenticated user's data.
+    -   `POST /editDetails`: Update user profile information.
+    -   `GET /deleteUser`: Delete user account and all associated data.
+    -   `POST /setPassword`: Set a new password after OTP verification.
+
+-   **OTP (`/api`)**
+    -   `POST /generate-otp`: Send an OTP for password reset.
+    -   `POST /verify-otp`: Verify the provided OTP.
+
+-   **Appointments (`/api/appointments`)**
+    -   `POST /addAppointment`: Add a new appointment.
+    -   `GET /getAppointments`: Get all appointments for the user.
+    -   `POST /editAppointment/:id`: Update a specific appointment.
+    -   `GET /deleteAppointment/:id`: Delete an appointment.
+
+-   **Readings (`/api/readings`)**
+    -   `POST /addReadings`: Add a new health reading.
+    -   `GET /getReadings`: Get all health readings.
+    -   `POST /editReading/:id`: Update a reading.
+    -   `GET /deleteReadings/:id`: Delete a reading.
+
+-   **Prescriptions (`/api/prescriptions`)**
+    -   `POST /addPrescription`: Upload a new prescription file.
+    -   `GET /getPrescriptions`: Get all prescriptions.
+    -   `POST /editPrescription/:id`: Update a prescription's details.
+    -   `GET /deletePrescription/:id`: Delete a prescription.
+
+-   **Test Results (`/api/testResults`)**
+    -   `POST /addTestResult`: Upload a new test result file.
+    -   `GET /getTestResults`: Get all test results.
+    -   `POST /editTestResult/:id`: Update a test result's details.
+    -   `GET /deleteTestResult/:id`: Delete a test result.
+
+-   **Doctors (`/api/doctors`)**
+    -   `POST /addDoctor`: Add a new doctor.
+    -   `GET /getDoctor`: Get all doctors.
+    -   `GET /deleteDoctor/:id`: Delete a doctor.
+
