@@ -1,6 +1,7 @@
 import React, { useContext, useRef, useState } from "react";
 import { AppContext } from "../Context/AppContext";
 import appointment from "../assets/doctor-appointment.png";
+import injection from "../assets/syringe.png";
 import { useEffect } from "react";
 import axios from "axios";
 import moment from "moment";
@@ -21,6 +22,7 @@ const HomeMain = () => {
     fetchDoctors,
   } = useContext(AppContext);
   const [appointments, setAppointments] = useState([]);
+  const [testAppointments, setTestAppointments] = useState([]);
 
   const [doctorName, setDoctorName] = useState("");
   const [doctorSpeciality, setDoctorSpeciality] = useState("");
@@ -59,6 +61,26 @@ const HomeMain = () => {
       );
       if (data.success) {
         setAppointments(data.appointments);
+        setLoading(false);
+      } else {
+        setLoading(false);
+        toast.error(data.message);
+      }
+    } catch (error) {
+      setLoading(false);
+      toast.error(error.message);
+    }
+  };
+
+  const fetchTestAppointments = async () => {
+    setLoading(true);
+    try {
+      const { data } = await axios.get(
+        backendUrl + "/api/testAppointments/getTestAppointments",
+        { headers: { token: userToken } }
+      );
+      if (data.success) {
+        setTestAppointments(data.testAppointments);
         setLoading(false);
       } else {
         setLoading(false);
@@ -181,6 +203,7 @@ const HomeMain = () => {
 
   useEffect(() => {
     fetchAppointments();
+    fetchTestAppointments();
   }, []);
 
   return !loading ? (
@@ -190,9 +213,7 @@ const HomeMain = () => {
       } px-8 max-sm:px-3 py-10 mt-20`}
       onClick={closeMenu}
     >
-      <h1 className="text-5xl max-sm:text-4xl font-bold">
-        My Health Record
-      </h1>
+      <h1 className="text-5xl max-sm:text-4xl font-bold">My Health Record</h1>
       <div className="py-5 max-sm:py-2">
         <div className="flex flex-col py-6 border-b border-gray-300">
           <div className="flex justify-between items-center">
@@ -296,20 +317,30 @@ const HomeMain = () => {
                 <thead>
                   <tr>
                     <th className="text-start py-1 max-sm:pr-6 pr-10">Name</th>
-                    <th className="text-start py-1 max-sm:pr-6 pr-10">Specialist</th>
-                    <th className="text-start py-1 max-sm:pr-6 pr-10">Number</th>
-                    <th className="text-start py-1 max-sm:pr-6 pr-10">Action</th>
+                    <th className="text-start py-1 max-sm:pr-6 pr-10">
+                      Specialist
+                    </th>
+                    <th className="text-start py-1 max-sm:pr-6 pr-10">
+                      Number
+                    </th>
+                    <th className="text-start py-1 max-sm:pr-6 pr-10">
+                      Action
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   {doctors.map((a, index) => {
                     return (
                       <tr key={index}>
-                        <td className="text-start py-2 max-sm:pr-6 pr-10">{a.name}</td>
+                        <td className="text-start py-2 max-sm:pr-6 pr-10">
+                          {a.name}
+                        </td>
                         <td className="text-start py-2 max-sm:pr-6 pr-10">
                           {a.speciality}
                         </td>
-                        <td className="text-start py-2 max-sm:pr-6 pr-10">{a.number}</td>
+                        <td className="text-start py-2 max-sm:pr-6 pr-10">
+                          {a.number}
+                        </td>
                         <td className="flex border-gray-200 relative py-5">
                           <img
                             src={dot}
@@ -400,7 +431,7 @@ const HomeMain = () => {
             </>
           ) : (
             <p className="text-xl lg:w-1/2 max-sm:text-lg text-gray-400 text-center">
-              No doctor records
+              No Doctor Records
             </p>
           )}
           <form
@@ -445,44 +476,85 @@ const HomeMain = () => {
             />
           </form>
         </div>
-        <div className="py-5">
-          <h3 className="text-2xl font-bold">Upcoming Appointments</h3>
-          {appointments.filter(
-            (a) => new Date(a.date) >= new Date().setHours(0, 0, 0, 0)
-          ).length > 0 ? (
-            appointments
-              .filter(
-                (a) => new Date(a.date) >= new Date().setHours(0, 0, 0, 0)
-              )
-              .sort(
-                (a, b) =>
-                  new Date(`${a.date}T${a.time}`) -
-                  new Date(`${b.date}T${b.time}`)
-              )
-              .map((a, index) => (
-                <div
-                  key={index}
-                  className={`flex items-center gap-5 p-2 mt-3 h-full md:w-2/4 lg:w-1/4 cursor-pointer text-white bg-[#9d75eb] rounded-xl hover:bg-[#814de5]`}
-                  onClick={() => navigate("/appointment")}
-                >
-                  <div className="w-15 h-full p-3 flex rounded-xl items-center justify-center">
-                    <img className="h-8" src={appointment} alt="" />
+        <div className="md:flex gap-10 lg:w-3/5">
+          <div className="py-5 md:w-1/2">
+            <h3 className="text-2xl font-bold ">Upcoming Appointments</h3>
+            {appointments.filter(
+              (a) => new Date(a.date) >= new Date().setHours(0, 0, 0, 0)
+            ).length > 0 ? (
+              appointments
+                .filter(
+                  (a) => new Date(a.date) >= new Date().setHours(0, 0, 0, 0)
+                )
+                .sort(
+                  (a, b) =>
+                    new Date(`${a.date}T${a.time}`) -
+                    new Date(`${b.date}T${b.time}`)
+                )
+                .map((a, index) => (
+                  <div
+                    key={index}
+                    className={`flex items-center gap-5 p-2 mt-3 md:w-full cursor-pointer text-white bg-[#9d75eb] rounded-xl hover:bg-[#814de5]`}
+                    onClick={() => navigate("/appointment")}
+                  >
+                    <div className="w-15 h-full p-3 flex rounded-xl items-center justify-center">
+                      <img className="h-8" src={appointment} alt="" />
+                    </div>
+                    <div>
+                      <p className="font-bold">
+                        {moment(a.date).format("DD-MM-YYYY")}, {a.time}
+                      </p>
+                      <p className="text-white text-sm font-semibold ">
+                        {a.doctorName}, {a.purpose}
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="font-bold">
-                      {moment(a.date).format("DD-MM-YYYY")}, {a.time}
-                    </p>
-                    <p className="text-white text-sm font-semibold ">
-                      {a.doctorName}, {a.purpose}
-                    </p>
+                ))
+            ) : (
+              <p className="text-xl max-sm:text-lg text-gray-400 pt-5 text-center">
+                No Upcoming Appointments
+              </p>
+            )}
+          </div>
+          <div className="py-5 md:w-1/2">
+            <h3 className="text-2xl font-bold">Upcoming Test Appointments</h3>
+            {testAppointments.filter(
+              (a) => new Date(a.date) >= new Date().setHours(0, 0, 0, 0)
+            ).length > 0 ? (
+              testAppointments
+                .filter(
+                  (a) => new Date(a.date) >= new Date().setHours(0, 0, 0, 0)
+                )
+                .sort(
+                  (a, b) =>
+                    new Date(`${a.date}T${a.time}`) -
+                    new Date(`${b.date}T${b.time}`)
+                )
+                .map((a, index) => (
+                  <div
+                    key={index}
+                    className={`flex items-center gap-5 p-2 mt-3 md:w-full cursor-pointer text-white bg-[#9d75eb] rounded-xl hover:bg-[#814de5]`}
+                    onClick={() => navigate("/testAppointment")}
+                  >
+                    <div className="w-15 h-full p-3 flex rounded-xl items-center justify-center">
+                      <img className="h-8" src={injection} alt="" />
+                    </div>
+                    <div>
+                      <p className="font-bold">
+                        {moment(a.date).format("DD-MM-YYYY")}, {a.time}
+                      </p>
+                      <p className="text-white text-sm font-semibold ">
+                        {a.labName}, {a.purpose}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              ))
-          ) : (
-            <p className="text-xl lg:w-1/2 max-sm:text-lg text-gray-400 pt-5 text-center">
-              No Upcoming Appointments
-            </p>
-          )}
+                ))
+            ) : (
+              <p className="text-xl max-sm:text-lg text-gray-400 pt-5 text-center">
+                No Upcoming Test Appointments
+              </p>
+            )}
+          </div>
         </div>
       </div>
     </div>

@@ -7,6 +7,7 @@ import stethoscope from "../assets/stethoscope.png";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../Context/AppContext";
 import person_icon from "../assets/person_icon.svg";
+import injection from "../assets/syringe.png";
 import { toast } from "react-toastify";
 import axios from "axios";
 import Loading from "./Loading";
@@ -83,8 +84,8 @@ const Dashboard = ({ section }) => {
             <li
               onClick={() => navigate("/home")}
               className={`flex block gap-4 px-5 py-2 rounded-xl ${
-                section === "home" ? "bg-[#692be0]" : ""
-              }  items-center w-full cursor-pointer hover:bg-[#9d75eb]`}
+                section === "home" ? "bg-[#692be0]" : "hover:bg-[#9d75eb]"
+              }  items-center w-full cursor-pointer`}
             >
               <img className="w-8" src={home} alt="" />
               <span className="text-xl font-medium">Home</span>
@@ -92,17 +93,26 @@ const Dashboard = ({ section }) => {
             <li
               onClick={() => navigate("/appointment")}
               className={`flex block gap-4 px-5 py-2 rounded-xl ${
-                section === "appointment" ? "bg-[#692be0]" : ""
-              }  items-center w-full cursor-pointer hover:bg-[#9d75eb]`}
+                section === "appointment" ? "bg-[#692be0]" : "hover:bg-[#9d75eb]"
+              }  items-center w-full cursor-pointer `}
             >
               <img className="w-8" src={appointment} alt="" />
               <span className="text-xl font-medium">Appointments</span>
             </li>
+             <li
+              onClick={() => navigate("/testAppointment")}
+              className={`flex block gap-4 px-5 py-2 rounded-xl ${
+                section === "testAppointment" ? "bg-[#692be0]" : "hover:bg-[#9d75eb]"
+              }  items-center w-full cursor-pointer `}
+            >
+              <img className="w-8" src={injection} alt="" />
+              <span className="text-xl font-medium">Test Appointments</span>
+            </li>
             <li
               onClick={() => navigate("/readings")}
               className={`flex block gap-4 px-5 py-2 rounded-xl ${
-                section === "readings" ? "bg-[#692be0]" : ""
-              }  items-center w-full cursor-pointer hover:bg-[#9d75eb]`}
+                section === "readings" ? "bg-[#692be0]" : "hover:bg-[#9d75eb]"
+              }  items-center w-full cursor-pointer `}
             >
               <img className="w-8" src={stethoscope} alt="" />
               <span className="text-xl font-medium">Readings</span>
@@ -110,8 +120,8 @@ const Dashboard = ({ section }) => {
             <li
               onClick={() => navigate("/prescriptions")}
               className={`flex block gap-4 px-5 py-2 rounded-xl ${
-                section === "prescriptions" ? "bg-[#692be0]" : ""
-              }  items-center w-full cursor-pointer hover:bg-[#9d75eb]`}
+                section === "prescriptions" ? "bg-[#692be0]" : "hover:bg-[#9d75eb]"
+              }  items-center w-full cursor-pointer `}
             >
               <img className="w-8" src={prescription} alt="" />
               <span className="text-xl font-medium">Prescriptions</span>
@@ -119,8 +129,8 @@ const Dashboard = ({ section }) => {
             <li
               onClick={() => navigate("/testResults")}
               className={`flex block gap-4 px-5 py-2 rounded-xl ${
-                section === "testresults" ? "bg-[#692be0]" : ""
-              }  items-center w-full cursor-pointer hover:bg-[#9d75eb]`}
+                section === "testresults" ? "bg-[#692be0]" : "hover:bg-[#9d75eb]"
+              }  items-center w-full cursor-pointer `}
             >
               <img className="w-8" src={report} alt="" />
               <span className="text-xl font-medium">Test Results</span>

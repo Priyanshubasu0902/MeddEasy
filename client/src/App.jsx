@@ -19,6 +19,9 @@ import { ToastContainer } from "react-toastify";
 import EditReadings from "./pages/EditReadings";
 import ForgotPassword from "./pages/ForgotPassword";
 import SetPassword from "./pages/SetPassword";
+import TestAppointment from "./pages/TestAppointment";
+import EditTestAppointments from "./pages/EditTestAppointments";
+import AddTestAppointments from "./pages/AddTestAppointments";
 
 const App = () => {
   const { userToken, userData } = useContext(AppContext);
@@ -39,10 +42,16 @@ const App = () => {
             <Route path="/addReadings" element={<AddReadings />} />
             <Route path="/editReadings/:id" element={<EditReadings />} />
             <Route path="/appointment" element={<Appointment />} />
+            <Route path="/testAppointment" element={<TestAppointment />} />
             <Route path="/addAppointments" element={<AddAppointments />} />
+            <Route path="/addTestAppointments" element={<AddTestAppointments/>} />
             <Route
               path="/editAppointments/:id"
               element={<EditAppointments />}
+            />
+            <Route
+              path="/editTestAppointments/:id"
+              element={<EditTestAppointments/>}
             />
             <Route path="/testResults" element={<TestResult />} />
             <Route path="/editTestresult/:id" element={<EditTestResult />} />

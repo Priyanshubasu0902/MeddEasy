@@ -3,6 +3,7 @@ import userModel from "../models/User.js";
 import doctorModel from "../models/Doctor.js";
 import readingModel from "../models/Readings.js";
 import appointmentModel from "../models/Appointment.js";
+import testAppointmentModel from "../models/TestAppointment.js";
 import prescriptionModel from "../models/Prescription.js";
 import testResultModel from "../models/TestResult.js";
 import generateToken from "../utils/generateToken.js";
@@ -169,6 +170,7 @@ export const deleteUser = async (req, res) => {
 
     await readingModel.deleteMany({ userId: user._id });
     await appointmentModel.deleteMany({ userId: user._id });
+    await testAppointmentModel.deleteMany({ userId: user._id });
 
     const prescriptions = await prescriptionModel.find(
       { userId: user._id },

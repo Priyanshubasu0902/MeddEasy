@@ -215,7 +215,7 @@ const ReadingMain = () => {
             </tbody>
           </table>
         ) : (
-          <p className="text-xl lg:w-1/2 max-sm:text-lg text-gray-400 text-center">No Records</p>
+          <p className="text-xl lg:w-1/2 max-sm:text-lg text-gray-400 text-center">No Readings</p>
         )}
       </div>
     </div>

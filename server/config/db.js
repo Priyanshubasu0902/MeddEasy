@@ -9,7 +9,7 @@ const connectDB = async () => {
     mongoose.connection.on("connected", ()=>dbgr("connected"));
 
     if (env == "development") {
-      mongoose.connect("mongodb://127.0.0.1:27017/medEasy");
+      mongoose.connect("mongodb://127.0.0.1:27017/meddEasy");
     } else if (env == "production") {
       mongoose.connect(`${process.env.MONGODB_URI}`);
     }

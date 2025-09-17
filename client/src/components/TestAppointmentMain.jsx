@@ -9,10 +9,10 @@ import { toast } from "react-toastify";
 import Loading from "./Loading";
 import dot from "../assets/dots.png";
 
-const AppointmentMain = () => {
+const TestAppointmentMain = () => {
   const {view, backendUrl, userToken } = useContext(AppContext);
   const navigate = useNavigate();
-  const [appointments, setAppointments] = useState([]);
+  const [testAppointments, setTestAppointments] = useState([]);
   const [loading, setLoading] = useState(false);
   const [menuView, setMenuView] = useState(false);
   const [menuViewType, setMenuViewType] = useState(false);
@@ -30,15 +30,15 @@ const AppointmentMain = () => {
     }
   };
 
-  const fetchAppointments = async () => {
+  const fetchTestAppointments = async () => {
     setLoading(true);
     try {
       const { data } = await axios.get(
-        backendUrl + "/api/appointments/getAppointments",
+        backendUrl + "/api/testAppointments/getTestAppointments",
         { headers: { token: userToken } }
       );
       if (data.success) {
-        setAppointments(data.appointments);
+        setTestAppointments(data.testAppointments);
         setLoading(false);
       } else {
         setLoading(false);
@@ -50,17 +50,17 @@ const AppointmentMain = () => {
     }
   };
 
-  const deleteAppointment = async (id) => {
+  const deleteTestAppointment = async (id) => {
     setLoading(true);
     try {
       const { data } = await axios.get(
-        backendUrl + `/api/appointments/deleteAppointment/${id}`,
+        backendUrl + `/api/testAppointments/deleteTestAppointment/${id}`,
         { headers: { token: userToken } }
       );
       if (data.success) {
         setMenuView(false);
         setMenuViewType(false);
-        fetchAppointments();
+        fetchTestAppointments();
         setLoading(false);
         toast.success(data.message);
       } else {
@@ -74,7 +74,7 @@ const AppointmentMain = () => {
   };
 
   useEffect(() => {
-    fetchAppointments();
+    fetchTestAppointments();
   }, []);
 
   return !loading ? (
@@ -87,10 +87,10 @@ const AppointmentMain = () => {
       <div className="w-full">
         <div className="flex justify-between">
           <h1 className="text-3xl max-sm:text-2xl max-lg:pt-3 font-bold">
-            Upcomming Appointments
+            Upcomming Test Appointments
           </h1>
           <button
-            onClick={() => navigate("/addAppointments")}
+            onClick={() => navigate("/addTestAppointments")}
             className="bg-[#814de5] text-white font-semibold px-2 py-2 mt-5 max-sm:text-sm rounded-lg cursor-pointer hover:bg-[#692be0]"
           >
             Add Appointment
@@ -100,7 +100,7 @@ const AppointmentMain = () => {
           <div className="my-3">
             <button onClick={()=>{
               setUpcomming('todays')
-            }} className={`px-2 py-2 ${upcomming==='todays'?'bg-[#d6c5f7]':'bg-white'} cursor-pointer border-t border-l border-b border-gray-300`}>Todays</button>
+            }} className={`px-2 py-2 ${upcomming==='todays'?'bg-[#d6c5f7]':' bg-white'} cursor-pointer border-t border-l border-b border-gray-300`}>Todays</button>
             <button onClick={()=>{
               setUpcomming('future')
             }} className={`px-2 py-2 ${upcomming==='future'?'bg-[#d6c5f7]':'bg-white'} cursor-pointer border-t border-r border-b border-gray-300`}>Future</button>
@@ -108,7 +108,7 @@ const AppointmentMain = () => {
           <div>
             
           </div>
-          { upcomming==='todays'? appointments.filter(
+          { upcomming==='todays'? testAppointments.filter(
             (a) =>
               new Date(a.date).setHours(0, 0, 0, 0) ===
               new Date().setHours(0, 0, 0, 0)
@@ -118,14 +118,14 @@ const AppointmentMain = () => {
                 <tr className="border-b border-gray-200 lg:h-14">
                   <th className="py-2 px-4 max-sm:px-2 text-left">Date</th>
                   <th className="py-2 px-4 max-sm:px-2 text-left">Time</th>
-                  <th className="py-2 px-4 max-sm:px-2 text-left">Doctor</th>
+                  <th className="py-2 px-4 max-sm:px-2 text-left">Lab</th>
                   <th className="py-2 px-4 max-sm:px-2 max-sm:hidden text-left">Purpose</th>
                   <th className="py-2 px-4 max-sm:px-2 text-left max-sm:text-center">Status</th>
                   <th className="py-2 px-4 max-sm:px-2 text-center">Action</th>
                 </tr>
               </thead>
               <tbody>
-                {appointments
+                {testAppointments
                   .filter(
                     (a) =>
                       new Date(a.date).setHours(0, 0, 0, 0) ===
@@ -145,7 +145,7 @@ const AppointmentMain = () => {
                         {a.time}
                       </td>
                       <td className="py-2 px-4 max-sm:px-2 border-b border-gray-200 text-left">
-                        {a.doctorName}
+                        {a.labName}
                       </td>
                       <td className="py-2 px-4 max-sm:px-2 border-b border-gray-200 max-sm:hidden text-left">
                         {a.purpose}
@@ -174,14 +174,14 @@ const AppointmentMain = () => {
                           <li
                             className="w-full py-2 px-4 max-sm:px-2 cursor-pointer border-b hover:bg-gray-300"
                             onClick={() =>
-                              navigate(`/editAppointments/${a._id}`)
+                              navigate(`/editTestAppointments/${a._id}`)
                             }
                           >
                             Edit
                           </li>
                           <li
                             className="w-full py-2 px-4 max-sm:px-2 cursor-pointer border-b hover:bg-gray-300"
-                            onClick={() => deleteAppointment(a._id)}
+                            onClick={() => deleteTestAppointment(a._id)}
                           >
                             Delete
                           </li>
@@ -197,9 +197,9 @@ const AppointmentMain = () => {
             </table>
           ) : (
             <p className="text-xl lg:w-1/2 max-sm:text-lg text-gray-400 text-center">
-              No Appointments Today
+              No Test Appointments Today
             </p>
-          ):appointments.filter(
+          ):testAppointments.filter(
             (a) =>
               new Date(a.date).setHours(0, 0, 0, 0) >
               new Date().setHours(0, 0, 0, 0)
@@ -209,14 +209,14 @@ const AppointmentMain = () => {
                 <tr className="border-b border-gray-200 lg:h-14">
                   <th className="py-2 px-4 max-sm:px-2 text-left">Date</th>
                   <th className="py-2 px-4 max-sm:px-2 text-left">Time</th>
-                  <th className="py-2 px-4 max-sm:px-2 text-left">Doctor</th>
+                  <th className="py-2 px-4 max-sm:px-2 text-left">Lab</th>
                   <th className="py-2 px-4 max-sm:px-2 max-sm:hidden text-left">Purpose</th>
                   <th className="py-2 px-4 max-sm:px-2 text-left max-sm:text-center">Status</th>
                   <th className="py-2 px-4 max-sm:px-2 text-center">Action</th>
                 </tr>
               </thead>
               <tbody>
-                {appointments
+                {testAppointments
                   .filter(
                     (a) =>
                       new Date(a.date).setHours(0, 0, 0, 0) >
@@ -236,7 +236,7 @@ const AppointmentMain = () => {
                         {a.time}
                       </td>
                       <td className="py-2 px-4 max-sm:px-2 border-b border-gray-200 text-left">
-                        {a.doctorName}
+                        {a.labName}
                       </td>
                       <td className="py-2 px-4 max-sm:px-2 border-b border-gray-200 max-sm:hidden text-left">
                         {a.purpose}
@@ -265,14 +265,14 @@ const AppointmentMain = () => {
                           <li
                             className="w-full py-2 px-4 max-sm:px-2 cursor-pointer border-b hover:bg-gray-300"
                             onClick={() =>
-                              navigate(`/editAppointments/${a._id}`)
+                              navigate(`/editTestAppointments/${a._id}`)
                             }
                           >
                             Edit
                           </li>
                           <li
                             className="w-full py-2 px-4 max-sm:px-2 cursor-pointer border-b hover:bg-gray-300"
-                            onClick={() => deleteAppointment(a._id)}
+                            onClick={() => deleteTestAppointment(a._id)}
                           >
                             Delete
                           </li>
@@ -288,14 +288,14 @@ const AppointmentMain = () => {
             </table>
           ) : (
             <p className="text-xl lg:w-1/2 max-sm:text-lg text-gray-400 text-center">
-              No Future Appointments
+              No Future Test Appointments
             </p>
           )}
         </div>
       </div>
       <div>
         <h3 className="text-3xl max-sm:text-2xl max-lg:pt-3 font-bold">
-          Previous Appointments
+          Previous Test Appointments
         </h3>
         <div className="mt-3">
           <div className="my-3">
@@ -306,7 +306,7 @@ const AppointmentMain = () => {
               setPrevious('missed')
             }} className={`px-2 py-2 ${previous==='missed'?'bg-[#d6c5f7]':'bg-white'} cursor-pointer border-b border-t border-r border-gray-300`}>Missed</button>
           </div>
-          { previous==='visited'?appointments.filter(
+          { previous==='visited'?testAppointments.filter(
             (a) =>
               new Date(a.date) < new Date().setHours(0, 0, 0, 0) &&
               a.status === "visited"
@@ -316,14 +316,14 @@ const AppointmentMain = () => {
                 <tr className="border-b border-gray-200 lg:h-14">
                   <th className="py-2 px-4 max-sm:px-2 text-left">Date</th>
                   <th className="py-2 px-4 max-sm:px-2 text-left">Time</th>
-                  <th className="py-2 px-4 max-sm:px-2 text-left">Doctor</th>
+                  <th className="py-2 px-4 max-sm:px-2 text-left">Lab</th>
                   <th className="py-2 px-4 max-sm:px-2 max-sm:hidden text-left">Purpose</th>
                   <th className="py-2 px-4 max-sm:px-2 text-left max-sm:text-center">Status</th>
                   <th className="py-2 px-4 max-sm:px-2 text-center">Action</th>
                 </tr>
               </thead>
               <tbody>
-                {appointments
+                {testAppointments
                   .filter(
                     (a) =>
                       new Date(a.date) < new Date().setHours(0, 0, 0, 0) &&
@@ -343,7 +343,7 @@ const AppointmentMain = () => {
                         {a.time}
                       </td>
                       <td className="py-2 px-4 max-sm:px-2 border-b border-gray-200 text-left">
-                        {a.doctorName}
+                        {a.labName}
                       </td>
                       <td className="py-2 px-4 max-sm:px-2 border-b border-gray-200 max-sm:hidden  text-left">
                         {a.purpose}
@@ -372,14 +372,14 @@ const AppointmentMain = () => {
                           <li
                             className="w-full py-2 px-4 max-sm:px-2 cursor-pointer border-b hover:bg-gray-300"
                             onClick={() =>
-                              navigate(`/editAppointments/${a._id}`)
+                              navigate(`/editTestAppointments/${a._id}`)
                             }
                           >
                             Edit
                           </li>
                           <li
                             className="w-full py-2 px-4 max-sm:px-2 cursor-pointer border-b hover:bg-gray-300"
-                            onClick={() => deleteAppointment(a._id)}
+                            onClick={() => deleteTestAppointment(a._id)}
                           >
                             Delete
                           </li>
@@ -395,9 +395,9 @@ const AppointmentMain = () => {
             </table>
           ) : (
             <p className="text-xl lg:w-1/2 max-sm:text-lg text-gray-400 text-center">
-              No Visited Appointments
+              No Visited Test Appointments
             </p>
-          ):appointments.filter(
+          ):testAppointments.filter(
             (a) =>
               new Date(a.date) < new Date().setHours(0, 0, 0, 0) &&
               a.status !== "visited"
@@ -407,14 +407,14 @@ const AppointmentMain = () => {
                 <tr className="border-b border-gray-200 lg:h-14">
                   <th className="py-2 px-4 max-sm:px-2 text-left">Date</th>
                   <th className="py-2 px-4 max-sm:px-2 text-left">Time</th>
-                  <th className="py-2 px-4 max-sm:px-2 text-left">Doctor</th>
+                  <th className="py-2 px-4 max-sm:px-2 text-left">Lab</th>
                   <th className="py-2 px-4 max-sm:px-2 max-sm:hidden text-left">Purpose</th>
                   <th className="py-2 px-4 max-sm:px-2 text-left max-sm:text-center">Status</th>
                   <th className="py-2 px-4 max-sm:px-2 text-center">Action</th>
                 </tr>
               </thead>
               <tbody>
-                {appointments
+                {testAppointments
                   .filter(
                     (a) =>
                       new Date(a.date) < new Date().setHours(0, 0, 0, 0) &&
@@ -434,7 +434,7 @@ const AppointmentMain = () => {
                         {a.time}
                       </td>
                       <td className="py-2 px-4 max-sm:px-2 border-b border-gray-200 text-left">
-                        {a.doctorName}
+                        {a.labName}
                       </td>
                       <td className="py-2 px-4 max-sm:px-2 border-b border-gray-200 max-sm:hidden text-left">
                         {a.purpose}
@@ -463,14 +463,14 @@ const AppointmentMain = () => {
                           <li
                             className="w-full py-2 px-4 max-sm:px-2 cursor-pointer border-b hover:bg-gray-300"
                             onClick={() =>
-                              navigate(`/editAppointments/${a._id}`)
+                              navigate(`/editTestAppointments/${a._id}`)
                             }
                           >
                             Edit
                           </li>
                           <li
                             className="w-full py-2 px-4 max-sm:px-2 cursor-pointer border-b hover:bg-gray-300"
-                            onClick={() => deleteAppointment(a._id)}
+                            onClick={() => deleteTestAppointment(a._id)}
                           >
                             Delete
                           </li>
@@ -486,7 +486,7 @@ const AppointmentMain = () => {
             </table>
           ) : (
             <p className="text-xl lg:w-1/2 max-sm:text-lg text-gray-400 text-center">
-              No Missed Appointments
+              No Missed Test Appointments
             </p>
           )}
         </div>
@@ -497,4 +497,4 @@ const AppointmentMain = () => {
   );
 };
 
-export default AppointmentMain;
+export default TestAppointmentMain;
