@@ -2,6 +2,10 @@
 
 MeddEasy is a comprehensive personal health record management system designed to help users effortlessly track their medical information. This full-stack application allows users to manage appointments, monitor vital health readings, store prescriptions and test results securely, and keep a list of their doctors. It also features an automated email reminder system for upcoming appointments.
 
+## 🚀 Live Project
+
+🔗 [MeddEasy Live Application](https://meddeasy.netlify.app/)
+
 ## Key Features
 
 -   **User Authentication:** Secure sign-up, login, and password reset functionality using JWT and OTP email verification.
@@ -145,3 +149,4 @@ The backend provides the following RESTful API endpoints:
     -   `POST /addDoctor`: Add a new doctor.
     -   `GET /getDoctor`: Get all doctors.
     -   `GET /deleteDoctor/:id`: Delete a doctor.
+
