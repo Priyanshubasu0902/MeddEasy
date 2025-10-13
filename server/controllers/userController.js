@@ -33,7 +33,7 @@ export const signUpUser = async (req, res) => {
 
   try {
     const imageUpload = await cloudinary.uploader.upload(image.path);
-    const userExists = await userModel.findOne({ email });
+    const userExists = await userModel.findOne({$or:[{ email },{number}]});
     if (userExists) {
       return res.json({
         success: false,

@@ -151,7 +151,7 @@ const TestAppointmentMain = () => {
                         {a.purpose}
                       </td>
                       <td className="py-2 px-3 border-b border-gray-200 text-left">
-                        <button className="w-23 h-9 bg-blue-100 text-sm font-bold rounded-2xl cursor-pointer">
+                        <button className={`w-23 h-9 ${a.status==='not booked'?'bg-[#BFA6F2]':a.status==='booked'?'bg-[#9d75eb]':a.status==='visited'?'bg-[#814de5]':''} text-white text-sm font-bold rounded-2xl cursor-pointer`}>
                           {a.status}
                         </button>
                       </td>
@@ -242,7 +242,7 @@ const TestAppointmentMain = () => {
                         {a.purpose}
                       </td>
                       <td className="py-2 px-3 max-sm:px-2 border-b border-gray-200 text-left">
-                        <button className="w-23 h-9 bg-blue-100 text-sm font-bold rounded-2xl cursor-pointer">
+                        <button className={`w-23 h-9 ${a.status==='not booked'?'bg-[#BFA6F2]':a.status==='booked'?'bg-[#9d75eb]':a.status==='visited'?'bg-[#814de5]':''} text-white text-sm font-bold rounded-2xl cursor-pointer`}>
                           {a.status}
                         </button>
                       </td>
@@ -349,7 +349,7 @@ const TestAppointmentMain = () => {
                         {a.purpose}
                       </td>
                       <td className="py-2 px-3 border-b border-gray-200 text-left">
-                        <button className="w-23 h-9 bg-blue-100 text-sm font-bold rounded-2xl cursor-pointer">
+                        <button className={`w-23 h-9 ${a.status==='not booked'?'bg-[#BFA6F2]':a.status==='booked'?'bg-[#9d75eb]':a.status==='visited'?'bg-[#814de5]':''} text-white text-sm font-bold rounded-2xl cursor-pointer`}>
                           {a.status}
                         </button>
                       </td>
@@ -440,7 +440,7 @@ const TestAppointmentMain = () => {
                         {a.purpose}
                       </td>
                       <td className="py-2 px-3 border-b border-gray-200 text-left">
-                        <button className="w-23 h-9 bg-blue-100 text-sm font-bold rounded-2xl cursor-pointer">
+                        <button className={`w-23 h-9 ${a.status==='not booked'?'bg-[#BFA6F2]':a.status==='booked'?'bg-[#9d75eb]':a.status==='visited'?'bg-[#814de5]':''} text-white text-sm font-bold rounded-2xl cursor-pointer`}>
                           {a.status}
                         </button>
                       </td>

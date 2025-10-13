@@ -7,7 +7,7 @@ import moment from "moment";
 
 export const checkAppointment = () => {
   try {
-    cron.schedule("0 0 * * *", async () => {
+    cron.schedule("0 0 1 * * *", async () => {
       const appointments = await appointmentModel.find({});
       appointments.forEach(async (a) => {
         const user = await userModel.findOne({ _id: a.userId });
@@ -19,14 +19,19 @@ export const checkAppointment = () => {
           let mailOptions = {
             from: process.env.EMAIL_ID,
             to: user.email,
-            subject: "Email from MeddEasy",
+            subject: "Email from MeddEasy [Reminder]",
             text:
               "Hi " +
               user.name +
-              ", you have an appointment scheduled today with " +
+              ",\n\n" +
+              "You have an appointment scheduled today with " +
               a.doctorName +
               " at " +
-              a.time,
+              a.time +
+              ". Please make sure to be on time" +
+              ".\n\n" +
+              "Thank you,\n" +
+              "The MeddEasy Team",
           };
           await transporter.sendMail(mailOptions, function (error, info) {
             if (error) {
@@ -36,7 +41,83 @@ export const checkAppointment = () => {
             }
           });
         }
-        if (((moment(new Date(`${a.date}T${a.time}`)).toNow(true) === "2 days")||(moment(`${a.date}T${a.time}`).toNow(true) === "a day")||(moment(`${a.date}T${a.time}`).toNow(true) === "3 days"))&&(a.status==="not booked")) {
+        if (
+          moment(new Date(a.date).setHours(0, 0, 0, 0)).diff(
+            new Date().setHours(0, 0, 0, 0),
+            "days"
+          ) <= 2 &&
+          new Date(a.date) > new Date() &&
+          a.status === "booked"
+        ) {
+          let mailOptions = {
+            from: process.env.EMAIL_ID,
+            to: user.email,
+            subject: "Email from MeddEasy [Reminder]",
+            text:
+              "Hi " +
+              user.name +
+              ",\n\n" +
+              "You have an appointment scheduled on " +
+              a.date +
+              " with " +
+              a.doctorName +
+              " at " +
+              a.time +
+              ". Please make sure to be on time" +
+              ".\n\n" +
+              "Thank you,\n" +
+              "The MeddEasy Team",
+          };
+          await transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+              console.log(error);
+            } else {
+              console.log("Email sent: " + info.response);
+            }
+          });
+        }
+        if (
+          moment(new Date(a.date).setHours(0, 0, 0, 0)).diff(
+            new Date().setHours(0, 0, 0, 0),
+            "days"
+          ) <= 2 &&
+          new Date(`${a.date}T${a.time}`) >= new Date() &&
+          a.status === "not booked"
+        ) {
+          let mailOptions = {
+            from: process.env.EMAIL_ID,
+            to: user.email,
+            subject: "Email from MeddEasy [Reminder]",
+            text:
+              "Hi " +
+              user.name +
+              ",\n\n" +
+              "You have not booked an appointment on " +
+              a.date +
+              " with " +
+              a.doctorName +
+              ". If you have already booked, please update the status in the MeddEasy platform for your convenience and accurate tracking" +
+              ".\n\n" +
+              "Thank you,\n" +
+              "The MeddEasy Team",
+          };
+          await transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+              console.log(error);
+            } else {
+              console.log("Email sent: " + info.response);
+            }
+          });
+        }
+        if (
+          moment(new Date().setHours(0, 0, 0, 0)).diff(
+            new Date(a.date).setHours(0, 0, 0, 0),
+            "days"
+          ) <= 2 &&
+          new Date(a.date).setHours(0, 0, 0, 0) <
+            new Date().setHours(0, 0, 0, 0) &&
+          a.status !== "visited"
+        ) {
           let mailOptions = {
             from: process.env.EMAIL_ID,
             to: user.email,
@@ -44,10 +125,15 @@ export const checkAppointment = () => {
             text:
               "Hi " +
               user.name +
-              ", you have not booked an appointment on " +
+              ",\n\n" +
+              "Our records show that you missed an appointment on " +
               a.date +
               " with " +
-              a.doctorName + ". If already booked please update the status "
+              a.doctorName +
+              ". If you have already completed this appointment, please update the status in the MeddEasy platform for you convenience and accurate tracking" +
+              ".\n\n" +
+              "Thank you,\n" +
+              "The MeddEasy Team",
           };
           await transporter.sendMail(mailOptions, function (error, info) {
             if (error) {
@@ -66,7 +152,7 @@ export const checkAppointment = () => {
 
 export const checkTestAppointment = () => {
   try {
-    cron.schedule("0 0 * * *", async () => {
+    cron.schedule("0 0 2 * * *", async () => {
       const testAppointments = await testAppointmentModel.find({});
       testAppointments.forEach(async (a) => {
         const user = await userModel.findOne({ _id: a.userId });
@@ -78,14 +164,19 @@ export const checkTestAppointment = () => {
           let mailOptions = {
             from: process.env.EMAIL_ID,
             to: user.email,
-            subject: "Email from MeddEasy",
+            subject: "Email from MeddEasy [Reminder]",
             text:
               "Hi " +
               user.name +
-              ", you have an test appointment scheduled today from " +
+              ",\n\n" +
+              "You have an test appointment scheduled today from " +
               a.labName +
               " at " +
-              a.time,
+              a.time +
+              ". Please make sure to be on time" +
+              ".\n\n" +
+              "Thank you,\n" +
+              "The MeddEasy Team",
           };
           await transporter.sendMail(mailOptions, function (error, info) {
             if (error) {
@@ -95,7 +186,83 @@ export const checkTestAppointment = () => {
             }
           });
         }
-        if (((moment(new Date(`${a.date}T${a.time}`)).toNow(true) === "2 days")||(moment(`${a.date}T${a.time}`).toNow(true) === "a day")||(moment(`${a.date}T${a.time}`).toNow(true) === "3 days"))&&(a.status==="not booked")) {
+        if (
+          moment(new Date(a.date).setHours(0, 0, 0, 0)).diff(
+            new Date().setHours(0, 0, 0, 0),
+            "days"
+          ) <= 2 &&
+          new Date(a.date) > new Date() &&
+          a.status === "booked"
+        ) {
+          let mailOptions = {
+            from: process.env.EMAIL_ID,
+            to: user.email,
+            subject: "Email from MeddEasy [Reminder]",
+            text:
+              "Hi " +
+              user.name +
+              ",\n\n" +
+              "You have an test appointment scheduled on " +
+              a.date +
+              " from " +
+              a.labName +
+              " at " +
+              a.time +
+              ". Please make sure to be on time" +
+              ".\n\n" +
+              "Thank you,\n" +
+              "The MeddEasy Team",
+          };
+          await transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+              console.log(error);
+            } else {
+              console.log("Email sent: " + info.response);
+            }
+          });
+        }
+        if (
+          moment(new Date(a.date).setHours(0, 0, 0, 0)).diff(
+            new Date().setHours(0, 0, 0, 0),
+            "days"
+          ) <= 2 &&
+          new Date(`${a.date}T${a.time}`) >= new Date() &&
+          a.status === "not booked"
+        ) {
+          let mailOptions = {
+            from: process.env.EMAIL_ID,
+            to: user.email,
+            subject: "Email from MeddEasy [Reminder]",
+            text:
+              "Hi " +
+              user.name +
+              ",\n\n" +
+              "You have not completed booking of a test appointment on " +
+              a.date +
+              " from " +
+              a.labName +
+              ". If already booked, please update the status in the MeddEasy platform for you convenience and accurate tracking" +
+              ".\n\n" +
+              "Thank you,\n" +
+              "The MeddEasy Team",
+          };
+          await transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+              console.log(error);
+            } else {
+              console.log("Email sent: " + info.response);
+            }
+          });
+        }
+        if (
+          moment(new Date().setHours(0, 0, 0, 0)).diff(
+            new Date(a.date).setHours(0, 0, 0, 0),
+            "days"
+          ) <= 2 &&
+          new Date(a.date).setHours(0, 0, 0, 0) <
+            new Date().setHours(0, 0, 0, 0) &&
+          a.status !== "visited"
+        ) {
           let mailOptions = {
             from: process.env.EMAIL_ID,
             to: user.email,
@@ -103,10 +270,15 @@ export const checkTestAppointment = () => {
             text:
               "Hi " +
               user.name +
-              ", you have not completed booking of a test appointment on " +
+              ",\n\n" +
+              "Our records show that you missed a test appointment on " +
               a.date +
               " from " +
-              a.labName + ". If already booked please update the status "
+              a.labName +
+              ". If you have already completed this appointment, please update the status in the MeddEasy platform for you convenience and accurate tracking" +
+              ".\n\n" +
+              "Thank you,\n" +
+              "The MeddEasy Team",
           };
           await transporter.sendMail(mailOptions, function (error, info) {
             if (error) {
