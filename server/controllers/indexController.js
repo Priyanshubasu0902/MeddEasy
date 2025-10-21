@@ -61,7 +61,7 @@ export const verifyOtp = async (req, res) => {
     const otpRecord = await otpModel.findOne({ email, otp });
 
     if (!otpRecord) {
-      return res.json({ success: false, message: "Invalid OTP" });
+      return res.json({ success: false, message: "Incorrect OTP" });
     }
 
     const user = await userModel.findOne({ email });

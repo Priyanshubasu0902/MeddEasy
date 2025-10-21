@@ -8,38 +8,50 @@ import Loading from "../components/Loading";
 
 const Login = () => {
   const navigate = useNavigate();
-
   const [email, setEmail] = useState("");
   const [number, setNumber] = useState("");
-  const [password, setPassword] = useState('');
-
+  const [password, setPassword] = useState("");
   const [emailType, setEmailType] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [numberIsValid, setNumberIsValid] = useState("");
 
   const { backendUrl, setUserToken } = useContext(AppContext);
 
+  const checkValidNumber = () => {
+    if (number.length === 10) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   const onSubmitHandler = async (e) => {
-    setLoading(true);
     e.preventDefault();
-    try {
-      const { data } = await axios.post(backendUrl + "/api/users/login", {
-        email,
-        number,
-        password,
-      });
-      if (data.success) {
-        setUserToken(data.token);
-        localStorage.setItem("token", data.token);
+    if (emailType?true:checkValidNumber()) {
+      setLoading(true);
+      try {
+        const { data } = await axios.post(backendUrl + "/api/users/login", {
+          email,
+          number,
+          password,
+        });
+        if (data.success) {
+          setUserToken(data.token);
+          localStorage.setItem("token", data.token);
+          setLoading(false);
+          toast.success("Logged In");
+          setNumberIsValid("");
+          navigate("/home");
+        } else {
+          setLoading(false);
+          toast.error(data.message);
+        }
+      } catch (error) {
         setLoading(false);
-        toast.success("Logged In");
-        navigate("/home");
-      } else {
-        setLoading(false);
-        toast.error(data.message);
+        toast.error(error.message);
       }
-    } catch (error) {
-      setLoading(false);
-      toast.error(error.message);
+    } else if (checkValidNumber() === false) {
+      setNumberIsValid(false);
     }
   };
 
@@ -122,7 +134,10 @@ const Login = () => {
           >
             <label htmlFor="">
               <input
-                onChange={(e) => setNumber(e.target.value)}
+                onChange={(e) => {
+                  setNumber(e.target.value);
+                  setNumberIsValid("");
+                }}
                 value={number}
                 className="border rounded-md focus:outline-[#692be0] focus:outline-3 w-full px-2 h-14 mt-1 text-lg font-semibold"
                 required
@@ -130,6 +145,9 @@ const Login = () => {
                 placeholder="Number"
               />
             </label>
+            {numberIsValid === false ? (
+              <p className="text-red-600">Number is Invalid</p>
+            ) : null}
             <label htmlFor="">
               <input
                 onChange={(e) => setPassword(e.target.value)}
@@ -164,7 +182,9 @@ const Login = () => {
         </div>
       </div>
     </div>
-  ):(<Loading dashboard={false}/>);
+  ) : (
+    <Loading dashboard={false} />
+  );
 };
 
 export default Login;

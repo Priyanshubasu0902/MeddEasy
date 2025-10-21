@@ -8,10 +8,12 @@ import Loading from "../components/Loading";
 const ForgotPassword = () => {
   const { backendUrl, setUserToken } = useContext(AppContext);
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
-  const [otp, setOtp] = useState('');
+  const [email, setEmail] = useState("");
+  const [otp, setOtp] = useState("");
   const [emailSubmitted, setEmailSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [otpIsValid, setOtpIsValid] = useState("");
+
 
   const submitEmail = async (e) => {
     setLoading(true);
@@ -34,30 +36,44 @@ const ForgotPassword = () => {
     }
   };
 
+  const checkValidOtp = () => {
+    if (otp.length === 6) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   const onSubmitOtp = async (e) => {
-    setLoading(true);
     e.preventDefault();
-    try {
-      const { data } = await axios.post(backendUrl + "/api/verify-otp", {
-        email,
-        otp,
-      });
-      if (data.success) {
-        setUserToken(data.token);
-        localStorage.setItem("token", data.token);
-        setEmailSubmitted(false);
-        setEmail("");
-        setOtp("");
+    if(checkValidOtp()) {
+      setLoading(true);
+      try {
+        const { data } = await axios.post(backendUrl + "/api/verify-otp", {
+          email,
+          otp,
+        });
+        if (data.success) {
+          setUserToken(data.token);
+          localStorage.setItem("token", data.token);
+          setEmailSubmitted(false);
+          setEmail("");
+          setOtp("");
+          setOtpIsValid("");
+          setLoading(false);
+          toast.success(data.message);
+          navigate("/setPassword");
+        } else {
+          setLoading(false);
+          toast.error(data.message);
+        }
+      } catch (error) {
         setLoading(false);
-        toast.success(data.message);
-        navigate("/setPassword");
-      } else {
-        setLoading(false);
-        toast.error(data.message);
+        toast.error(error.message);
       }
-    } catch (error) {
-      setLoading(false);
-      toast.error(error.message);
+    }
+    else if(checkValidOtp()===false) {
+      setOtpIsValid(false);
     }
   };
 
@@ -100,16 +116,18 @@ const ForgotPassword = () => {
               htmlFor=""
             >
               <input
-                onChange={(e) => setOtp(e.target.value)}
+                onChange={(e) => {
+                  setOtp(e.target.value)
+                  setOtpIsValid("");
+                }}
                 value={otp}
                 className="border rounded-xl focus:outline-[#692be0] focus:outline-3 w-full text-center h-14 mt-1 text-lg font-semibold"
                 type="number"
-                max="999999"
-                min="00000012"
                 placeholder="  *   *   *   *   *   *   "
                 required
               />
             </label>
+            {otpIsValid===false?(<p className="text-red-600">OTP is Invalid</p>):null}
             <input
               type="submit"
               value="Verify OTP"
@@ -119,7 +137,9 @@ const ForgotPassword = () => {
         )}
       </div>
     </div>
-  ):(<Loading dashboard={false}/>);
+  ) : (
+    <Loading dashboard={false} />
+  );
 };
 
 export default ForgotPassword;

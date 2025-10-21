@@ -18,45 +18,80 @@ const SignUp = () => {
   const [password, setPassword] = useState("");
   const [image, setImage] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [strength, setStrength] = useState("");
+  const [numberIsValid, setNumberIsValid] = useState("");
 
   const { backendUrl, setUserToken } = useContext(AppContext);
 
+  const passwordStrength = (password) => {
+    let str = 0;
+
+    if (password.length >= 8) str++;
+    if (/[a-z]/.test(password)) str++;
+    if (/[A-Z]/.test(password)) str++;
+    if (/[0-9]/.test(password)) str++;
+    if (/[!@#$%^&*()]/.test(password)) str++;
+
+    if (str === 0) return "";
+    if (str <= 2) return "weak";
+    if (str <= 4) return "medium";
+    return "strong";
+  };
+
+  const checkValidNumber = () => {
+    if (number.length === 10) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   const onSubmitHandler = async (e) => {
-    setLoading(true);
     e.preventDefault();
-    try {
-      const formData = new FormData();
-      formData.append("name", name);
-      formData.append("email", email);
-      formData.append("number", number);
-      formData.append("gender", gender);
-      formData.append("age", age);
-      formData.append("image", image);
-      formData.append("password", password);
-      const { data } = await axios.post(
-        backendUrl + "/api/users/signUp",
-        formData
-      );
-      if (data.success) {
-        setUserToken(data.token);
-        localStorage.setItem("token", data.token);
+    if ((strength === "strong" || strength === "medium")&&checkValidNumber()) {
+      setLoading(true);
+      try {
+        const formData = new FormData();
+        formData.append("name", name);
+        formData.append("email", email);
+        formData.append("number", number);
+        formData.append("gender", gender);
+        formData.append("age", age);
+        formData.append("image", image);
+        formData.append("password", password);
+        const { data } = await axios.post(
+          backendUrl + "/api/users/signUp",
+          formData
+        );
+        if (data.success) {
+          setUserToken(data.token);
+          localStorage.setItem("token", data.token);
+          setLoading(false);
+          toast.success("Account Created");
+          setStrength("");
+          setNumberIsValid("");
+          navigate("/home");
+        } else {
+          setLoading(false);
+          toast.error(data.message);
+        }
+      } catch (error) {
         setLoading(false);
-        toast.success("Account Created");
-        navigate("/home");
-      } else {
-        setLoading(false);
-        toast.error(data.message);
+        toast.error(error.message);
       }
-    } catch (error) {
-      setLoading(false);
-      toast.error(error.message);
+    }
+    else if(checkValidNumber()===false) {
+      // toast.error("Invalid Number");
+      setNumberIsValid(false);
     }
   };
 
   return !loading ? (
     <div className="w-full bg-[#692be0] min-h-screen flex items-center justify-center max-sm:px-3">
       <div className="w-100 bg-white border border-[#692be0] shadow-2xl border-3 rounded-3xl p-5 max-sm:px-3">
-        <h2 className="text-center text-[#692be0] text-3xl mt-4 font-bold">Welcome</h2>
+        <h2 className="text-center text-[#692be0] text-3xl mt-4 font-bold">
+          Welcome
+        </h2>
         <p className="text-center text-gray-500">Register to our platform</p>
         <form
           onSubmit={(e) => onSubmitHandler(e)}
@@ -85,15 +120,19 @@ const SignUp = () => {
           </label>
           <label htmlFor="">
             <input
-              onChange={(e) => setNumber(e.target.value)}
+              onChange={(e) => {
+                setNumber(e.target.value);
+                setNumberIsValid("");
+              }}
               value={number}
               className="border rounded-md focus:outline-[#692be0] focus:outline-3 text-lg font-semibold w-full px-2 h-14 mt-1"
               required
               type="number"
-              maxLength='10'
+              maxLength="10"
               placeholder="Number"
             />
           </label>
+          {numberIsValid===false?(<p className="text-red-600">Number is Invalid</p>):null}
           <label htmlFor="">
             <input
               onChange={(e) => setAge(e.target.value)}
@@ -123,7 +162,10 @@ const SignUp = () => {
           </label>
           <label htmlFor="">
             <input
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                setStrength(passwordStrength(e.target.value));
+              }}
               value={password}
               className="border rounded-md focus:outline-[#692be0] focus:outline-3 text-lg font-semibold w-full px-2 h-14 mt-1"
               type="password"
@@ -131,24 +173,45 @@ const SignUp = () => {
               placeholder="Password"
             />
           </label>
-            <label htmlFor="img" className="flex cursor-pointer items-center gap-3 mt-2">
-              <img
-                className="w-16 h-16 object-contain rounded-full cursor-pointer"
-                src={image ? URL.createObjectURL(image) : uploadImage}
-                alt=""
-              />
-              <input
-                onChange={(e) => setImage(e.target.files[0])}
-                type="file"
-                hidden
-                id="img"
-                 accept=".png, .jpeg, .jpg"
-              />
-            <p className="font-semibold">Upload image
-              <br />
-              <span className="font-normal text-sm">Accepted file types: png, jpeg</span>
+          {strength !== "" ? (
+            <p
+              className={`${
+                strength === "weak"
+                  ? "text-red-600"
+                  : strength === "medium"
+                  ? "text-yellow-400"
+                  : strength === "strong"
+                  ? "text-green-500"
+                  : ""
+              }`}
+            >
+              Your password is {strength}
             </p>
-            </label>
+          ) : null}
+          <label
+            htmlFor="img"
+            className="flex cursor-pointer items-center gap-3 mt-2"
+          >
+            <img
+              className="w-16 h-16 object-contain rounded-full cursor-pointer"
+              src={image ? URL.createObjectURL(image) : uploadImage}
+              alt=""
+            />
+            <input
+              onChange={(e) => setImage(e.target.files[0])}
+              type="file"
+              hidden
+              id="img"
+              accept=".png, .jpeg, .jpg"
+            />
+            <p className="font-semibold">
+              Upload image
+              <br />
+              <span className="font-normal text-sm">
+                Accepted file types: png, jpeg
+              </span>
+            </p>
+          </label>
           <input
             type="submit"
             value="Sign Up"
@@ -167,7 +230,7 @@ const SignUp = () => {
       </div>
     </div>
   ) : (
-    <Loading dashboard={false}/>
+    <Loading dashboard={false} />
   );
 };
 

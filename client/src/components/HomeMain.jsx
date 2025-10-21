@@ -93,33 +93,37 @@ const HomeMain = () => {
   };
 
   const doctorSubmitHandler = async (e) => {
-    setLoading(true);
     e.preventDefault();
-    try {
-      const { data } = await axios.post(
-        backendUrl + "/api/doctors/addDoctor",
-        {
-          name: doctorName,
-          speciality: doctorSpeciality,
-          number: doctorNumber,
-        },
-        { headers: { token: userToken } }
-      );
-      if (data.success) {
-        fetchDoctors();
-        setMenuView(false);
-        setDoctorName("");
-        setDoctorSpeciality("");
-        setDoctorNumber("");
+    if (checkValidNumber(doctorNumber)) {
+      setLoading(true);
+      try {
+        const { data } = await axios.post(
+          backendUrl + "/api/doctors/addDoctor",
+          {
+            name: doctorName,
+            speciality: doctorSpeciality,
+            number: doctorNumber,
+          },
+          { headers: { token: userToken } }
+        );
+        if (data.success) {
+          fetchDoctors();
+          setMenuView(false);
+          setDoctorName("");
+          setDoctorSpeciality("");
+          setDoctorNumber("");
+          setLoading(false);
+          toast.success(data.message);
+        } else {
+          setLoading(false);
+          toast.error(data.message);
+        }
+      } catch (error) {
         setLoading(false);
-        toast.success(data.message);
-      } else {
-        setLoading(false);
-        toast.error(data.message);
+        toast.error(error.message);
       }
-    } catch (error) {
-      setLoading(false);
-      toast.error(error.message);
+    } else if (!checkValidNumber(doctorNumber)) {
+      toast.error("Invalid Number");
     }
   };
 
@@ -172,32 +176,45 @@ const HomeMain = () => {
 
   const editDoctorHandler = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    try {
-      const { data } = await axios.post(
-        backendUrl + `/api/doctors/editDoctor/${editDoctor}`,
-        {
-          name: editDoctorName,
-          speciality: editDoctorSpeciality,
-          number: editDoctorNumber,
-        },
-        { headers: { token: userToken } }
-      );
-      if (data.success) {
-        setEditDoctor(false);
-        setEditDoctorName("");
-        setEditDoctorSpeciality("");
-        setEditDoctorNumber("");
-        fetchDoctors();
+    if (checkValidNumber(editDoctorNumber)) {
+      setLoading(true);
+      try {
+        const { data } = await axios.post(
+          backendUrl + `/api/doctors/editDoctor/${editDoctor}`,
+          {
+            name: editDoctorName,
+            speciality: editDoctorSpeciality,
+            number: editDoctorNumber,
+          },
+          { headers: { token: userToken } }
+        );
+        if (data.success) {
+          setEditDoctor(false);
+          setEditDoctorName("");
+          setEditDoctorSpeciality("");
+          setEditDoctorNumber("");
+          fetchDoctors();
+          setLoading(false);
+          toast.success(data.message);
+        } else {
+          setLoading(false);
+          toast.error(data.message);
+        }
+      } catch (error) {
         setLoading(false);
-        toast.success(data.message);
-      } else {
-        setLoading(false);
-        toast.error(data.message);
+        toast.error(error.message);
       }
-    } catch (error) {
-      setLoading(false);
-      toast.error(error.message);
+    }
+    else if(!checkValidNumber(editDoctorNumber)) {
+      toast.error("Invalid Number");
+    }
+  };
+
+  const checkValidNumber = (number) => {
+    if (number.length === 10) {
+      return true;
+    } else {
+      return false;
     }
   };
 

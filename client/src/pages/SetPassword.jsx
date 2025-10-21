@@ -11,32 +11,65 @@ const SetPassword = () => {
   const [password, setPassword] = useState(null);
   const [confirmPassword, setConfirmPassword] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [strength, setStrength] = useState("");
+  const [match, setMatch] = useState("");
 
   const { backendUrl, userToken } = useContext(AppContext);
 
+  const passwordStrength = (password) => {
+    let str = 0;
+
+    if (password.length >= 8) str++;
+    if (/[a-z]/.test(password)) str++;
+    if (/[A-Z]/.test(password)) str++;
+    if (/[0-9]/.test(password)) str++;
+    if (/[!@#$%^&*()]/.test(password)) str++;
+
+    if (str === 0) return "";
+    if (str <= 2) return "weak";
+    if (str <= 4) return "medium";
+    return "strong";
+  };
+
+  const checkMatch = (confirmPassword) => {
+    if(confirmPassword===password) {
+      setMatch(true);
+    }
+    else{
+      setMatch(false);
+    }
+    if(confirmPassword.length===0){
+      setMatch("");
+    }
+  }
+
   const onSubmitHandler = async (e) => {
-    setLoading(true);
     e.preventDefault();
-    try {
-      const { data } = await axios.post(
-        backendUrl + "/api/users/setPassword",
-        {
-          password,
-          confirmPassword,
-        },
-        { headers: { token: userToken } }
-      );
-      if (data.success) {
+    if ((strength === "strong" || strength === "medium")&&match===true) {
+      setLoading(true);
+      try {
+        const { data } = await axios.post(
+          backendUrl + "/api/users/setPassword",
+          {
+            password,
+            confirmPassword,
+          },
+          { headers: { token: userToken } }
+        );
+        if (data.success) {
+          setLoading(false);
+          setStrength("");
+          setMatch("");
+          toast.success(data.message);
+          navigate("/login");
+        } else {
+          setLoading(false);
+          toast.error(data.message);
+        }
+      } catch (error) {
         setLoading(false);
-        toast.success(data.message);
-        navigate("/login");
-      } else {
-        setLoading(false);
-        toast.error(data.message);
+        toast.error(error.message);
       }
-    } catch (error) {
-      setLoading(false);
-      toast.error(error.message);
     }
   };
 
@@ -53,10 +86,11 @@ const SetPassword = () => {
           action=""
         >
           <label htmlFor="">
-            {/* <span className="font-semibold">New Password:</span>
-              <br /> */}
             <input
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                setStrength(passwordStrength(e.target.value));
+              }}
               value={password}
               className="border rounded-md focus:outline-[#692be0] focus:outline-3 w-full px-2 h-14 mt-1 text-lg font-semibold"
               type="password"
@@ -64,11 +98,27 @@ const SetPassword = () => {
               placeholder="New Password"
             />
           </label>
+          {strength !== "" ? (
+            <p
+              className={`${
+                strength === "weak"
+                  ? "text-red-600"
+                  : strength === "medium"
+                  ? "text-yellow-400"
+                  : strength === "strong"
+                  ? "text-green-500"
+                  : ""
+              }`}
+            >
+              Your password is {strength}
+            </p>
+          ) : null}
           <label htmlFor="">
-            {/* <span className="font-semibold">Confirm Password:</span>
-              <br /> */}
             <input
-              onChange={(e) => setConfirmPassword(e.target.value)}
+              onChange={(e) => {
+                setConfirmPassword(e.target.value);
+                checkMatch(e.target.value);
+              }}
               value={confirmPassword}
               className="border rounded-md focus:outline-[#692be0] focus:outline-3 w-full px-2 h-14 mt-1 text-lg font-semibold"
               type="password"
@@ -76,6 +126,13 @@ const SetPassword = () => {
               placeholder="Confirm new password"
             />
           </label>
+          { match===false? 
+            <p
+              className="text-red-600"
+            >
+              Your passwords do not match
+            </p>:null
+            }
           <input
             type="submit"
             value="Set New Password"
@@ -85,7 +142,7 @@ const SetPassword = () => {
       </div>
     </div>
   ) : (
-    <Loading dashboard={false}/>
+    <Loading dashboard={false} />
   );
 };
 
